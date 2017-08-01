@@ -128,8 +128,23 @@ int totalCharge();
 // Number of SFOS pairs
 int getNumSFOS();
 
-// Various dilepton mass cuts for the tri-lepton regions
-//std::map<TString, float> get3LMlls();
+// Get the Mll of same-flavor pair
+float get0SFOSMll();
 
+// Get the Mll of same-electron pair if it doesn't exist, it returns -999
+float get0SFOSMee();
+
+// Get the Mll of SFOS pair in 1SFOS
+float get1SFOSMll();
+
+// Get the Mll of first SFOS pair in 2SFOS
+// (Check the pair in order of (0,1), (0,2) (1,2)
+//  and returns the first pair that works)
+float get2SFOSMll0();
+
+// Get the Mll of second SFOS pair in 2SFOS
+// (Check the pair in order of (1,2), (0,2) (0,1)
+//  and returns the first pair that works)
+float get2SFOSMll1();
 
 #endif

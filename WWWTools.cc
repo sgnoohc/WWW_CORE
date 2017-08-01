@@ -407,39 +407,6 @@ int getNumSFOS()
     return num_SFOS;
 }
 
-////______________________________________________________________________________________
-//std::map<TString, float> get3LMlls()
-//{
-//    int num_SFOS = getNumSFOS();
-//
-//    std::map<TString, float> mlls;
-//    mlls["0SFOSMll"] = -999;
-//    mlls["0SFOSMee"] = -999;
-//    mlls["1SFOSMll"] = -999;
-//    mlls["2SFOSMll0"] = -999;
-//    mlls["2SFOSMll1"] = -999;
-//
-//    for ( int i = 0; i < ( int ) lepidx["TightLepton"].size(); i++ )
-//    {
-//        for ( int j = i + 1; j < ( int ) lepidx["TightLepton"].size(); j++ )
-//        {
-//            if ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][i]]
-//                 == -wwwbaby.lep_pdgId()[lepidx["TightLepton"][j]] )
-//            {
-//                num_SFOS++;
-//            }
-//            if ( num_SFOS )
-//            else if ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][i]]
-//                      == wwwbaby.lep_pdgId()[lepidx["TightLepton"][j]] )
-//            {
-//
-//            }
-//        }
-//    }
-//
-//    return mlls;
-//}
-
 //______________________________________________________________________________________
 float get0SFOSMll()
 {
