@@ -4,6 +4,8 @@ unsigned int objidx_set_to_eventid;
 ObjIdx lepidx;
 ObjIdx jetidx;
 
+#define MZ 91.1876
+
 //______________________________________________________________________________________
 bool passSSpresel( int Nm1idx )
 {
@@ -93,12 +95,40 @@ bool pass3Lcommon( int Nm1idx )
 bool pass3L0SFOS( int Nm1idx )
 {
     setObjectIndices();
-    if (!( ( Nm1idx == 0 ) || ( pass3Lcommon()            ) )) return false;
-    if (!( ( Nm1idx == 1 ) || ( getNumSFOS()      ==   0  ) )) return false;
+    if (!( ( Nm1idx == 0 ) || ( pass3Lcommon()                      ) )) return false;
+    if (!( ( Nm1idx == 1 ) || ( getNumSFOS()               ==   0   ) )) return false;
+    if (!( ( Nm1idx == 2 ) || ( get0SFOSMll()              >   20.  ) )) return false;
+    if (!( ( Nm1idx == 3 ) || ( fabs( get0SFOSMee() - MZ ) >   15.  ) )) return false;
+    if (!( ( Nm1idx == 4 ) || ( DPhi3lMET()                >    2.7 ) )) return false;
     return true;
 }
 
-//    if (!( ( Nm1idx == 3 ) || ( wwwbaby.met_pt()  >   50. ) )) return false;
+//______________________________________________________________________________________
+bool pass3L1SFOS( int Nm1idx )
+{
+    setObjectIndices();
+    if (!( ( Nm1idx == 0 ) || ( pass3Lcommon()                      ) )) return false;
+    if (!( ( Nm1idx == 1 ) || ( getNumSFOS()               ==   1   ) )) return false;
+    if (!( ( Nm1idx == 2 ) || ( wwwbaby.met_pt()           >   45.  ) )) return false;
+    if (!( ( Nm1idx == 3 ) || ( get1SFOSMll()              <   55.||
+                                get1SFOSMll()              >  100.  ) )) return false;
+    if (!( ( Nm1idx == 4 ) || ( DPhi3lMET()                >    2.5 ) )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool pass3L2SFOS( int Nm1idx )
+{
+    setObjectIndices();
+    if (!( ( Nm1idx == 0 ) || ( pass3Lcommon()                       ) )) return false;
+    if (!( ( Nm1idx == 1 ) || ( getNumSFOS()                ==   2   ) )) return false;
+    if (!( ( Nm1idx == 2 ) || ( wwwbaby.met_pt()            >   55.  ) )) return false;
+    if (!( ( Nm1idx == 3 ) || ( fabs( get2SFOSMll0() - MZ ) >   20.  ) )) return false;
+    if (!( ( Nm1idx == 4 ) || ( fabs( get2SFOSMll1() - MZ ) >   20.  ) )) return false;
+    if (!( ( Nm1idx == 5 ) || ( DPhi3lMET()                 >    2.5 ) )) return false;
+    return true;
+}
+
 //______________________________________________________________________________________
 void setObjectIndices()
 {
@@ -360,6 +390,22 @@ float Pt3l()
     return ( wwwbaby.lep_p4()[jetidx["TightLepton"][0]]
              + wwwbaby.lep_p4()[jetidx["TightLepton"][1]]
              + wwwbaby.lep_p4()[jetidx["TightLepton"][2]] ).pt();
+}
+
+//______________________________________________________________________________________
+float DPhi3lMET()
+{
+    if ( lepidx["TightLepton"].size() != 3 )
+        return -999;
+    TLorentzVector met;
+    met.SetPtEtaPhiM( wwwbaby.met_pt(), 0, wwwbaby.met_phi(), 0 );
+    LorentzVector metlv;
+    metlv.SetPxPyPzE( met.Px(), met.Py(), met.Pz(), met.E() );
+    return fabs( ROOT::Math::VectorUtil::DeltaPhi(
+                wwwbaby.lep_p4()[jetidx["TightLepton"][0]]
+                + wwwbaby.lep_p4()[jetidx["TightLepton"][1]]
+                + wwwbaby.lep_p4()[jetidx["TightLepton"][2]],
+                met ));
 }
 
 //______________________________________________________________________________________

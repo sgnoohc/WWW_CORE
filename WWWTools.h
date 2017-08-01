@@ -6,6 +6,7 @@
 
 // ROOT
 #include "Math/VectorUtil.h"
+#include "TLorentzVector.h"
 
 // C++
 #include <stdlib.h>
@@ -47,34 +48,34 @@ ObjIdx getLeptonsIndices();
 ObjIdx getJetsIndices();
 
 // Tight
-bool isTightSSLepton( int );
-bool isTightSSMuon( int );
-bool isTightSSElec( int );
+bool isTightLepton( int );
+bool isTightMuon( int );
+bool isTightElec( int );
 
 // Loose
-bool isLooseSSLepton( int );
-bool isLooseSSMuon( int );
-bool isLooseSSElec( int );
+bool isLooseLepton( int );
+bool isLooseMuon( int );
+bool isLooseElec( int );
 
 // Loose But Not Tight (Lbnt)
-bool isLbntSSLepton( int );
-bool isLbntSSMuon( int );
-bool isLbntSSElec( int );
+bool isLbntLepton( int );
+bool isLbntMuon( int );
+bool isLbntElec( int );
 
 // Tight
-bool isTightSSLepton( int );
-bool isTightSSMuon( int );
-bool isTightSSElec( int );
+bool isTightLepton( int );
+bool isTightMuon( int );
+bool isTightElec( int );
 
 // Loose
-bool isLooseSSLepton( int );
-bool isLooseSSMuon( int );
-bool isLooseSSElec( int );
+bool isLooseLepton( int );
+bool isLooseMuon( int );
+bool isLooseElec( int );
 
 // Loose But Not Tight (Lbnt)
-bool isLbntSSLepton( int );
-bool isLbntSSMuon( int );
-bool isLbntSSElec( int );
+bool isLbntLepton( int );
+bool isLbntMuon( int );
+bool isLbntElec( int );
 
 // Good SS category jet
 bool isGoodSSJet( int );
@@ -111,6 +112,9 @@ float MllSS();
 
 // Ptlll (Pt3l)
 float Pt3l();
+
+// DPhilll,MET
+float DPhi3lMET();
 
 // Get Lep Flavor
 int LepFlavProduct();
