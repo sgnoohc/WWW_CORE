@@ -26,18 +26,25 @@ extern ObjIdx jetidx;
 static int DEBUG;
 
 // SS Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
+// The 2nd argument just returns the object by reference to further gain information about which cut failed
 bool passSSpresel( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Just object countings
 bool passSScommon( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Presel + Common selections (W-tagging, b-veto, high Mjj rejection)
-bool passSSMM    ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passSSEM    ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passSSEE    ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 
-// SS Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
+// 3L Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
+// The 2nd argument just returns the object by reference to further gain information about which cut failed
 bool pass3Lpresel( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Just object countings
 bool pass3Lcommon( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Presel + Common selections (W-tagging, b-veto, high Mjj rejection)
-bool pass3L0SFOS ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool pass3L1SFOS ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool pass3L2SFOS ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool pass3L0SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool pass3L1SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool pass3L2SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+
+// Application region definitions
+bool passSSARMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSAREM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSAREE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 
 // Event weights
 float weight();
@@ -50,6 +57,10 @@ bool isObjectSelected();
 
 // Set object indices for this event
 void setObjectIndices();
+
+// Replace "SignalLepton" containers with other leptons
+void setSignalLeptonWithOneTightAndOneLbnt();
+void setSignalLeptonWithTightLepton();
 
 // Returns a collection of indices for selected leptons
 ObjIdx getLeptonsIndices();

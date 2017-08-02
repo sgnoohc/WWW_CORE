@@ -11,10 +11,10 @@ ObjIdx jetidx;
 bool passSSpresel( int Nm1idx, int& cutidx )
 {
     setObjectIndices();
-    if (!( ( Nm1idx == 1 ) || ( lepidx["TightLepton"].size()                      ==  2  ) )) { cutidx = -1; return false; }
+    if (!( ( Nm1idx == 1 ) || ( lepidx["SignalLepton"].size()                     ==  2  ) )) { cutidx = -1; return false; }
     if (!( ( Nm1idx == 2 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==  2  ) )) { cutidx = -2; return false; }
-    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >  30. ) )) { cutidx = -3; return false; }
-    if (!( ( Nm1idx == 4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >  30. ) )) { cutidx = -4; return false; }
+    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].pt()  >  30. ) )) { cutidx = -3; return false; }
+    if (!( ( Nm1idx == 4 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]].pt()  >  30. ) )) { cutidx = -4; return false; }
     if (!( ( Nm1idx == 5 ) || ( jetidx["GoodSSJet"]    .size()                    >=  2  ) )) { cutidx = -5; return false; }
     if (!( ( Nm1idx == 6 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==  0  ) )) { cutidx = -6; return false; }
     if (!( ( Nm1idx == 7 ) || ( isSS()                                                   ) )) { cutidx = -7; return false; }
@@ -78,11 +78,11 @@ bool passSSEE( int Nm1idx, int& cutidx )
 bool pass3Lpresel( int Nm1idx, int& cutidx )
 {
     setObjectIndices();
-    if (!( ( Nm1idx == 1 ) || ( lepidx["TightLepton"].size()                      ==  3  ) )) { cutidx = -1 ; return false; }
+    if (!( ( Nm1idx == 1 ) || ( lepidx["SignalLepton"].size()                     ==  3  ) )) { cutidx = -1 ; return false; }
     if (!( ( Nm1idx == 2 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==  3  ) )) { cutidx = -2 ; return false; }
-    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >  20. ) )) { cutidx = -3 ; return false; }
-    if (!( ( Nm1idx == 4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >  20. ) )) { cutidx = -4 ; return false; }
-    if (!( ( Nm1idx == 5 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][2]].pt()   >  20. ) )) { cutidx = -5 ; return false; }
+    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].pt()  >  20. ) )) { cutidx = -3 ; return false; }
+    if (!( ( Nm1idx == 4 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]].pt()  >  20. ) )) { cutidx = -4 ; return false; }
+    if (!( ( Nm1idx == 5 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][2]].pt()  >  20. ) )) { cutidx = -5 ; return false; }
     if (!( ( Nm1idx == 6 ) || ( abs( totalCharge() )                              ==  1  ) )) { cutidx = -6 ; return false; }
     if (!( ( Nm1idx == 7 ) || ( jetidx["Good3LJet"].size()                        <=  1  ) )) { cutidx = -7 ; return false; }
     cutidx = 1;
@@ -139,6 +139,36 @@ bool pass3L2SFOS( int Nm1idx, int& cutidx )
     if (!( ( Nm1idx == 5 ) || ( DPhi3lMET()                 >    2.5 ) )) { cutidx = -5 ; return false; }
     cutidx = 1;
     return true;
+}
+
+//______________________________________________________________________________________
+bool passSSARMM( int Nm1idx, int& cutidx )
+{
+    setObjectIndices();
+    setSignalLeptonWithOneTightAndOneLbnt();
+    bool pass = passSSMM( Nm1idx, cutidx );
+    setSignalLeptonWithTightLepton();
+    return pass;
+}
+
+//______________________________________________________________________________________
+bool passSSAREM( int Nm1idx, int& cutidx )
+{
+    setObjectIndices();
+    setSignalLeptonWithOneTightAndOneLbnt();
+    bool pass = passSSEM( Nm1idx, cutidx );
+    setSignalLeptonWithTightLepton();
+    return pass;
+}
+
+//______________________________________________________________________________________
+bool passSSAREE( int Nm1idx, int& cutidx )
+{
+    setObjectIndices();
+    setSignalLeptonWithOneTightAndOneLbnt();
+    bool pass = passSSEE( Nm1idx, cutidx );
+    setSignalLeptonWithTightLepton();
+    return pass;
 }
 
 //______________________________________________________________________________________
@@ -247,6 +277,26 @@ void setObjectIndices()
 }
 
 //______________________________________________________________________________________
+void setSignalLeptonWithOneTightAndOneLbnt()
+{
+    if ( lepidx["TightLepton"].size() == 1 &&
+         lepidx["LbntLepton"] .size() == 1 )
+    {
+        lepidx["SignalLepton"].clear();
+        lepidx["SignalLepton"].push_back( lepidx["TightLepton"][0] );
+        lepidx["SignalLepton"].push_back( lepidx["LbntLepton"] [0] );
+    }
+}
+
+//______________________________________________________________________________________
+void setSignalLeptonWithTightLepton()
+{
+    lepidx["SignalLepton"] = lepidx["TightLepton"];
+    lepidx["SignalMuon"] = lepidx["TightMuon"];
+    lepidx["SignalElec"] = lepidx["TightElec"];
+}
+
+//______________________________________________________________________________________
 bool isObjectSelected()
 {
     if ( objidx_set_to_eventid == wwwbaby.evt() )
@@ -271,6 +321,8 @@ ObjIdx getLeptonsIndices()
         if ( isLbntMuon   ( ilep ) ) idx["LbntMuon"]   .push_back( ilep );
         if ( isLbntElec   ( ilep ) ) idx["LbntElec"]   .push_back( ilep );
     }
+    // Call the tight leptons, "signal leptons"
+    setSignalLeptonWithTightLepton();
     return idx;
 }
 
@@ -481,42 +533,42 @@ float DEtajjLead()
 //______________________________________________________________________________________
 float MllSS()
 {
-    if ( lepidx["TightLepton"].size() != 2 )
+    if ( lepidx["SignalLepton"].size() != 2 )
         return -999;
-    return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-             + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass();
+    return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+             + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]] ).mass();
 }
 
 //______________________________________________________________________________________
 float Pt3l()
 {
-    if ( lepidx["TightLepton"].size() != 3 )
+    if ( lepidx["SignalLepton"].size() != 3 )
         return -999;
-    return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-             + wwwbaby.lep_p4()[lepidx["TightLepton"][1]]
-             + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).pt();
+    return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+             + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]]
+             + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).pt();
 }
 
 //______________________________________________________________________________________
 float DPhi3lMET()
 {
-    if ( lepidx["TightLepton"].size() != 3 )
+    if ( lepidx["SignalLepton"].size() != 3 )
         return -999;
     TLorentzVector met;
     met.SetPtEtaPhiM( wwwbaby.met_pt(), 0, wwwbaby.met_phi(), 0 );
     LorentzVector metlv;
     metlv.SetPxPyPzE( met.Px(), met.Py(), met.Pz(), met.E() );
     return fabs( ROOT::Math::VectorUtil::DeltaPhi(
-                wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                + wwwbaby.lep_p4()[lepidx["TightLepton"][1]]
-                + wwwbaby.lep_p4()[lepidx["TightLepton"][2]],
+                wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]]
+                + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]],
                 met ));
 }
 
 //______________________________________________________________________________________
 float getMTmax()
 {
-    if ( lepidx["TightLepton"].size() < 2 )
+    if ( lepidx["SignalLepton"].size() < 2 )
         return -999;
     // Set MET
     TLorentzVector met;
@@ -525,9 +577,9 @@ float getMTmax()
     metlv.SetPxPyPzE( met.Px(), met.Py(), met.Pz(), met.E() );
     // Get Lepton p4
     LorentzVector p4;
-    p4 = wwwbaby.lep_p4()[lepidx["TightLepton"][0]];
+    p4 = wwwbaby.lep_p4()[lepidx["SignalLepton"][0]];
     float MT0 = sqrt( 2 * p4.pt() * metlv.pt() * ( 1 - cos( ROOT::Math::VectorUtil::DeltaPhi( metlv, p4 ) ) ) );
-    p4 = wwwbaby.lep_p4()[lepidx["TightLepton"][1]];
+    p4 = wwwbaby.lep_p4()[lepidx["SignalLepton"][1]];
     float MT1 = sqrt( 2 * p4.pt() * metlv.pt() * ( 1 - cos( ROOT::Math::VectorUtil::DeltaPhi( metlv, p4 ) ) ) );
     return MT0 > MT1 ? MT0 : MT1;
 }
@@ -535,10 +587,10 @@ float getMTmax()
 //______________________________________________________________________________________
 int LepFlavProduct()
 {
-    if ( lepidx["TightLepton"].size() != 2 )
+    if ( lepidx["SignalLepton"].size() != 2 )
         return false;
-    return wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-           * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]];
+    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]]
+           * wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]];
 }
 
 //______________________________________________________________________________________
@@ -552,7 +604,7 @@ bool isSSMM() { return LepFlavProduct() == 169; }
 int totalCharge()
 {
     int charge = 0;
-    for ( auto& ilep : lepidx["TightLepton"] )
+    for ( auto& ilep : lepidx["SignalLepton"] )
         charge += wwwbaby.lep_charge()[ilep];
     return charge;
 }
@@ -560,17 +612,17 @@ int totalCharge()
 //______________________________________________________________________________________
 int getNumSFOS()
 {
-    if ( lepidx["TightLepton"].size() != 3 )
+    if ( lepidx["SignalLepton"].size() != 3 )
         return -999;
     /* Loops through pairs of entries in the lep_pdgId vector
        and counts how many have opposite value*/
     int num_SFOS = 0;
-    for ( int i = 0; i < ( int ) lepidx["TightLepton"].size(); i++ )
+    for ( int i = 0; i < ( int ) lepidx["SignalLepton"].size(); i++ )
     {
-        for ( int j = i + 1; j < ( int ) lepidx["TightLepton"].size(); j++ )
+        for ( int j = i + 1; j < ( int ) lepidx["SignalLepton"].size(); j++ )
         {
-            if ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][i]] ==
-                    -( wwwbaby.lep_pdgId()[lepidx["TightLepton"][j]] ) )
+            if ( wwwbaby.lep_pdgId()[lepidx["SignalLepton"][i]] ==
+                    -( wwwbaby.lep_pdgId()[lepidx["SignalLepton"][j]] ) )
                 num_SFOS++;
         }
     }
@@ -580,20 +632,20 @@ int getNumSFOS()
 //______________________________________________________________________________________
 float get0SFOSMll()
 {
-    if ( lepidx["TightLepton"].size() != 3 )
+    if ( lepidx["SignalLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][2]];
     if ( pdgid0 == pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]] ).mass();
     else if ( pdgid0 == pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     else if ( pdgid1 == pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
@@ -603,20 +655,20 @@ float get0SFOSMll()
 //______________________________________________________________________________________
 float get0SFOSMee()
 {
-    if ( lepidx["TightLepton"].size() != 3 )
+    if ( lepidx["SignalLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][2]];
     if ( pdgid0 == pdgid1 && abs( pdgid0 ) == 11 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]] ).mass();
     else if ( pdgid0 == pdgid2 && abs( pdgid0 ) == 11 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     else if ( pdgid1 == pdgid2 && abs( pdgid1 ) == 11 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
@@ -626,20 +678,20 @@ float get0SFOSMee()
 //______________________________________________________________________________________
 float get1SFOSMll()
 {
-    if ( lepidx["TightLepton"].size() != 3 )
+    if ( lepidx["SignalLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][2]];
     if ( pdgid0 == -pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]] ).mass();
     else if ( pdgid0 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     else if ( pdgid1 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
@@ -649,20 +701,20 @@ float get1SFOSMll()
 //______________________________________________________________________________________
 float get2SFOSMll0()
 {
-    if ( lepidx["TightLepton"].size() != 3 )
+    if ( lepidx["SignalLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][2]];
     if ( pdgid0 == -pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]] ).mass();
     else if ( pdgid0 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     else if ( pdgid1 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
@@ -672,20 +724,20 @@ float get2SFOSMll0()
 //______________________________________________________________________________________
 float get2SFOSMll1()
 {
-    if ( lepidx["TightLepton"].size() != 3 )
+    if ( lepidx["SignalLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["SignalLepton"][2]];
     if ( pdgid2 == -pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]] ).mass();
     else if ( pdgid0 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     else if ( pdgid1 == -pdgid0 )
-        return ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["TightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["SignalLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
