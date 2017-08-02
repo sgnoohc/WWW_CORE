@@ -23,19 +23,27 @@ extern unsigned int objidx_set_to_eventid;
 extern ObjIdx lepidx;
 extern ObjIdx jetidx;
 
-// SS Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
-bool passSSpresel( int Nminus1_cut_idx = -1 ); // Just object countings
-bool passSScommon( int Nminus1_cut_idx = -1 ); // Presel + Common selections (W-tagging, b-veto, high Mjj rejection)
-bool passSSMM( int Nminus1_cut_idx = -1 );
-bool passSSEM( int Nminus1_cut_idx = -1 );
-bool passSSEE( int Nminus1_cut_idx = -1 );
+static int DEBUG;
 
 // SS Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
-bool pass3Lpresel( int Nminus1_cut_idx = -1 ); // Just object countings
-bool pass3Lcommon( int Nminus1_cut_idx = -1 ); // Presel + Common selections (W-tagging, b-veto, high Mjj rejection)
-bool pass3L0SFOS( int Nminus1_cut_idx = -1 );
-bool pass3L1SFOS( int Nminus1_cut_idx = -1 );
-bool pass3L2SFOS( int Nminus1_cut_idx = -1 );
+bool passSSpresel( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Just object countings
+bool passSScommon( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Presel + Common selections (W-tagging, b-veto, high Mjj rejection)
+bool passSSMM    ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSEM    ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSEE    ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+
+// SS Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
+bool pass3Lpresel( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Just object countings
+bool pass3Lcommon( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Presel + Common selections (W-tagging, b-veto, high Mjj rejection)
+bool pass3L0SFOS ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool pass3L1SFOS ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool pass3L2SFOS ( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+
+// Event weights
+float weight();
+
+// Print event information
+void printEvent();
 
 // Check whether this event's object selections have been performed
 bool isObjectSelected();
@@ -116,6 +124,9 @@ float Pt3l();
 // DPhilll,MET
 float DPhi3lMET();
 
+// MT max of the two SS leptons
+float getMTmax();
+
 // Get Lep Flavor
 int LepFlavProduct();
 
@@ -150,5 +161,7 @@ float get2SFOSMll0();
 // (Check the pair in order of (1,2), (0,2) (0,1)
 //  and returns the first pair that works)
 float get2SFOSMll1();
+
+
 
 #endif
