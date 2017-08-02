@@ -59,8 +59,8 @@ bool isObjectSelected();
 void setObjectIndices();
 
 // Replace "SignalLepton" containers with other leptons
-void setSignalLeptonWithOneTightAndOneLbnt();
-void setSignalLeptonWithTightLepton();
+void setSignalLeptonToOneTightAndOneLbnt();
+void setSignalLeptonToTightLepton();
 
 // Returns a collection of indices for selected leptons
 ObjIdx getLeptonsIndices();

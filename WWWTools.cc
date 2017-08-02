@@ -145,9 +145,9 @@ bool pass3L2SFOS( int Nm1idx, int& cutidx )
 bool passSSARMM( int Nm1idx, int& cutidx )
 {
     setObjectIndices();
-    setSignalLeptonWithOneTightAndOneLbnt();
+    setSignalLeptonToOneTightAndOneLbnt();
     bool pass = passSSMM( Nm1idx, cutidx );
-    setSignalLeptonWithTightLepton();
+    setSignalLeptonToTightLepton();
     return pass;
 }
 
@@ -155,9 +155,9 @@ bool passSSARMM( int Nm1idx, int& cutidx )
 bool passSSAREM( int Nm1idx, int& cutidx )
 {
     setObjectIndices();
-    setSignalLeptonWithOneTightAndOneLbnt();
+    setSignalLeptonToOneTightAndOneLbnt();
     bool pass = passSSEM( Nm1idx, cutidx );
-    setSignalLeptonWithTightLepton();
+    setSignalLeptonToTightLepton();
     return pass;
 }
 
@@ -165,9 +165,9 @@ bool passSSAREM( int Nm1idx, int& cutidx )
 bool passSSAREE( int Nm1idx, int& cutidx )
 {
     setObjectIndices();
-    setSignalLeptonWithOneTightAndOneLbnt();
+    setSignalLeptonToOneTightAndOneLbnt();
     bool pass = passSSEE( Nm1idx, cutidx );
-    setSignalLeptonWithTightLepton();
+    setSignalLeptonToTightLepton();
     return pass;
 }
 
@@ -277,7 +277,7 @@ void setObjectIndices()
 }
 
 //______________________________________________________________________________________
-void setSignalLeptonWithOneTightAndOneLbnt()
+void setSignalLeptonToOneTightAndOneLbnt()
 {
     if ( lepidx["TightLepton"].size() == 1 &&
          lepidx["LbntLepton"] .size() == 1 )
@@ -289,7 +289,7 @@ void setSignalLeptonWithOneTightAndOneLbnt()
 }
 
 //______________________________________________________________________________________
-void setSignalLeptonWithTightLepton()
+void setSignalLeptonToTightLepton()
 {
     lepidx["SignalLepton"] = lepidx["TightLepton"];
     lepidx["SignalMuon"] = lepidx["TightMuon"];
@@ -321,8 +321,10 @@ ObjIdx getLeptonsIndices()
         if ( isLbntMuon   ( ilep ) ) idx["LbntMuon"]   .push_back( ilep );
         if ( isLbntElec   ( ilep ) ) idx["LbntElec"]   .push_back( ilep );
     }
-    // Call the tight leptons, "signal leptons"
-    setSignalLeptonWithTightLepton();
+    // Default is to set signal leptons to Tight leptons
+    idx["SignalLepton"] = idx["TightLepton"];
+    idx["SignalMuon"] = idx["TightMuon"];
+    idx["SignalElec"] = idx["TightElec"];
     return idx;
 }
 
