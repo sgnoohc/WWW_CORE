@@ -279,10 +279,10 @@ void setObjectIndices()
 //______________________________________________________________________________________
 void setSignalLeptonToOneTightAndOneLbnt()
 {
+    lepidx["SignalLepton"].clear();
     if ( lepidx["TightLepton"].size() == 1 &&
          lepidx["LbntLepton"] .size() == 1 )
     {
-        lepidx["SignalLepton"].clear();
         lepidx["SignalLepton"].push_back( lepidx["TightLepton"][0] );
         lepidx["SignalLepton"].push_back( lepidx["LbntLepton"] [0] );
     }
@@ -744,5 +744,102 @@ float get2SFOSMll1()
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
     return -999;
+}
+
+//______________________________________________________________________________________
+bool passWHWWW()
+{
+    // VH Non-bb sample counting
+    int nW = 0;
+    int nZ = 0;
+    int nWfromH = 0;
+    int nZfromH = 0;
+
+    if ( wwwbaby.evt_dataset()[0].Contains( "/VHToNonbb" ) )
+    {
+        for ( unsigned int igen = 0; igen < wwwbaby.genPart_pdgId().size(); ++igen )
+        {
+            if ( abs( wwwbaby.genPart_pdgId().at( igen ) )  == 24
+                   && wwwbaby.genPart_status().at( igen )   == 22
+                   && wwwbaby.genPart_motherId().at( igen ) != 25 )
+                nW++;
+
+            if ( abs( wwwbaby.genPart_pdgId().at( igen ) )  == 23
+                   && wwwbaby.genPart_status().at( igen )   == 22
+                   && wwwbaby.genPart_motherId().at( igen ) != 25 )
+                nZ++;
+
+            if ( abs( wwwbaby.genPart_pdgId().at( igen ) )  == 24
+                   && wwwbaby.genPart_status().at( igen )   == 22
+                   && wwwbaby.genPart_motherId().at( igen ) == 25 )
+                nWfromH++;
+
+            if ( abs( wwwbaby.genPart_pdgId().at( igen ) )  == 23
+                   && wwwbaby.genPart_status().at( igen )   == 22
+                   && wwwbaby.genPart_motherId().at( igen ) == 25 )
+                nZfromH++;
+        }
+
+        // WH
+        if ( nW == 1 )
+        {
+            if ( nWfromH != 2 )
+                return false;
+            else
+                return true;
+        }
+        // ZH
+        else if ( nZ == 1 )
+            return false;
+        // unknown
+        else
+            return false;
+    }
+
+    return true;
+}
+
+//______________________________________________________________________________________
+TString sampleCategory()
+{
+    const TString& dsname = wwwbaby.evt_dataset()[0];
+    if ( dsname.Contains( "/WJetsToLNu" ) )                                        return "wj";
+    if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "madgraphMLM" ) )  return "dy";
+    if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "amcatnloFXFX" ) ) return "dynlo";
+    if ( dsname.Contains( "/TTJets_Single" ) )                                     return "tt1l";
+    if ( dsname.Contains( "/TTJets_Di" ) )                                         return "tt2l";
+    if ( dsname.Contains( "/ST_" ) )                                               return "singletop";
+    if ( dsname.Contains( "/tZq" ) )                                               return "singletop";
+    if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "powheg" ) )               return "ww";
+    if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "DoubleScattering" ) )     return "wwdpi";
+    if ( dsname.Contains( "/WmWm" ) )                                              return "vbsww";
+    if ( dsname.Contains( "/WpWp" ) )                                              return "wpwpjj";
+    if ( dsname.Contains( "/WZTo" ) )                                              return "wz";
+    if ( dsname.Contains( "/EWKWPlus2Jets_WToLNu_M" ) )                            return "wjj";
+    if ( dsname.Contains( "/EWKWMinus2Jets_WToLNu_M" ) )                           return "wjj";
+    if ( dsname.Contains( "/EWKZ2Jets_ZToLL_M" ) )                                 return "zjj";
+    if ( dsname.Contains( "/ZZTo" ) )                                              return "zz";
+    if ( dsname.Contains( "/ttZJets_13TeV_madgraphMLM" ) )                         return "ttz";
+    if ( dsname.Contains( "/TTZToLLNuNu_M" ) )                                     return "ttznlo";
+    if ( dsname.Contains( "/ttWJets_13TeV_madgraphMLM" ) )                         return "ttw";
+    if ( dsname.Contains( "/TTWJetsTo" ) )                                         return "ttwnlo";
+    if ( dsname.Contains( "/ttHToNonbb_M125_TuneCUETP8M2_ttHtranche3_13TeV" ) )    return "tth";
+    if ( dsname.Contains( "/ttHTobb_M125_13TeV_powheg_pythia8" ) )                 return "tth";
+    if ( dsname.Contains( "/TTGJets_TuneCUETP8M1_13TeV" ) )                        return "ttg";
+    if ( dsname.Contains( "/TTTT" ) )                                              return "tttt";
+    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "madgraphMLM" ) )      return "wg";
+    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "amcatnloFXFX" ) )     return "wgnlo";
+    if ( dsname.Contains( "/WGstarTo" ) )                                          return "wgstar";
+    if ( dsname.Contains( "/VHToNonbb" ) && passWHWWW() )                          return "whwww";
+    if ( dsname.Contains( "/VHToNonbb" ) && !passWHWWW() )                         return "vh";
+    if ( dsname.Contains( "/WWW" ) )                                               return "www_incl";
+    if ( dsname.Contains( "/WWZ" ) )                                               return "wwz_incl";
+    if ( dsname.Contains( "/WZZ" ) )                                               return "wzz_incl";
+    if ( dsname.Contains( "/ZZZ" ) )                                               return "zzz_incl";
+    if ( dsname.Contains( "/WZG" ) )                                               return "wzg_incl";
+    if ( dsname.Contains( "/WWG" ) )                                               return "wwg_incl";
+    if ( dsname.Contains( "/TEST-www" ) )                                          return "www";
+    if ( dsname.Contains( "Run2016" ) )                                            return "data";
+    return "other";
 }
 

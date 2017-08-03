@@ -173,6 +173,11 @@ float get2SFOSMll0();
 //  and returns the first pair that works)
 float get2SFOSMll1();
 
+// If the sample is VHNonbb, check whether this is WHWWW or non-WHWWW
+bool passWHWWW();
+
+// Current events background categorization
+TString sampleCategory();
 
 
 #endif
