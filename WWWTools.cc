@@ -5,7 +5,7 @@ ObjIdx lepidx;
 ObjIdx jetidx;
 
 #define MZ 91.1876
-#define LUMI 35.9
+#define LUMI 35.87
 
 //______________________________________________________________________________________
 bool passSSpresel( int Nm1idx, int& cutidx )
