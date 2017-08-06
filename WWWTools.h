@@ -71,6 +71,9 @@ bool isTightLepton( int );
 bool isTightMuon( int );
 bool isTightElec( int );
 
+// SS analysis (not us the SUSY) ID
+bool isSUSYSSTightMuon( int );
+
 // Loose
 bool isLooseLepton( int );
 bool isLooseMuon( int );
@@ -173,11 +176,17 @@ float get2SFOSMll0();
 //  and returns the first pair that works)
 float get2SFOSMll1();
 
+// Four fermion mass
+float M4();
+
 // If the sample is VHNonbb, check whether this is WHWWW or non-WHWWW
 bool passWHWWW();
 
 // Current events background categorization
 TString sampleCategory();
+
+// Get the category of sample based on input filename
+TString categ( TString );
 
 
 #endif
