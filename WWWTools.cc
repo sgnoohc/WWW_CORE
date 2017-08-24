@@ -1,6 +1,8 @@
 #include "WWWTools.h"
 
 unsigned int objidx_set_to_eventid;
+int objidx_set_to_run;
+int objidx_set_to_lumi;
 ObjIdx lepidx;
 ObjIdx jetidx;
 
@@ -13,13 +15,13 @@ bool passSSpresel( int Nm1idx, int& cutidx )
     setObjectIndices();
 //    if (!( ( Nm1idx == 0 ) || ( wwwbaby.HLT_DoubleMu_noiso() || wwwbaby.HLT_DoubleMu()   ) )) { cutidx = 0; return false; }
     if (!( ( Nm1idx == 1 ) || ( lepidx["SignalLepton"].size()                     ==  2  ) )) { cutidx = 1; return false; }
-    if (!( ( Nm1idx == 2 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==  2  ) )) { cutidx = 2; return false; }
-    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].pt()  >  30. ) )) { cutidx = 3; return false; }
-    if (!( ( Nm1idx == 4 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]].pt()  >  30. ) )) { cutidx = 4; return false; }
+    if (!( ( Nm1idx == 2 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].pt()  >  30. ) )) { cutidx = 2; return false; }
+    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]].pt()  >  30. ) )) { cutidx = 3; return false; }
+    if (!( ( Nm1idx == 4 ) || ( isSS()                                                   ) )) { cutidx = 4; return false; }
     if (!( ( Nm1idx == 5 ) || ( jetidx["GoodSSJet"]    .size()                    >=  2  ) )) { cutidx = 5; return false; }
-    if (!( ( Nm1idx == 6 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==  0  ) )) { cutidx = 6; return false; }
-    if (!( ( Nm1idx == 7 ) || ( isSS()                                                   ) )) { cutidx = 7; return false; }
-    cutidx = -1;
+    if (!( ( Nm1idx == 6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==  2  ) )) { cutidx = 6; return false; }
+    if (!( ( Nm1idx == 7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==  0  ) )) { cutidx = 7; return false; }
+    cutidx = 8;
     return true;
 }
 
@@ -28,12 +30,12 @@ bool passSScommon( int Nm1idx, int& cutidx )
 {
     setObjectIndices();
     if (!( ( Nm1idx == 0 ) || ( passSSpresel()                       ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1 ) || ( MjjW()                     > 60.  &&
-                                MjjW()                     < 100.    ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( MjjLead()                  < 400.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3 ) || ( DEtajjLead()               < 1.5     ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4 ) || ( jetidx["LooseBJet"].size() == 0      ) )) { cutidx = 4 ; return false; }
-    cutidx = -1;
+    if (!( ( Nm1idx == 1 ) || ( jetidx["LooseBJet"].size() == 0      ) )) { cutidx = 1 ; return false; }
+    if (!( ( Nm1idx == 2 ) || ( MjjW()                     > 60.  &&
+                                MjjW()                     < 100.    ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx == 3 ) || ( MjjLead()                  < 400.    ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx == 4 ) || ( DEtajjLead()               < 1.5     ) )) { cutidx = 4 ; return false; }
+    cutidx = 5;
     return true;
 }
 
@@ -43,8 +45,8 @@ bool passSSMM( int Nm1idx, int& cutidx )
     setObjectIndices();
     if (!( ( Nm1idx == 0 ) || ( passSScommon() ) )) { cutidx = 0 ; return false; }
     if (!( ( Nm1idx == 1 ) || ( isSSMM()       ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( MllSS() > 40.  ) )) { cutidx = 2 ; return false; }
-    cutidx = -1;
+    if (!( ( Nm1idx == 2 ) || ( Mll() > 40.  ) )) { cutidx = 2 ; return false; }
+    cutidx = 3;
     return true;
 }
 
@@ -54,10 +56,10 @@ bool passSSEM( int Nm1idx, int& cutidx )
     setObjectIndices();
     if (!( ( Nm1idx == 0 ) || ( passSScommon()         ) )) { cutidx = 0 ; return false; }
     if (!( ( Nm1idx == 1 ) || ( isSSEM()               ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( MllSS()          > 30. ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx == 2 ) || ( Mll()          > 30. ) )) { cutidx = 2 ; return false; }
     if (!( ( Nm1idx == 3 ) || ( wwwbaby.met_pt() > 40. ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4 ) || ( getMTmax()       > 90. ) )) { cutidx = 4 ; return false; }
-    cutidx = -1;
+    if (!( ( Nm1idx == 4 ) || ( MTmax()          > 90. ) )) { cutidx = 4 ; return false; }
+    cutidx = 5;
     return true;
 }
 
@@ -67,11 +69,11 @@ bool passSSEE( int Nm1idx, int& cutidx )
     setObjectIndices();
     if (!( ( Nm1idx == 0 ) || ( passSScommon()             ) )) { cutidx = 0 ; return false; }
     if (!( ( Nm1idx == 1 ) || ( isSSEE()                   ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( MllSS()          >  40.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3 ) || ( MllSS()          <  80. ||
-                                MllSS()          > 100.    ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx == 2 ) || ( Mll()          >  40.    ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx == 3 ) || ( Mll()          <  80. ||
+                                Mll()          > 100.    ) )) { cutidx = 3 ; return false; }
     if (!( ( Nm1idx == 4 ) || ( wwwbaby.met_pt() >  40.    ) )) { cutidx = 4 ; return false; }
-    cutidx = -1;
+    cutidx = 5;
     return true;
 }
 
@@ -81,12 +83,12 @@ bool pass3Lpresel( int Nm1idx, int& cutidx )
     setObjectIndices();
     if (!( ( Nm1idx == 1 ) || ( lepidx["SignalLepton"].size()                     ==  3  ) )) { cutidx = 1 ; return false; }
     if (!( ( Nm1idx == 2 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==  3  ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].pt()  >  20. ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].pt()  >  25. ) )) { cutidx = 3 ; return false; }
     if (!( ( Nm1idx == 4 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]].pt()  >  20. ) )) { cutidx = 4 ; return false; }
     if (!( ( Nm1idx == 5 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][2]].pt()  >  20. ) )) { cutidx = 5 ; return false; }
     if (!( ( Nm1idx == 6 ) || ( abs( totalCharge() )                              ==  1  ) )) { cutidx = 6 ; return false; }
     if (!( ( Nm1idx == 7 ) || ( jetidx["Good3LJet"].size()                        <=  1  ) )) { cutidx = 7 ; return false; }
-    cutidx = -1;
+    cutidx = 8;
     return true;
 }
 
@@ -97,7 +99,7 @@ bool pass3Lcommon( int Nm1idx, int& cutidx )
     if (!( ( Nm1idx == 0 ) || ( pass3Lpresel()                   ) )) { cutidx = 0 ; return false; }
     if (!( ( Nm1idx == 1 ) || ( Pt3l() > 60.                     ) )) { cutidx = 1 ; return false; }
     if (!( ( Nm1idx == 2 ) || ( jetidx["LooseBJet"].size() ==  0 ) )) { cutidx = 2 ; return false; }
-    cutidx = -1;
+    cutidx = 3;
     return true;
 }
 
@@ -110,7 +112,7 @@ bool pass3L0SFOS( int Nm1idx, int& cutidx )
     if (!( ( Nm1idx == 2 ) || ( get0SFOSMll()              >   20.  ) )) { cutidx = 2 ; return false; }
     if (!( ( Nm1idx == 3 ) || ( fabs( get0SFOSMee() - MZ ) >   15.  ) )) { cutidx = 3 ; return false; }
     if (!( ( Nm1idx == 4 ) || ( DPhi3lMET()                >    2.7 ) )) { cutidx = 4 ; return false; }
-    cutidx = -1;
+    cutidx = 5;
     return true;
 }
 
@@ -246,7 +248,7 @@ void printEvent()
     std::cout  << "MjjW          " << " : " << MjjW           () << std::endl;
     std::cout  << "MjjLead       " << " : " << MjjLead        () << std::endl;
     std::cout  << "DEtajjLead    " << " : " << DEtajjLead     () << std::endl;
-    std::cout  << "MllSS         " << " : " << MllSS          () << std::endl;
+    std::cout  << "Mll         " << " : " << Mll          () << std::endl;
     std::cout  << "Pt3l          " << " : " << Pt3l           () << std::endl;
     std::cout  << "DPhi3lMET     " << " : " << DPhi3lMET      () << std::endl;
     std::cout  << "LepFlavProduct" << " : " << LepFlavProduct () << std::endl;
@@ -275,6 +277,8 @@ void setObjectIndices()
     jetidx = getJetsIndices();
     // Now set the event id of the event the objects are selected from
     objidx_set_to_eventid = wwwbaby.evt();
+    objidx_set_to_run     = wwwbaby.run();
+    objidx_set_to_lumi    = wwwbaby.lumi();
 }
 
 //______________________________________________________________________________________
@@ -300,7 +304,9 @@ void setSignalLeptonToTightLepton()
 //______________________________________________________________________________________
 bool isObjectSelected()
 {
-    if ( objidx_set_to_eventid == wwwbaby.evt() )
+    if ( objidx_set_to_eventid == wwwbaby.evt() &&
+         objidx_set_to_run     == wwwbaby.run() &&
+         objidx_set_to_lumi    == wwwbaby.lumi() )
         return true;
     else
         return false;
@@ -492,6 +498,9 @@ int getBabyVersion( TString path )
     if ( path.Contains( "v0.1.5" ) ) return 5;
     if ( path.Contains( "v0.1.9" ) ) return 9;
     if ( path.Contains( "v0.1.11" ) ) return 11;
+    if ( path.Contains( "v0_1_5" ) ) return 5;
+    if ( path.Contains( "v0_1_9" ) ) return 9;
+    if ( path.Contains( "v0_1_11" ) ) return 11;
     std::cout << "Error:: Unrecognized version number!" << std::endl;
     exit(-1);
     return -1;
@@ -545,12 +554,31 @@ float DEtajjLead()
 }
 
 //______________________________________________________________________________________
-float MllSS()
+float Mll()
 {
-    if ( lepidx["SignalLepton"].size() != 2 )
+    if ( lepidx["SignalLepton"].size() < 2 )
         return -999;
     return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
              + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]] ).mass();
+}
+
+//______________________________________________________________________________________
+float DPhill()
+{
+    if ( lepidx["SignalLepton"].size() < 2 )
+        return -999;
+    return fabs( ROOT::Math::VectorUtil::DeltaPhi(
+            wwwbaby.lep_p4()[lepidx["SignalLepton"][0]],
+            wwwbaby.lep_p4()[lepidx["SignalLepton"][1]] ));
+}
+
+//______________________________________________________________________________________
+float DEtall()
+{
+    if ( lepidx["SignalLepton"].size() < 2 )
+        return -999;
+    return fabs( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].eta()
+             - wwwbaby.lep_p4()[lepidx["SignalLepton"][1]].eta() );
 }
 
 //______________________________________________________________________________________
@@ -580,9 +608,37 @@ float DPhi3lMET()
 }
 
 //______________________________________________________________________________________
-float getMTmax()
+float MTmax()
 {
     if ( lepidx["SignalLepton"].size() < 2 )
+        return -999;
+    float mt0 = MT0();
+    float mt1 = MT1();
+    return mt0 > mt1 ? mt0 : mt1;
+}
+
+//______________________________________________________________________________________
+float MT0()
+{
+    return MTidx( 0 );
+}
+
+//______________________________________________________________________________________
+float MT1()
+{
+    return MTidx( 1 );
+}
+
+//______________________________________________________________________________________
+float MT2()
+{
+    return MTidx( 2 );
+}
+
+//______________________________________________________________________________________
+float MTidx( int idx )
+{
+    if ( lepidx["SignalLepton"].size() < (unsigned int) idx + 1 )
         return -999;
     // Set MET
     TLorentzVector met;
@@ -591,20 +647,67 @@ float getMTmax()
     metlv.SetPxPyPzE( met.Px(), met.Py(), met.Pz(), met.E() );
     // Get Lepton p4
     LorentzVector p4;
-    p4 = wwwbaby.lep_p4()[lepidx["SignalLepton"][0]];
-    float MT0 = sqrt( 2 * p4.pt() * metlv.pt() * ( 1 - cos( ROOT::Math::VectorUtil::DeltaPhi( metlv, p4 ) ) ) );
-    p4 = wwwbaby.lep_p4()[lepidx["SignalLepton"][1]];
-    float MT1 = sqrt( 2 * p4.pt() * metlv.pt() * ( 1 - cos( ROOT::Math::VectorUtil::DeltaPhi( metlv, p4 ) ) ) );
-    return MT0 > MT1 ? MT0 : MT1;
+    p4 = wwwbaby.lep_p4()[lepidx["SignalLepton"][idx]];
+    return sqrt( 2 * p4.pt() * metlv.pt() * ( 1 - cos( ROOT::Math::VectorUtil::DeltaPhi( metlv, p4 ) ) ) );
 }
 
 //______________________________________________________________________________________
 int LepFlavProduct()
 {
-    if ( lepidx["SignalLepton"].size() != 2 )
+    if ( lepidx["SignalLepton"].size() < 2 )
         return false;
     return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]]
            * wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]];
+}
+
+//______________________________________________________________________________________
+bool isLeadPlus()
+{
+    if ( lepidx["SignalLepton"].size() < 1 )
+        return false;
+    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]] < 0;
+}
+
+//______________________________________________________________________________________
+bool isSubleadPlus()
+{
+    if ( lepidx["SignalLepton"].size() < 2 )
+        return false;
+    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]] < 0;
+}
+
+//______________________________________________________________________________________
+bool isLeadMinus()
+{
+    if ( lepidx["SignalLepton"].size() < 1 )
+        return false;
+    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]] > 0;
+}
+
+//______________________________________________________________________________________
+bool isSubleadMinus()
+{
+    if ( lepidx["SignalLepton"].size() < 2 )
+        return false;
+    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]] > 0;
+}
+
+//______________________________________________________________________________________
+bool isPlusPlus()
+{
+    if ( isLeadPlus() && isSubleadPlus() )
+        return true;
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool isMinusMinus()
+{
+    if ( isLeadMinus() && isSubleadMinus() )
+        return true;
+    else
+        return false;
 }
 
 //______________________________________________________________________________________
@@ -826,57 +929,64 @@ bool passWHWWW()
 }
 
 //______________________________________________________________________________________
-TString sampleCategory()
+TString sampleCategory( int& priority )
 {
     const TString& dsname = wwwbaby.evt_dataset()[0];
-    if ( dsname.Contains( "/GJets" ) )                                             return "gj";
-    if ( dsname.Contains( "/WJetsToLNu" ) )                                        return "wj";
-    if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "madgraphMLM" ) )  return "dy";
-    if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "amcatnloFXFX" ) ) return "dynlo";
-    if ( dsname.Contains( "/TTJets_Single" ) && dsname.Contains( "ext1" ) )        return "tt1l";
-    if ( dsname.Contains( "/TTJets_Single" ) && !dsname.Contains( "ext1" ) )       return "tt1lnonext";
-    if ( dsname.Contains( "/TTJets_Di" ) && dsname.Contains( "ext1" ) )            return "tt2l";
-    if ( dsname.Contains( "/TTJets_Di" ) && !dsname.Contains( "ext1") )            return "tt2lnonext";
-    if ( dsname.Contains( "/TTTo2L2Nu_" ) )                                        return "tt2lpowheg";
-    if ( dsname.Contains( "/ST_" ) )                                               return "singletop";
-    if ( dsname.Contains( "/tZq" ) )                                               return "singletop";
-    if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "powheg" ) )               return "ww";
-    if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "DoubleScattering" ) )     return "wwdpi";
-    if ( dsname.Contains( "/WpWpJJ_EWK" ) )                                        return "vbsww";
-    if ( dsname.Contains( "/WmWmJJ_13" ) )                                         return "wwjj";
-    if ( dsname.Contains( "/WpWpJJ_13" ) )                                         return "wwjj";
-    if ( dsname.Contains( "/WZTo" ) )                                              return "wz";
-    if ( dsname.Contains( "/EWKWPlus2Jets_WToLNu_M" ) )                            return "wjj";
-    if ( dsname.Contains( "/EWKWMinus2Jets_WToLNu_M" ) )                           return "wjj";
-    if ( dsname.Contains( "/EWKZ2Jets_ZToLL_M" ) )                                 return "zjj";
-    if ( dsname.Contains( "/ZZTo" ) )                                              return "zz";
-    if ( dsname.Contains( "/ttZJets_13TeV_madgraphMLM" ) )                         return "ttz";
-    if ( dsname.Contains( "/TTZToLLNuNu_M" ) )                                     return "ttznlo";
-    if ( dsname.Contains( "/ttWJets_13TeV_madgraphMLM" ) )                         return "ttw";
-    if ( dsname.Contains( "/TTWJetsTo" ) )                                         return "ttwnlo";
-    if ( dsname.Contains( "/ttHToNonbb_M125_TuneCUETP8M2_ttHtranche3_13TeV" ) )    return "tth";
-    if ( dsname.Contains( "/ttHTobb_M125_13TeV_powheg_pythia8" ) )                 return "tth";
-    if ( dsname.Contains( "/TTGJets_TuneCUETP8M1_13TeV" ) )                        return "ttg";
-    if ( dsname.Contains( "/TTTT" ) )                                              return "tttt";
-    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "madgraphMLM" ) )      return "wg";
-    if ( dsname.Contains( "/WGJets_"  ) )                                          return "wgpt40";
-    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "amcatnloFXFX" ) )     return "wgnlo";
-    if ( dsname.Contains( "/WGstarTo" ) )                                          return "wgstar";
-    if ( dsname.Contains( "/ZGTo2LG"  ) )                                          return "zg";
-    if ( dsname.Contains( "/VHToNonbb" ) && passWHWWW() )                          return "whwww";
-    if ( dsname.Contains( "/VHToNonbb" ) && !passWHWWW() )                         return "vh";
-    if ( dsname.Contains( "/WWW" ) )                                               return "www_incl";
-    if ( dsname.Contains( "/WWZ" ) )                                               return "wwz_incl";
-    if ( dsname.Contains( "/WZZ" ) )                                               return "wzz_incl";
-    if ( dsname.Contains( "/ZZZ" ) )                                               return "zzz_incl";
-    if ( dsname.Contains( "/WZG" ) )                                               return "wzg_incl";
-    if ( dsname.Contains( "/WWG" ) )                                               return "wwg_incl";
-    if ( dsname.Contains( "/TEST-www" ) )                                          return "www";
-    if ( dsname.Contains( "/TEST-tth" ) )                                          return "tthmia";
-    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "DoubleMuon" ) )         return "data_mm";
-    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "DoubleEG" ) )           return "data_ee";
-    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "MuonEG" ) )             return "data_em";
-    if ( dsname.Contains( "Run2016" ) )                                            return "data_other";
+    if ( dsname.Contains( "/QCD_HT" ) )                                            { priority = 2; return "qcd"; }
+    if ( dsname.Contains( "/GJets" ) )                                             { priority = 2; return "gj"; }
+    if ( dsname.Contains( "/WJetsToLNu" ) )                                        { priority = 1; return "wj"; }
+    if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "madgraphMLM" ) )  { priority = 1; return "dy"; }
+    if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "amcatnloFXFX" ) ) { priority = 2; return "dynlo"; }
+    if ( dsname.Contains( "/TTJets_Single" ) && dsname.Contains( "ext1" ) )        { priority = 1; return "tt1l"; }
+    if ( dsname.Contains( "/TTJets_Single" ) && !dsname.Contains( "ext1" ) )       { priority = 2; return "tt1lnonext"; }
+    if ( dsname.Contains( "/TTJets_Di" ) && dsname.Contains( "ext1" ) )            { priority = 1; return "tt2l"; }
+    if ( dsname.Contains( "/TTJets_Di" ) && !dsname.Contains( "ext1") )            { priority = 2; return "tt2lnonext"; }
+    if ( dsname.Contains( "/TTTo2L2Nu_" ) )                                        { priority = 2; return "tt2lpowheg"; }
+    if ( dsname.Contains( "TTTo2L2Nu_" ) )                                         { priority = 2; return "tt2lpowheg"; } // some weird ones have weird names 
+    if ( dsname.Contains( "/ST_" ) )                                               { priority = 1; return "singletop"; }
+    if ( dsname.Contains( "/tZq" ) )                                               { priority = 1; return "singletop"; }
+    if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "powheg" ) )               { priority = 1; return "ww"; }
+    if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "DoubleScattering" ) )     { priority = 1; return "wwdpi"; }
+    if ( dsname.Contains( "/WpWpJJ_EWK" ) )                                        { priority = 1; return "vbsww"; }
+    if ( dsname.Contains( "/WmWmJJ_13" ) )                                         { priority = 2; return "wwjj"; }
+    if ( dsname.Contains( "/WpWpJJ_13" ) )                                         { priority = 2; return "wwjj"; }
+    if ( dsname.Contains( "/WZTo" ) )                                              { priority = 1; return "wz"; }
+    if ( dsname.Contains( "/GluGluHToZZTo4L" ) )                                   { priority = 2; return "gghzz"; }
+    if ( dsname.Contains( "/EWKWPlus2Jets_WToLNu_M" ) )                            { priority = 2; return "wjj"; }
+    if ( dsname.Contains( "/EWKWMinus2Jets_WToLNu_M" ) )                           { priority = 2; return "wjj"; }
+    if ( dsname.Contains( "/EWKZ2Jets_ZToLL_M" ) )                                 { priority = 2; return "zjj"; }
+    if ( dsname.Contains( "/ZZTo" ) )                                              { priority = 1; return "zz"; }
+    if ( dsname.Contains( "/ttZJets_13TeV_madgraphMLM" ) )                         { priority = 1; return "ttz"; }
+    if ( dsname.Contains( "/TTZToLLNuNu_M" ) )                                     { priority = 2; return "ttznlo"; }
+    if ( dsname.Contains( "/ttWJets_13TeV_madgraphMLM" ) )                         { priority = 1; return "ttw"; }
+    if ( dsname.Contains( "/TTWJetsTo" ) )                                         { priority = 2; return "ttwnlo"; }
+    if ( dsname.Contains( "/ttH_HToZZ_4LFilter" ) )                                { priority = 2; return "tthzz"; }
+    if ( dsname.Contains( "/ttHToNonbb_M125_TuneCUETP8M2_ttHtranche3_13TeV" ) )    { priority = 1; return "tth"; }
+    if ( dsname.Contains( "/ttHTobb_M125_13TeV_powheg_pythia8" ) )                 { priority = 1; return "tth"; }
+    if ( dsname.Contains( "/TTGJets_TuneCUETP8M1_13TeV" ) )                        { priority = 1; return "ttg"; }
+    if ( dsname.Contains( "/TTTT" ) )                                              { priority = 2; return "tttt"; }
+    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "madgraphMLM" ) )      { priority = 2; return "wg"; }
+    if ( dsname.Contains( "/WGJets_"  ) )                                          { priority = 2; return "wgpt40"; }
+    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "amcatnloFXFX" ) )     { priority = 2; return "wgnlo"; }
+    if ( dsname.Contains( "/WGstarTo" ) )                                          { priority = 2; return "wgstar"; }
+    if ( dsname.Contains( "/ZGTo2LG"  ) )                                          { priority = 2; return "zg"; }
+    if ( dsname.Contains( "/WminusH_HToBB" ) )                                     { priority = 2; return "whbb"; }
+    if ( dsname.Contains( "/WplusH_HToBB" ) )                                      { priority = 2; return "whbb"; }
+    if ( dsname.Contains( "/VHToNonbb" ) && !passWHWWW() )                         { priority = 1; return "vh"; }
+    if ( dsname.Contains( "/VHToNonbb" ) && passWHWWW() )                          { priority = 1; return "whwww"; }
+    if ( dsname.Contains( "/WWW" ) )                                               { priority = 2; return "www_incl"; }
+    if ( dsname.Contains( "/WWZ" ) )                                               { priority = 1; return "wwz_incl"; }
+    if ( dsname.Contains( "/WZZ" ) )                                               { priority = 1; return "wzz_incl"; }
+    if ( dsname.Contains( "/ZZZ" ) )                                               { priority = 1; return "zzz_incl"; }
+    if ( dsname.Contains( "/WZG" ) )                                               { priority = 2; return "wzg_incl"; }
+    if ( dsname.Contains( "/WWG" ) )                                               { priority = 2; return "wwg_incl"; }
+    if ( dsname.Contains( "/TEST-www" ) )                                          { priority = 1; return "www"; }
+    if ( dsname.Contains( "/TEST-tth" ) )                                          { priority = 2; return "tthmia"; }
+    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "DoubleMuon" ) )         { priority = 1; return "data_mm"; }
+    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "DoubleEG" ) )           { priority = 1; return "data_ee"; }
+    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "MuonEG" ) )             { priority = 1; return "data_em"; }
+    if ( dsname.Contains( "Run2016" ) )                                            { priority = 1; return "data_other"; }
+    if ( wwwbaby.evt() == 1532413419 && wwwbaby.lumi() == 962 && wwwbaby.run() == 281797 ) { priority = 1; return "data_ee"; }
 
     if ( dsname.Length() == 0 )
     {
@@ -885,6 +995,208 @@ TString sampleCategory()
         std::cout << wwwbaby.evt() << " " << wwwbaby.lumi() << " " << wwwbaby.run() << std::endl;
     }
 
-    TString othername = dsname;
+    TString othername = dsname + "_UNCATEGORIZED";
+    priority = 2;
     return othername.ReplaceAll( "/", "_" );
 }
+
+//______________________________________________________________________________________
+TString bkgCategory()
+{
+
+    if ( wwwbaby.isData() ) return sampleCategory();
+
+    const TString& dsname = wwwbaby.evt_dataset()[0];
+    if ( dsname.Contains( "/VHToNonbb" ) && passWHWWW() ) return "whwww";
+    if ( dsname.Contains( "/TEST-www" ) )                 return "www";
+
+    std::vector<unsigned int> iSS = lepidx["TightLepton"];
+    std::vector<unsigned int> iaSS = lepidx["LbntLepton"];
+    std::vector<unsigned int> ilSS = lepidx["LooseLepton"];
+
+    TString sn = "";
+    TString sn2 = "";
+        
+    if ( ( ( iSS.size() + iaSS.size() ) >= 2 ) || ( ( iSS.size() + ilSS.size() ) >= 2 ) )
+    {
+        int l1( -1 ), l2( -1 );
+        
+        if ( iSS.size() >= 2 )
+        {
+            l1 = iSS[0];
+            l2 = iSS[1];
+        }
+        else if ( iSS.size() == 1 && iaSS.size() >= 1 )
+        {
+            l1 = iSS[0];
+            l2 = iaSS[0];
+        }
+        else if ( iSS.size() == 1 && ilSS.size() >= 1 )
+        {
+            l1 = iSS[0];
+            l2 = ilSS[0];
+        }
+        else if ( iaSS.size() >= 2 )
+        {
+            l1 = iaSS[0];
+            l2 = iaSS[1];
+        }
+        else if ( ilSS.size() >= 2 )
+        {
+            l1 = ilSS[0];
+            l2 = ilSS[1];
+        }
+        
+        int nW( 0 ), nZ( 0 ), nG( 0 ), nF( 0 );
+        
+        if ( wwwbaby.lep_isFromW()[l1] )
+            ++nW;
+        else if ( wwwbaby.lep_isFromZ()[l1] )
+            ++nZ;
+        else if ( wwwbaby.lep_isFromB()[l1] || wwwbaby.lep_isFromC()[l1] || wwwbaby.lep_isFromL()[l1] || wwwbaby.lep_isFromLF()[l1] )
+            ++nF;
+        else if ( wwwbaby.lep_motherIdSS()[l1] == ( -3 ) )
+            ++nG;
+            
+        if ( wwwbaby.lep_isFromW()[l2] )
+            ++nW;
+        else if ( wwwbaby.lep_isFromZ()[l2] )
+            ++nZ;
+        else if ( wwwbaby.lep_isFromB()[l2] || wwwbaby.lep_isFromC()[l2] || wwwbaby.lep_isFromL()[l2] || wwwbaby.lep_isFromLF()[l2] )
+            ++nF;
+        else if ( wwwbaby.lep_motherIdSS()[l2] == ( -3 ) )
+            ++nG;
+            
+        if ( nW == 2 && wwwbaby.lep_mc_Id()[l1]*wwwbaby.lep_mc_Id()[l2] > 0 )
+            sn = "trueSS";//W+W+
+        else if ( nW == 2 )
+            sn = "chargeflips";//W+W-
+        else if ( nZ == 2 && wwwbaby.lep_mc_Id()[l1]*wwwbaby.lep_mc_Id()[l2] <= 0 )
+            sn = "chargeflips";//Z
+        else if ( nZ == 2 )
+            sn = "SSLL";//ZZ both with a lost lepton
+        else if ( nW == 1 && nZ == 1 )
+            sn = "SSLL";//WZ
+        else if ( ( nW + nZ ) == 1 && nG == 1 )
+            sn = "photonfakes";
+        else if ( ( nW + nZ ) == 1 )
+            sn = "fakes";
+        else if ( ( nW + nZ ) == 0 && nG == 2 )
+            sn = "photondoublefakes";
+        else if ( ( nW + nZ ) == 0 && nG == 1 )
+            sn = "fakesphotonfakes";
+        else if ( ( nW + nZ ) == 0 )
+            sn = "doublefakes";
+        else
+        {
+            if ( nG >= 1 )
+                sn = "otherphotonfakes";
+            else
+                sn = "others";
+        }
+    }
+    else
+    {
+        std::cout << std::endl;
+        std::cout << "bkgCategoryFull() Why am I here?";
+        std::cout << wwwbaby.evt() << " " << wwwbaby.lumi() << " " << wwwbaby.run() << std::endl;
+        return "others";
+    }
+
+    return sn;
+    
+//    if ( ( i3l.size() >= 3 ) || ( i3l.size() == 2 && looseEle >= 0 ) )
+//    {
+//        int l1( -1 ), l2( -1 ), l3( -1 );
+//        
+//        if ( i3l.size() >= 3 )
+//        {
+//            l1 = i3l[0];
+//            l2 = i3l[1];
+//            l3 = i3l[2];
+//        }
+//        
+//        if ( i3l.size() == 2 && looseEle >= 0 )
+//        {
+//            l1 = i3l[0];
+//            l2 = i3l[1];
+//            l3 = looseEle;
+//        }
+//        
+//        int nW( 0 ), nZ( 0 ), nG( 0 ), nF( 0 );
+//        
+//        if ( wwwbaby.lep_isFromW()[l1] )
+//            ++nW;
+//        else if ( wwwbaby.lep_isFromZ()[l1] )
+//            ++nZ;
+//        else if ( wwwbaby.lep_isFromB()[l1] || wwwbaby.lep_isFromC()[l1] || wwwbaby.lep_isFromL()[l1] || wwwbaby.lep_isFromLF()[l1] )
+//            ++nF;
+//        else if ( wwwbaby.lep_motherIdSS()[l1] == ( -3 ) )
+//            ++nG;
+//            
+//        if ( wwwbaby.lep_isFromW()[l2] )
+//            ++nW;
+//        else if ( wwwbaby.lep_isFromZ()[l2] )
+//            ++nZ;
+//        else if ( wwwbaby.lep_isFromB()[l2] || wwwbaby.lep_isFromC()[l2] || wwwbaby.lep_isFromL()[l2] || wwwbaby.lep_isFromLF()[l2] )
+//            ++nF;
+//        else if ( wwwbaby.lep_motherIdSS()[l2] == ( -3 ) )
+//            ++nG;
+//            
+//        if ( wwwbaby.lep_isFromW()[l3] )
+//            ++nW;
+//        else if ( wwwbaby.lep_isFromZ()[l3] )
+//            ++nZ;
+//        else if ( wwwbaby.lep_isFromB()[l3] || wwwbaby.lep_isFromC()[l3] || wwwbaby.lep_isFromL()[l3] || wwwbaby.lep_isFromLF()[l3] )
+//            ++nF;
+//        else if ( wwwbaby.lep_motherIdSS()[l3] == ( -3 ) )
+//            ++nG;
+//            
+//        if ( nW == 3 && ( wwwbaby.lep_mc_Id()[l1] > 0 && wwwbaby.lep_mc_Id()[l2] > 0 && wwwbaby.lep_mc_Id()[l3] > 0 ) )
+//            sn2 = "chargeflips";//W+W+W+ - it could be +++ final state, but at the end this final state will be vetoed, so if reco is ++- (e.g.), then this is a chargeflip
+//        else if ( nW == 3 && ( wwwbaby.lep_mc_Id()[l1] < 0 && wwwbaby.lep_mc_Id()[l2] < 0 && wwwbaby.lep_mc_Id()[l3] < 0 ) )
+//            sn2 = "chargeflips";//W+W+W+ - it could be +++ final state, but at the end this final state will be vetoed, so if reco is ++- (e.g.), then this is a chargeflip
+//        else if ( nW == 3 )
+//            sn2 = "trueWWW";
+//        else if ( nW == 2 && nZ == 1 )
+//            sn2 = "3lLL";//ttZ w/ LL
+//        else if ( nW == 1 && nZ == 2 )
+//            sn2 = "true3L";//WZ, neglect WZZ as LL
+//        else if ( nZ == 3 )
+//            sn2 = "3lLL";//ZZ
+//        else if ( ( nW + nZ ) == 2 )
+//        {
+//            if ( nG == 1 )
+//                sn2 = "photonfakes";
+//            else
+//                sn2 = "fakes";
+//        }
+//        else if ( ( nW + nZ ) == 1 )
+//        {
+//            if ( nG == 2 )
+//                sn2 = "photondoublefakes";
+//            else if ( nG == 1 )
+//                sn2 = "fakesphotonfakes";
+//            else
+//                sn2 = "doublefakes";
+//        }
+//        else
+//        {
+//            if ( nG == 3 )
+//                sn2 = "photontriplefakes";
+//            else if ( nG >= 1 )
+//                sn2 = "otherphotonfakes";
+//            else
+//                sn2 = "others";//could be triple fakes
+//        }
+//    }
+}
+
+//______________________________________________________________________________________
+void printEventID()
+{
+    std::cout << std::endl;
+    std::cout << "(evt, run, lumi) = (" << wwwbaby.evt() << ", " << wwwbaby.run() << ", " << wwwbaby.lumi() << ")" << std::endl;
+    std::cout << wwwbaby.run() << ":" << wwwbaby.lumi() << ":" << wwwbaby.evt() << std::endl;
+}
+

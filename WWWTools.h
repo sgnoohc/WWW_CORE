@@ -20,6 +20,8 @@ bool comparator_pdgId   ( int i, int j ) { return      wwwbaby.lep_pdgId()[i]   
 bool comparator_pt      ( int i, int j ) { return      wwwbaby.lep_p4()[i].pt() >      wwwbaby.lep_p4()[j].pt(); }
 
 extern unsigned int objidx_set_to_eventid;
+extern int objidx_set_to_run;
+extern int objidx_set_to_lumi;
 extern ObjIdx lepidx;
 extern ObjIdx jetidx;
 
@@ -129,8 +131,14 @@ float MjjLead();
 // DEtajj for the leading two jets
 float DEtajjLead();
 
-// DEtajj for the leading two jets
-float MllSS();
+// Mll for the leading two leptons in SS channel (return -999 if not two leptons)
+float Mll();
+
+// Delta Phi for the leading two leptons in SS channel (return -999 if not two leptons)
+float DPhill();
+
+// Delta Eta for the leading two leptons in SS channel (return -999 if not two leptons)
+float DEtall();
 
 // Ptlll (Pt3l)
 float Pt3l();
@@ -139,10 +147,30 @@ float Pt3l();
 float DPhi3lMET();
 
 // MT max of the two SS leptons
-float getMTmax();
+float MTmax();
+
+// MT with the leading lepton
+float MT0();
+
+// MT with the sub-leading lepton
+float MT1();
+
+// MT with the sub-sub-leading lepton
+float MT2();
+
+// MT with the lepton in given index
+float MTidx( int );
 
 // Get Lep Flavor
 int LepFlavProduct();
+
+// Lepton sign
+bool isLeadPlus();
+bool isSubleadPlus();
+bool isLeadMinus();
+bool isSubleadMinus();
+bool isPlusPlus();
+bool isMinusMinus();
 
 // SS events flavor categorization
 bool isOS(); // is two lepton opposite sign event?
@@ -183,10 +211,16 @@ float M4();
 bool passWHWWW();
 
 // Current events background categorization
-TString sampleCategory();
+TString sampleCategory( int& priority=DEBUG );
+
+// Current events background categorization (based on what kind of bkg, e.g. trueSS, lost-lepton (LL), or fakes etc.)
+TString bkgCategory();
 
 // Get the category of sample based on input filename
 TString categ( TString );
+
+// Print event ID in order of evt, run, lumi
+void printEventID();
 
 
 #endif
