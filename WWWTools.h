@@ -35,6 +35,11 @@ bool passSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool passSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool passSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 
+// SS B-tag validation region
+bool passBTagVRSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passBTagVRSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passBTagVRSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+
 // 3L Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
 // The 2nd argument just returns the object by reference to further gain information about which cut failed
 bool pass3Lpresel( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Just object countings

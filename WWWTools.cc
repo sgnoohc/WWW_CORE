@@ -10,6 +10,83 @@ ObjIdx jetidx;
 #define LUMI 35.87
 
 //______________________________________________________________________________________
+bool passSSMM( int Nm1idx, int& cutidx )
+{
+    setObjectIndices();
+    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
+    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
+    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
+    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
+    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
+    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                        ==   0     ) )) { cutidx = 8 ; return false; }
+    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                            >   60. &&
+                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
+    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
+    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
+    if (!( ( Nm1idx == 13 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 169     ) )) { cutidx = 12; return false; }
+    if (!( ( Nm1idx == 14 ) || ( Mll()                                             >   40.    ) )) { cutidx = 13; return false; }
+    cutidx = 14;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passSSEM( int Nm1idx, int& cutidx )
+{
+    setObjectIndices();
+    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
+    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
+    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
+    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
+    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
+    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                        ==   0     ) )) { cutidx = 8 ; return false; }
+    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                            >   60. &&
+                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
+    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
+    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
+    if (!( ( Nm1idx == 13 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 143     ) )) { cutidx = 12; return false; }
+    if (!( ( Nm1idx == 14 ) || ( Mll()                                             >   30.    ) )) { cutidx = 13; return false; }
+    if (!( ( Nm1idx == 15 ) || ( wwwbaby.met_pt()                                  >   40.    ) )) { cutidx = 14; return false; }
+    if (!( ( Nm1idx == 16 ) || ( MTmax()                                           >   90.    ) )) { cutidx = 15; return false; }
+    cutidx = 16;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passSSEE( int Nm1idx, int& cutidx )
+{
+    setObjectIndices();
+    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
+    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
+    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
+    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
+    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
+    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                        ==   0     ) )) { cutidx = 8 ; return false; }
+    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                            >   60. &&
+                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
+    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
+    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
+    if (!( ( Nm1idx == 13 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 121     ) )) { cutidx = 12; return false; }
+    if (!( ( Nm1idx == 14 ) || ( Mll()                                             >   40.    ) )) { cutidx = 13; return false; }
+    if (!( ( Nm1idx == 15 ) || ( wwwbaby.met_pt()                                  >   40.    ) )) { cutidx = 14; return false; }
+    if (!( ( Nm1idx == 16 ) || ( Mll()                                             <   80. ||
+                                 Mll()                                             >  100.    ) )) { cutidx = 15; return false; }
+    cutidx = 16;
+    return true;
+}
+
+//______________________________________________________________________________________
 bool passSSpresel( int Nm1idx, int& cutidx )
 {
     setObjectIndices();
@@ -35,44 +112,6 @@ bool passSScommon( int Nm1idx, int& cutidx )
                                 MjjW()                     < 100.    ) )) { cutidx = 2 ; return false; }
     if (!( ( Nm1idx == 3 ) || ( MjjLead()                  < 400.    ) )) { cutidx = 3 ; return false; }
     if (!( ( Nm1idx == 4 ) || ( DEtajjLead()               < 1.5     ) )) { cutidx = 4 ; return false; }
-    cutidx = 5;
-    return true;
-}
-
-//______________________________________________________________________________________
-bool passSSMM( int Nm1idx, int& cutidx )
-{
-    setObjectIndices();
-    if (!( ( Nm1idx == 0 ) || ( passSScommon() ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1 ) || ( isSSMM()       ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( Mll() > 40.  ) )) { cutidx = 2 ; return false; }
-    cutidx = 3;
-    return true;
-}
-
-//______________________________________________________________________________________
-bool passSSEM( int Nm1idx, int& cutidx )
-{
-    setObjectIndices();
-    if (!( ( Nm1idx == 0 ) || ( passSScommon()         ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1 ) || ( isSSEM()               ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( Mll()          > 30. ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3 ) || ( wwwbaby.met_pt() > 40. ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4 ) || ( MTmax()          > 90. ) )) { cutidx = 4 ; return false; }
-    cutidx = 5;
-    return true;
-}
-
-//______________________________________________________________________________________
-bool passSSEE( int Nm1idx, int& cutidx )
-{
-    setObjectIndices();
-    if (!( ( Nm1idx == 0 ) || ( passSScommon()             ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1 ) || ( isSSEE()                   ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( Mll()          >  40.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3 ) || ( Mll()          <  80. ||
-                                Mll()          > 100.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4 ) || ( wwwbaby.met_pt() >  40.    ) )) { cutidx = 4 ; return false; }
     cutidx = 5;
     return true;
 }
@@ -942,7 +981,7 @@ TString sampleCategory( int& priority )
     if ( dsname.Contains( "/TTJets_Di" ) && dsname.Contains( "ext1" ) )            { priority = 1; return "tt2l"; }
     if ( dsname.Contains( "/TTJets_Di" ) && !dsname.Contains( "ext1") )            { priority = 2; return "tt2lnonext"; }
     if ( dsname.Contains( "/TTTo2L2Nu_" ) )                                        { priority = 2; return "tt2lpowheg"; }
-    if ( dsname.Contains( "TTTo2L2Nu_" ) )                                         { priority = 2; return "tt2lpowheg"; } // some weird ones have weird names 
+    if ( dsname.Contains( "TTTo2L2Nu_" ) )                                         { priority = 2; return "tt2lpowheg"; } // some weird ones have weird names
     if ( dsname.Contains( "/ST_" ) )                                               { priority = 1; return "singletop"; }
     if ( dsname.Contains( "/tZq" ) )                                               { priority = 1; return "singletop"; }
     if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "powheg" ) )               { priority = 1; return "ww"; }
@@ -1016,11 +1055,11 @@ TString bkgCategory()
 
     TString sn = "";
     TString sn2 = "";
-        
+
     if ( ( ( iSS.size() + iaSS.size() ) >= 2 ) || ( ( iSS.size() + ilSS.size() ) >= 2 ) )
     {
         int l1( -1 ), l2( -1 );
-        
+
         if ( iSS.size() >= 2 )
         {
             l1 = iSS[0];
@@ -1046,9 +1085,9 @@ TString bkgCategory()
             l1 = ilSS[0];
             l2 = ilSS[1];
         }
-        
+
         int nW( 0 ), nZ( 0 ), nG( 0 ), nF( 0 );
-        
+
         if ( wwwbaby.lep_isFromW()[l1] )
             ++nW;
         else if ( wwwbaby.lep_isFromZ()[l1] )
@@ -1057,7 +1096,7 @@ TString bkgCategory()
             ++nF;
         else if ( wwwbaby.lep_motherIdSS()[l1] == ( -3 ) )
             ++nG;
-            
+
         if ( wwwbaby.lep_isFromW()[l2] )
             ++nW;
         else if ( wwwbaby.lep_isFromZ()[l2] )
@@ -1066,7 +1105,7 @@ TString bkgCategory()
             ++nF;
         else if ( wwwbaby.lep_motherIdSS()[l2] == ( -3 ) )
             ++nG;
-            
+
         if ( nW == 2 && wwwbaby.lep_mc_Id()[l1]*wwwbaby.lep_mc_Id()[l2] > 0 )
             sn = "trueSS";//W+W+
         else if ( nW == 2 )
@@ -1104,27 +1143,27 @@ TString bkgCategory()
     }
 
     return sn;
-    
+
 //    if ( ( i3l.size() >= 3 ) || ( i3l.size() == 2 && looseEle >= 0 ) )
 //    {
 //        int l1( -1 ), l2( -1 ), l3( -1 );
-//        
+//
 //        if ( i3l.size() >= 3 )
 //        {
 //            l1 = i3l[0];
 //            l2 = i3l[1];
 //            l3 = i3l[2];
 //        }
-//        
+//
 //        if ( i3l.size() == 2 && looseEle >= 0 )
 //        {
 //            l1 = i3l[0];
 //            l2 = i3l[1];
 //            l3 = looseEle;
 //        }
-//        
+//
 //        int nW( 0 ), nZ( 0 ), nG( 0 ), nF( 0 );
-//        
+//
 //        if ( wwwbaby.lep_isFromW()[l1] )
 //            ++nW;
 //        else if ( wwwbaby.lep_isFromZ()[l1] )
@@ -1133,7 +1172,7 @@ TString bkgCategory()
 //            ++nF;
 //        else if ( wwwbaby.lep_motherIdSS()[l1] == ( -3 ) )
 //            ++nG;
-//            
+//
 //        if ( wwwbaby.lep_isFromW()[l2] )
 //            ++nW;
 //        else if ( wwwbaby.lep_isFromZ()[l2] )
@@ -1142,7 +1181,7 @@ TString bkgCategory()
 //            ++nF;
 //        else if ( wwwbaby.lep_motherIdSS()[l2] == ( -3 ) )
 //            ++nG;
-//            
+//
 //        if ( wwwbaby.lep_isFromW()[l3] )
 //            ++nW;
 //        else if ( wwwbaby.lep_isFromZ()[l3] )
@@ -1151,7 +1190,7 @@ TString bkgCategory()
 //            ++nF;
 //        else if ( wwwbaby.lep_motherIdSS()[l3] == ( -3 ) )
 //            ++nG;
-//            
+//
 //        if ( nW == 3 && ( wwwbaby.lep_mc_Id()[l1] > 0 && wwwbaby.lep_mc_Id()[l2] > 0 && wwwbaby.lep_mc_Id()[l3] > 0 ) )
 //            sn2 = "chargeflips";//W+W+W+ - it could be +++ final state, but at the end this final state will be vetoed, so if reco is ++- (e.g.), then this is a chargeflip
 //        else if ( nW == 3 && ( wwwbaby.lep_mc_Id()[l1] < 0 && wwwbaby.lep_mc_Id()[l2] < 0 && wwwbaby.lep_mc_Id()[l3] < 0 ) )
