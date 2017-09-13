@@ -40,6 +40,11 @@ bool passBTagVRSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool passBTagVRSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool passBTagVRSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 
+// SS B-tag validation region
+bool passBTagARSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passBTagARSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passBTagARSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+
 // 3L Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
 // The 2nd argument just returns the object by reference to further gain information about which cut failed
 bool pass3Lpresel( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Just object countings
@@ -73,11 +78,6 @@ void setSignalLeptonToTightLepton();
 ObjIdx getLeptonsIndices();
 ObjIdx getJetsIndices();
 
-// Tight
-bool isTightLepton( int );
-bool isTightMuon( int );
-bool isTightElec( int );
-
 // SS analysis (not us the SUSY) ID
 bool isSUSYSSTightMuon( int );
 
@@ -95,6 +95,10 @@ bool isLbntElec( int );
 bool isTightLepton( int );
 bool isTightMuon( int );
 bool isTightElec( int );
+
+// Tight 3L electrons
+bool is3LTightLepton( int );
+bool is3LTightElec( int );
 
 // Loose
 bool isLooseLepton( int );
@@ -137,7 +141,7 @@ float MjjLead();
 float DEtajjLead();
 
 // Mll for the leading two leptons in SS channel (return -999 if not two leptons)
-float Mll();
+float Mll( TString="SignalLepton" );
 
 // Delta Phi for the leading two leptons in SS channel (return -999 if not two leptons)
 float DPhill();
@@ -152,19 +156,19 @@ float Pt3l();
 float DPhi3lMET();
 
 // MT max of the two SS leptons
-float MTmax();
+float MTmax( TString="SignalLepton" );
 
 // MT with the leading lepton
-float MT0();
+float MT0( TString="SignalLepton" );
 
 // MT with the sub-leading lepton
-float MT1();
+float MT1( TString="SignalLepton" );
 
 // MT with the sub-sub-leading lepton
-float MT2();
+float MT2( TString="SignalLepton" );
 
 // MT with the lepton in given index
-float MTidx( int );
+float MTidx( int, TString="SignalLepton" );
 
 // Get Lep Flavor
 int LepFlavProduct();
