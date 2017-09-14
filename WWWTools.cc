@@ -120,19 +120,19 @@ bool passBTagVRSSMM( int Nm1idx, int& cutidx )
     setObjectIndices();
     if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
     if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 169     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 169     ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 4 ; return false; }
     if (!( ( Nm1idx ==  5 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 8 ; return false; }
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 5 ; return false; }
+    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 6 ; return false; }
+    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 7 ; return false; }
+    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 8 ; return false; }
+    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 9 ; return false; }
     if (!( ( Nm1idx == 10 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
+                                 MjjW()                                            <  100.    ) )) { cutidx = 10; return false; }
+    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 11; return false; }
+    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 12; return false; }
     if (!( ( Nm1idx == 13 ) || ( Mll( "TightLepton" )                              >   40.    ) )) { cutidx = 13; return false; }
     cutidx = 14;
     return true;
@@ -144,19 +144,19 @@ bool passBTagVRSSEM( int Nm1idx, int& cutidx )
     setObjectIndices();
     if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
     if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 143     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 143     ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 4 ; return false; }
     if (!( ( Nm1idx ==  5 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 8 ; return false; }
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 5 ; return false; }
+    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 6 ; return false; }
+    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 7 ; return false; }
+    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 8 ; return false; }
+    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 9 ; return false; }
     if (!( ( Nm1idx == 10 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
+                                 MjjW()                                            <  100.    ) )) { cutidx = 10; return false; }
+    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 11; return false; }
+    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 12; return false; }
     if (!( ( Nm1idx == 13 ) || ( Mll( "TightLepton" )                              >   30.    ) )) { cutidx = 13; return false; }
     if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                  >   40.    ) )) { cutidx = 14; return false; }
     if (!( ( Nm1idx == 15 ) || ( MTmax( "TightLepton" )                            >   90.    ) )) { cutidx = 15; return false; }
@@ -170,19 +170,19 @@ bool passBTagVRSSEE( int Nm1idx, int& cutidx )
     setObjectIndices();
     if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
     if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 121     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 121     ) )) { cutidx = 2 ; return false; }
+    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
+    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 4 ; return false; }
     if (!( ( Nm1idx ==  5 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 8 ; return false; }
+                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 5 ; return false; }
+    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 6 ; return false; }
+    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 7 ; return false; }
+    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 8 ; return false; }
+    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 9 ; return false; }
     if (!( ( Nm1idx == 10 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
+                                 MjjW()                                            <  100.    ) )) { cutidx = 10; return false; }
+    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 11; return false; }
+    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 12; return false; }
     if (!( ( Nm1idx == 13 ) || ( Mll( "TightLepton" )                              >   40.    ) )) { cutidx = 13; return false; }
     if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                  >   40.    ) )) { cutidx = 14; return false; }
     if (!( ( Nm1idx == 15 ) || ( Mll( "TightLepton" )                              <   80. ||
