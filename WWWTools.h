@@ -35,6 +35,11 @@ bool passSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool passSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool passSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 
+// Application region definitions
+bool passSSARMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSAREM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSAREE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+
 // SS B-tag validation region
 bool passBTagVRSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool passBTagVRSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
@@ -53,13 +58,8 @@ bool pass3L0SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool pass3L1SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 bool pass3L2SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
 
-// Application region definitions
-bool passSSARMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passSSAREM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passSSAREE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-
 // Event weights
-float weight();
+float weight( bool=false );
 
 // Print event information
 void printEvent();
@@ -230,6 +230,10 @@ TString categ( TString );
 
 // Print event ID in order of evt, run, lumi
 void printEventID();
+
+// Fake "Factor"
+double fakerate( int, int=0 );
+double fakefactor( int, int=0 );
 
 
 #endif
