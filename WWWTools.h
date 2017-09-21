@@ -27,39 +27,103 @@ extern ObjIdx jetidx;
 
 static int DEBUG;
 
-// SS Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
-// The 2nd argument just returns the object by reference to further gain information about which cut failed
-bool passSSpresel( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Just object countings
-bool passSScommon( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Presel + Common selections (W-tagging, b-veto, high Mjj rejection)
-bool passSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+// SS Signal region definitions
+bool passSSMM( TString="TightLepton", bool=false, bool=false, bool=false );
+bool passSSEM( TString="TightLepton", bool=false, bool=false, bool=false );
+bool passSSEE( TString="TightLepton", bool=false, bool=false, bool=false );
+
+// SS Signal region definitions
+bool passSSMMPred();
+bool passSSEMPred();
+bool passSSEEPred();
 
 // Application region definitions
-bool passSSARMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passSSAREM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passSSAREE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passSSARMM();
+bool passSSAREM();
+bool passSSAREE();
+
+// Application region definitions
+bool passSSARMMPred();
+bool passSSAREMPred();
+bool passSSAREEPred();
 
 // SS B-tag validation region
-bool passBTagVRSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passBTagVRSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passBTagVRSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passBTagVRSSMM();
+bool passBTagVRSSEM();
+bool passBTagVRSSEE();
 
 // SS B-tag validation region
-bool passBTagARSSMM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passBTagARSSEM( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool passBTagARSSEE( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+bool passBTagVRSSMMPred();
+bool passBTagVRSSEMPred();
+bool passBTagVRSSEEPred();
 
-// 3L Signal region definitions (Nminus1_cut_idx == -1 means do not drop any cuts)
-// The 2nd argument just returns the object by reference to further gain information about which cut failed
-bool pass3Lpresel( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Just object countings
-bool pass3Lcommon( int Nminus1_cut_idx = -1, int& debug = DEBUG ); // Presel + Common selections (W-tagging, b-veto, high Mjj rejection)
-bool pass3L0SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool pass3L1SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
-bool pass3L2SFOS( int Nminus1_cut_idx = -1, int& debug = DEBUG );
+// SS B-tag validation region
+bool passBTagARSSMM();
+bool passBTagARSSEM();
+bool passBTagARSSEE();
+
+// SS B-tag validation region
+bool passBTagARSSMMPred();
+bool passBTagARSSEMPred();
+bool passBTagARSSEEPred();
+
+// SS B-tag validation region
+bool passMjjSBVRSSMM();
+bool passMjjSBVRSSEM();
+bool passMjjSBVRSSEE();
+
+// SS B-tag validation region
+bool passMjjSBVRSSMMPred();
+bool passMjjSBVRSSEMPred();
+bool passMjjSBVRSSEEPred();
+
+// SS B-tag validation region
+bool passMjjSBARSSMM();
+bool passMjjSBARSSEM();
+bool passMjjSBARSSEE();
+
+// SS B-tag validation region
+bool passMjjSBARSSMMPred();
+bool passMjjSBARSSEMPred();
+bool passMjjSBARSSEEPred();
+
+// SS B-tag validation region
+bool passMjjSBPRVRSSMM();
+bool passMjjSBPRVRSSEM();
+bool passMjjSBPRVRSSEE();
+
+// SS B-tag validation region
+bool passMjjSBPRVRSSMMPred();
+bool passMjjSBPRVRSSEMPred();
+bool passMjjSBPRVRSSEEPred();
+
+// SS B-tag validation region
+bool passMjjSBPRARSSMM();
+bool passMjjSBPRARSSEM();
+bool passMjjSBPRARSSEE();
+
+// SS B-tag validation region
+bool passMjjSBPRARSSMMPred();
+bool passMjjSBPRARSSEMPred();
+bool passMjjSBPRARSSEEPred();
+
+// 3L Signal region definitions
+bool pass3L0SFOS( TString="3LTightLepton" );
+bool pass3L1SFOS( TString="3LTightLepton" );
+bool pass3L2SFOS( TString="3LTightLepton" );
+
+// Application region definitions
+bool pass3LAR0SFOS();
+bool pass3LAR1SFOS();
+bool pass3LAR2SFOS();
+
+// Trigger selections
+bool passTrigMM();
+bool passTrigEM();
+bool passTrigEE();
 
 // Event weights
-float weight( bool=false );
+float weight( bool=false, int=0 );
 
 // Print event information
 void printEvent();
@@ -70,16 +134,14 @@ bool isObjectSelected();
 // Set object indices for this event
 void setObjectIndices();
 
-// Replace "SignalLepton" containers with other leptons
-void setSignalLeptonToOneTightAndOneLbnt();
-void setSignalLeptonToTightLepton();
-
 // Returns a collection of indices for selected leptons
 ObjIdx getLeptonsIndices();
 ObjIdx getJetsIndices();
 
-// SS analysis (not us the SUSY) ID
-bool isSUSYSSTightMuon( int );
+// Loose
+bool isVetoLepton( int );
+bool isVetoMuon( int );
+bool isVetoElec( int );
 
 // Loose
 bool isLooseLepton( int );
@@ -106,9 +168,9 @@ bool isLooseMuon( int );
 bool isLooseElec( int );
 
 // Loose But Not Tight (Lbnt)
-bool isLbntLepton( int );
-bool isLbntMuon( int );
-bool isLbntElec( int );
+bool isLbn3LtLepton( int );
+bool isLbn3LtMuon( int );
+bool isLbn3LtElec( int );
 
 // Good SS category jet
 bool isGoodSSJet( int );
@@ -227,6 +289,20 @@ TString bkgCategory();
 
 // Get the category of sample based on input filename
 TString categ( TString );
+
+// is a a MC sample to be replaced by fake estimation
+// If so, we only accept two real from W/Z leptons
+bool isFakeSample();
+
+// is a a MC sample to be replaced by fake estimation
+// If so, we only accept two real from W/Z leptons
+bool isPhotonConversionSample();
+
+// True if the leptons are from all W/Z leptons
+bool isRealLeptonEvent();
+
+// True if a lepton comes from photon
+bool isPhotonConversionEvent();
 
 // Print event ID in order of evt, run, lumi
 void printEventID();

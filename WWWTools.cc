@@ -9,385 +9,697 @@ ObjIdx jetidx;
 #define MZ 91.1876
 #define LUMI 35.87
 
-//======================================================================================
-//
-//
-//
-// Same sign analysis signal region selection functions
-//
-//
-//
-//======================================================================================
-
-//HLT_DoubleEl_noiso, HLT_MuEG_noiso, HLT_DoubleMu_noiso
-
 //______________________________________________________________________________________
-// The SS dimuon signal region definition
-bool passSSMM( int Nm1idx, int& cutidx )
+bool passSSMM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
 {
     setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.HLT_DoubleMu() || wwwbaby.HLT_DoubleMu_noiso()             ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                      ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                            ==   2     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()         >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()         >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]         >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                          >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                        ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto()       ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                              ==   0     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                                  >   60. &&
-                                 MjjW()                                                  <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                               <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                            <    1.5   ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]         == 169     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass() >   40.    ) )) { cutidx = 13; return false; }
-    cutidx = 14;
+    if (!( passTrigMM()                                                             )) return false;
+    if (!( wwwbaby.evt_passgoodrunlist()                                            )) return false;
+    if (!( lepidx[lepid].size()                              ==   2                 )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           >    0                 )) return false;
+    if (!( jetidx["GoodSSJet"].size()                        >=   2                 )) return false;
+    if (!( lepidx["VetoLepton"].size()                       ==   2                 )) return false;
+    if (!( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0                 )) return false;
+    if (!( jetidx["LooseBJet"].size()                        ==   0     || dropbtag )) return false;
+    if (!( ( MjjW()                                          >   60. &&
+             MjjW()                                          <  100. )  || dropmjj  )) return false;
+    if (!( MjjLead()                                         <  400.    || dropjet  )) return false;
+    if (!( DEtajjLead()                                      <    1.5   || dropjet  )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 169                 )) return false;
+    if (!( ( wwwbaby.lep_p4()[lepidx[lepid][0]]
+             + wwwbaby.lep_p4()[lepidx[lepid][1]] ).mass()   >   40.                )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-// The SS emu signal region definition
-bool passSSEM( int Nm1idx, int& cutidx )
+bool passSSEM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
 {
     setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.HLT_MuEG() || wwwbaby.HLT_MuEG_noiso()                     ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                      ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                            ==   2     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()         >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()         >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]         >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                          >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                        ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto()       ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                              ==   0     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                                  >   60. &&
-                                 MjjW()                                                  <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                               <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                            <    1.5   ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]         == 143     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass() >   30.    ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                        >   40.    ) )) { cutidx = 14; return false; }
-    if (!( ( Nm1idx == 15 ) || ( MTmax( "TightLepton" )                                  >   90.    ) )) { cutidx = 15; return false; }
-    cutidx = 16;
+    if (!( passTrigEM()                                                             )) return false;
+    if (!( wwwbaby.evt_passgoodrunlist()                                            )) return false;
+    if (!( lepidx[lepid].size()                              ==   2                 )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           >    0                 )) return false;
+    if (!( jetidx["GoodSSJet"].size()                        >=   2                 )) return false;
+    if (!( lepidx["VetoLepton"].size()                       ==   2                 )) return false;
+    if (!( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0                 )) return false;
+    if (!( jetidx["LooseBJet"].size()                        ==   0     || dropbtag )) return false;
+    if (!( ( MjjW()                                          >   60. &&
+             MjjW()                                          <  100. )  || dropmjj  )) return false;
+    if (!( MjjLead()                                         <  400.    || dropjet  )) return false;
+    if (!( DEtajjLead()                                      <    1.5   || dropjet  )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 143                 )) return false;
+    if (!( ( wwwbaby.lep_p4()[lepidx[lepid][0]]
+             + wwwbaby.lep_p4()[lepidx[lepid][1]] ).mass()   >   30.                )) return false;
+    if (!( wwwbaby.met_pt()                                  >   40.                )) return false;
+    if (!( MTmax( lepid )                                    >   90.                )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-// The SS dielectron signal region definition
-bool passSSEE( int Nm1idx, int& cutidx )
+bool passSSEE( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
 {
     setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.HLT_DoubleEl()||wwwbaby.HLT_DoubleEl_DZ()||
-                                 wwwbaby.HLT_DoubleEl_DZ_2()||wwwbaby.HLT_DoubleEl_noiso()          ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                      ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                            ==   2     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()         >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()         >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]         >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                          >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                        ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto()       ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                              ==   0     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                                  >   60. &&
-                                 MjjW()                                                  <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                               <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                            <    1.5   ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]         == 121     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass() >   40.    ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                        >   40.    ) )) { cutidx = 14; return false; }
-    if (!( ( Nm1idx == 15 ) || ( ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass() <   80. ||
-                                 ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["TightLepton"][1]] ).mass() >  100.    ) )) { cutidx = 15; return false; }
-    cutidx = 16;
+    if (!( passTrigEE()                                                              )) return false;
+    if (!( wwwbaby.evt_passgoodrunlist()                                             )) return false;
+    if (!( lepidx[lepid].size()                              ==   2                  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                 )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                 )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           >    0                  )) return false;
+    if (!( jetidx["GoodSSJet"].size()                        >=   2                  )) return false;
+    if (!( lepidx["VetoLepton"].size()                       ==   2                  )) return false;
+    if (!( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0                  )) return false;
+    if (!( jetidx["LooseBJet"].size()                        ==   0      || dropbtag )) return false;
+    if (!( ( MjjW()                                          >   60. &&
+             MjjW()                                          <  100. )   || dropmjj  )) return false;
+    if (!( MjjLead()                                         <  400.     || dropjet  )) return false;
+    if (!( DEtajjLead()                                      <    1.5    || dropjet  )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 121                  )) return false;
+    if (!( ( wwwbaby.lep_p4()[lepidx[lepid][0]]
+             + wwwbaby.lep_p4()[lepidx[lepid][1]] ).mass()   >   40.                 )) return false;
+    if (!( wwwbaby.met_pt()                                  >   40.                 )) return false;
+    if (!( ( wwwbaby.lep_p4()[lepidx[lepid][0]]
+             + wwwbaby.lep_p4()[lepidx[lepid][1]] ).mass()   <   80. ||
+           ( wwwbaby.lep_p4()[lepidx[lepid][0]]
+             + wwwbaby.lep_p4()[lepidx[lepid][1]] ).mass()   >  100.    )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-// The SS dimuon signal region definition
-bool passSSARMM( int Nm1idx, int& cutidx )
+bool passSSMMPred()
 {
     setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.HLT_DoubleMu()                                             ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                      ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["LooseLepton"].size()                            ==   2     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                            ==   1     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt()         >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt()         >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]         >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                          >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                        ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto()       ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                              ==   0     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                                  >   60. &&
-                                 MjjW()                                                  <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                               <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                            <    1.5   ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]         == 169     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["LooseLepton"][1]] ).mass() >   40.    ) )) { cutidx = 13; return false; }
-    cutidx = 14;
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passSSMM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passSSMM();
+        else
+            return false;
+    }
+    else
+    {
+        return passSSMM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passSSEMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passSSEM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passSSEM();
+        else
+            return false;
+    }
+    else
+    {
+        return passSSEM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passSSEEPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passSSEE();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passSSEE();
+        else
+            return false;
+    }
+    else
+    {
+        return passSSEE();
+    }
+}
+
+//______________________________________________________________________________________
+bool passSSARMMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passSSARMM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passSSAREMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passSSAREM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passSSAREEPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passSSAREE();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passSSARMM()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1 )) return false;
+    if (!( passSSMM( "LooseLepton" )         )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-// The SS emu signal region definition
-bool passSSAREM( int Nm1idx, int& cutidx )
+bool passSSAREM()
 {
     setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.HLT_MuEG()                                                 ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                      ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["LooseLepton"].size()                            ==   2     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                            ==   1     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt()         >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt()         >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]         >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                          >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                        ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto()       ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                              ==   0     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                                  >   60. &&
-                                 MjjW()                                                  <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                               <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                            <    1.5   ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]         == 143     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["LooseLepton"][1]] ).mass() >   30.    ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                        >   40.    ) )) { cutidx = 14; return false; }
-    if (!( ( Nm1idx == 15 ) || ( MTmax( "LooseLepton" )                                  >   90.    ) )) { cutidx = 15; return false; }
-    cutidx = 16;
+    if (!( lepidx["TightLepton"].size() == 1 )) return false;
+    if (!( passSSEM( "LooseLepton" )         )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-// The SS dielectron signal region definition
-bool passSSAREE( int Nm1idx, int& cutidx )
+bool passSSAREE()
 {
     setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.HLT_DoubleEl()||wwwbaby.HLT_DoubleEl_DZ()||wwwbaby.HLT_DoubleEl_DZ_2() ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                                  ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["LooseLepton"].size()                            ==   2                 ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                            ==   1                 ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt()         >   30.                ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt()         >   30.                ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]         >    0                 ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                          >=   2                 ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                        ==   2                 ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto()       ==   0                 ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                              ==   0                 ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                                  >   60. &&
-                                 MjjW()                                                  <  100.                ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                               <  400.                ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                            <    1.5               ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]         == 121                 ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["LooseLepton"][1]] ).mass() >   40.                ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                        >   40.                ) )) { cutidx = 14; return false; }
-    if (!( ( Nm1idx == 15 ) || ( ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["LooseLepton"][1]] ).mass() <   80. ||
-                                 ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]]
-                                   + wwwbaby.lep_p4()[lepidx["LooseLepton"][1]] ).mass() >  100.                ) )) { cutidx = 15; return false; }
-    cutidx = 16;
-    return true;
-}
-
-//======================================================================================
-//
-//
-//
-// Same sign analysis fake rate b-tagging validation region
-//
-//
-//
-//======================================================================================
-
-//______________________________________________________________________________________
-bool passBTagVRSSMM( int Nm1idx, int& cutidx )
-{
-    setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 169     ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( Mll( "TightLepton" )                              >   40.    ) )) { cutidx = 13; return false; }
-    cutidx = 14;
+    if (!( lepidx["TightLepton"].size() == 1 )) return false;
+    if (!( passSSEE( "LooseLepton" )         )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-bool passBTagVRSSEM( int Nm1idx, int& cutidx )
+bool passBTagVRSSMM()
 {
     setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 143     ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( Mll( "TightLepton" )                              >   30.    ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                  >   40.    ) )) { cutidx = 14; return false; }
-    if (!( ( Nm1idx == 15 ) || ( MTmax( "TightLepton" )                            >   90.    ) )) { cutidx = 15; return false; }
-    cutidx = 16;
+    if (!( passSSMM( "TightLepton", true ) )) return false;
+    if (!( jetidx["LooseBJet"].size() >= 1 )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-bool passBTagVRSSEE( int Nm1idx, int& cutidx )
+bool passBTagVRSSEM()
 {
     setObjectIndices();
-    if (!( ( Nm1idx ==  0 ) || ( wwwbaby.evt_passgoodrunlist()                                ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   2     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   == 121     ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt()   >   30.    ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]]   >    0     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( Mll( "TightLepton" )                              >   40.    ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                  >   40.    ) )) { cutidx = 14; return false; }
-    if (!( ( Nm1idx == 15 ) || ( Mll( "TightLepton" )                              <   80. ||
-                                 Mll( "TightLepton" )                              >  100.    ) )) { cutidx = 15; return false; }
-    cutidx = 16;
-    return true;
-}
-
-//======================================================================================
-//
-//
-//
-// Same sign analysis fake rate b-tagging application region
-//
-//
-//
-//======================================================================================
-
-//______________________________________________________________________________________
-bool passBTagARSSMM( int Nm1idx, int& cutidx )
-{
-    setObjectIndices();
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.evt_passgoodrunlist()                                ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( lepidx["LooseLepton"].size()                      ==   2     ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   1     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]   == 169     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( Mll( "LooseLepton" )                              >   40.    ) )) { cutidx = 13; return false; }
-    cutidx = 14;
+    if (!( passSSEM( "TightLepton", true ) )) return false;
+    if (!( jetidx["LooseBJet"].size() >= 1 )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-bool passBTagARSSEM( int Nm1idx, int& cutidx )
+bool passBTagVRSSEE()
 {
     setObjectIndices();
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.evt_passgoodrunlist()                                ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( lepidx["LooseLepton"].size()                      ==   2     ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   1     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]   == 143     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( Mll( "LooseLepton" )                              >   30.    ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                  >   40.    ) )) { cutidx = 14; return false; }
-    if (!( ( Nm1idx == 15 ) || ( MTmax( "LooseLepton" )                            >   90.    ) )) { cutidx = 15; return false; }
-    cutidx = 16;
+    if (!( passSSEE( "TightLepton", true ) )) return false;
+    if (!( jetidx["LooseBJet"].size() >= 1 )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-bool passBTagARSSEE( int Nm1idx, int& cutidx )
+bool passBTagARSSMM()
 {
     setObjectIndices();
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.evt_passgoodrunlist()                                ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  0 ) || ( lepidx["LooseLepton"].size()                      ==   2     ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx ==  1 ) || ( lepidx["TightLepton"].size()                      ==   1     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx ==  2 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt()   >   30.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx ==  3 ) || ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt()   >   30.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx ==  4 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]   >    0     ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx ==  5 ) || ( jetidx["GoodSSJet"]    .size()                    >=   2     ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx ==  6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   2     ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx ==  7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0     ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx ==  8 ) || ( jetidx["LooseBJet"].size()                        >=   1     ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx ==  9 ) || ( MjjW()                                            >   60. &&
-                                 MjjW()                                            <  100.    ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( MjjLead()                                         <  400.    ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( DEtajjLead()                                      <    1.5   ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]]
-                                 * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]]   == 121     ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( Mll( "LooseLepton" )                              >   40.    ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( wwwbaby.met_pt()                                  >   40.    ) )) { cutidx = 14; return false; }
-    if (!( ( Nm1idx == 15 ) || ( Mll( "LooseLepton" )                              <   80. ||
-                                 Mll( "LooseLepton" )                              >  100.    ) )) { cutidx = 15; return false; }
-    cutidx = 16;
+    if (!( lepidx["TightLepton"].size() == 1 )) return false;
+    if (!( passSSMM( "LooseLepton", true )   )) return false;
+    if (!( jetidx["LooseBJet"].size()   >= 1 )) return false;
     return true;
+}
+
+//______________________________________________________________________________________
+bool passBTagARSSEM()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1 )) return false;
+    if (!( passSSEM( "LooseLepton", true )   )) return false;
+    if (!( jetidx["LooseBJet"].size()   >= 1 )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passBTagARSSEE()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1 )) return false;
+    if (!( passSSEE( "LooseLepton", true )   )) return false;
+    if (!( jetidx["LooseBJet"].size()   >= 1 )) return false;
+    return true;
+}
+
+
+//______________________________________________________________________________________
+bool passBTagVRSSMMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passBTagVRSSMM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passBTagVRSSMM();
+        else
+            return false;
+    }
+    else
+    {
+        return passBTagVRSSMM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passBTagVRSSEMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passBTagVRSSEM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passBTagVRSSEM();
+        else
+            return false;
+    }
+    else
+    {
+        return passBTagVRSSEM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passBTagVRSSEEPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passBTagVRSSEE();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passBTagVRSSEE();
+        else
+            return false;
+    }
+    else
+    {
+        return passBTagVRSSEE();
+    }
+}
+
+//______________________________________________________________________________________
+bool passBTagARSSMMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passBTagARSSMM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passBTagARSSEMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passBTagARSSEM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passBTagARSSEEPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passBTagARSSEE();
+    else
+        return false;
+}
+
+
+//______________________________________________________________________________________
+bool passMjjSBVRSSMM()
+{
+    setObjectIndices();
+    if (!( passSSMM( "TightLepton", false, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBVRSSEM()
+{
+    setObjectIndices();
+    if (!( passSSEM( "TightLepton", false, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBVRSSEE()
+{
+    setObjectIndices();
+    if (!( passSSEE( "TightLepton", false, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBARSSMM()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSMM( "LooseLepton", false, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBARSSEM()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSEM( "LooseLepton", false, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBARSSEE()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSEE( "LooseLepton", false, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBVRSSMMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passMjjSBVRSSMM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passMjjSBVRSSMM();
+        else
+            return false;
+    }
+    else
+    {
+        return passMjjSBVRSSMM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passMjjSBVRSSEMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passMjjSBVRSSEM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passMjjSBVRSSEM();
+        else
+            return false;
+    }
+    else
+    {
+        return passMjjSBVRSSEM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passMjjSBVRSSEEPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passMjjSBVRSSEE();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passMjjSBVRSSEE();
+        else
+            return false;
+    }
+    else
+    {
+        return passMjjSBVRSSEE();
+    }
+}
+
+//______________________________________________________________________________________
+bool passMjjSBARSSMMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passMjjSBARSSMM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBARSSEMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passMjjSBARSSEM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBARSSEEPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passMjjSBARSSEE();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRVRSSMM()
+{
+    setObjectIndices();
+    if (!( passSSMM( "TightLepton", false, true, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRVRSSEM()
+{
+    setObjectIndices();
+    if (!( passSSEM( "TightLepton", false, true, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRVRSSEE()
+{
+    setObjectIndices();
+    if (!( passSSEE( "TightLepton", false, true, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRARSSMM()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSMM( "LooseLepton", false, true, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRARSSEM()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSEM( "LooseLepton", false, true, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRARSSEE()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSEE( "LooseLepton", false, true, true ) )) return false;
+    if (!( MjjW() <= 60. || MjjW() >= 100.        )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRVRSSMMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passMjjSBPRVRSSMM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passMjjSBPRVRSSMM();
+        else
+            return false;
+    }
+    else
+    {
+        return passMjjSBPRVRSSMM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRVRSSEMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passMjjSBPRVRSSEM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passMjjSBPRVRSSEM();
+        else
+            return false;
+    }
+    else
+    {
+        return passMjjSBPRVRSSEM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRVRSSEEPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passMjjSBPRVRSSEE();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passMjjSBPRVRSSEE();
+        else
+            return false;
+    }
+    else
+    {
+        return passMjjSBPRVRSSEE();
+    }
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRARSSMMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passMjjSBPRARSSMM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRARSSEMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passMjjSBPRARSSEM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passMjjSBPRARSSEEPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passMjjSBPRARSSEE();
+    else
+        return false;
 }
 
 //======================================================================================
@@ -402,167 +714,103 @@ bool passBTagARSSEE( int Nm1idx, int& cutidx )
 
 //______________________________________________________________________________________
 // The 3L0SFOS signal region definition
-bool pass3L0SFOS( int Nm1idx, int& cutidx )
+bool pass3L0SFOS( TString lepid )
 {
     setObjectIndices();
-    if (!( ( Nm1idx == 0  ) || ( wwwbaby.evt_passgoodrunlist()                              ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1  ) || ( lepidx["3LTightLepton"].size()                    ==   3   ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2  ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   3   ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]].pt() >   25.  ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]].pt() >   20.  ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx == 5  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]].pt() >   20.  ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx == 6  ) || ( abs( totalCharge() )                              ==   1   ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx == 7  ) || ( jetidx["Good3LJet"].size()                        <=   1   ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx == 8  ) || ( Pt3l()                                            >   60.  ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx == 9  ) || ( jetidx["LooseBJet"].size()                        ==   0   ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( getNumSFOS()                                      ==   0   ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( get0SFOSMll()                                     >   20.  ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( fabs( get0SFOSMee() - MZ )                        >   15.  ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( DPhi3lMET()                                       >    2.7 ) )) { cutidx = 13; return false; }
-    cutidx = 14;
+    if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
+    if (!( lepidx[lepid].size()                    ==   3   )) return false;
+    if (!( lepidx["VetoLepton"].size()             ==   3   )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt() >   20.  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][2]].pt() >   20.  )) return false;
+    if (!( abs( totalCharge() )                    ==   1   )) return false;
+    if (!( jetidx["Good3LJet"].size()              <=   1   )) return false;
+    if (!( Pt3l()                                  >   60.  )) return false;
+    if (!( jetidx["LooseBJet"].size()              ==   0   )) return false;
+    if (!( getNumSFOS()                            ==   0   )) return false;
+    if (!( get0SFOSMll()                           >   20.  )) return false;
+    if (!( fabs( get0SFOSMee() - MZ )              >   15.  )) return false;
+    if (!( DPhi3lMET()                             >    2.7 )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
 // The 3L1SFOS signal region definition
-bool pass3L1SFOS( int Nm1idx, int& cutidx )
+bool pass3L1SFOS( TString lepid )
 {
     setObjectIndices();
-    if (!( ( Nm1idx == 0  ) || ( wwwbaby.evt_passgoodrunlist()                              ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1  ) || ( lepidx["3LTightLepton"].size()                    ==   3   ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2  ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   3   ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]].pt() >   25.  ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]].pt() >   20.  ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx == 5  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]].pt() >   20.  ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx == 6  ) || ( abs( totalCharge() )                              ==   1   ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx == 7  ) || ( jetidx["Good3LJet"].size()                        <=   1   ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx == 8  ) || ( Pt3l()                                            >   60.  ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx == 9  ) || ( jetidx["LooseBJet"].size()                        ==   0   ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( getNumSFOS()                                      ==   1   ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( wwwbaby.met_pt()                                  >   45.  ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( get1SFOSMll()                                     <   55.||
-                                 get1SFOSMll()                                     >  100.  ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( DPhi3lMET()                                       >    2.5 ) )) { cutidx = 13; return false; }
-    cutidx = 14;
+    if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
+    if (!( lepidx[lepid].size()                    ==   3   )) return false;
+    if (!( lepidx["VetoLepton"].size()             ==   3   )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt() >   20.  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][2]].pt() >   20.  )) return false;
+    if (!( abs( totalCharge() )                    ==   1   )) return false;
+    if (!( jetidx["Good3LJet"].size()              <=   1   )) return false;
+    if (!( Pt3l()                                  >   60.  )) return false;
+    if (!( jetidx["LooseBJet"].size()              ==   0   )) return false;
+    if (!( getNumSFOS()                            ==   1   )) return false;
+    if (!( wwwbaby.met_pt()                        >   45.  )) return false;
+    if (!( get1SFOSMll()                           <   55. ||
+           get1SFOSMll()                           >  100.  )) return false;
+    if (!( DPhi3lMET()                             >    2.5 )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
 // The 3L2SFOS signal region definition
-bool pass3L2SFOS( int Nm1idx, int& cutidx )
+bool pass3L2SFOS( TString lepid )
 {
     setObjectIndices();
-    if (!( ( Nm1idx == 0  ) || ( wwwbaby.evt_passgoodrunlist()                              ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1  ) || ( lepidx["3LTightLepton"].size()                    ==   3   ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2  ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==   3   ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]].pt() >   25.  ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]].pt() >   20.  ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx == 5  ) || ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]].pt() >   20.  ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx == 6  ) || ( abs( totalCharge() )                              ==   1   ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx == 7  ) || ( jetidx["Good3LJet"].size()                        <=   1   ) )) { cutidx = 7 ; return false; }
-    if (!( ( Nm1idx == 8  ) || ( Pt3l()                                            >   60.  ) )) { cutidx = 8 ; return false; }
-    if (!( ( Nm1idx == 9  ) || ( jetidx["LooseBJet"].size()                        ==   0   ) )) { cutidx = 9 ; return false; }
-    if (!( ( Nm1idx == 10 ) || ( getNumSFOS()                                      ==   2   ) )) { cutidx = 10; return false; }
-    if (!( ( Nm1idx == 11 ) || ( wwwbaby.met_pt()                                  >   55.  ) )) { cutidx = 11; return false; }
-    if (!( ( Nm1idx == 12 ) || ( fabs( get2SFOSMll0() - MZ )                        >   20. ) )) { cutidx = 12; return false; }
-    if (!( ( Nm1idx == 13 ) || ( fabs( get2SFOSMll1() - MZ )                        >   20. ) )) { cutidx = 13; return false; }
-    if (!( ( Nm1idx == 14 ) || ( DPhi3lMET()                                       >    2.5 ) )) { cutidx = 14; return false; }
-    cutidx = 15;
-    return true;
-}
-
-//======================================================================================
-// Some common selections that are not mainly used
-//======================================================================================
-
-//______________________________________________________________________________________
-bool passSSpresel( int Nm1idx, int& cutidx )
-{
-    setObjectIndices();
-//    if (!( ( Nm1idx == 0 ) || ( wwwbaby.HLT_DoubleMu_noiso() || wwwbaby.HLT_DoubleMu()   ) )) { cutidx = 0; return false; }
-    if (!( ( Nm1idx == 1 ) || ( lepidx["SignalLepton"].size()                     ==  2  ) )) { cutidx = 1; return false; }
-    if (!( ( Nm1idx == 2 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].pt()  >  30. ) )) { cutidx = 2; return false; }
-    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]].pt()  >  30. ) )) { cutidx = 3; return false; }
-    if (!( ( Nm1idx == 4 ) || ( isSS()                                                   ) )) { cutidx = 4; return false; }
-    if (!( ( Nm1idx == 5 ) || ( jetidx["GoodSSJet"]    .size()                    >=  2  ) )) { cutidx = 5; return false; }
-    if (!( ( Nm1idx == 6 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==  2  ) )) { cutidx = 6; return false; }
-    if (!( ( Nm1idx == 7 ) || ( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==  0  ) )) { cutidx = 7; return false; }
-    cutidx = 8;
+    if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
+    if (!( lepidx[lepid].size()                    ==   3   )) return false;
+    if (!( lepidx["VetoLepton"].size()             ==   3   )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt() >   20.  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][2]].pt() >   20.  )) return false;
+    if (!( abs( totalCharge() )                    ==   1   )) return false;
+    if (!( jetidx["Good3LJet"].size()              <=   1   )) return false;
+    if (!( Pt3l()                                  >   60.  )) return false;
+    if (!( jetidx["LooseBJet"].size()              ==   0   )) return false;
+    if (!( getNumSFOS()                            ==   2   )) return false;
+    if (!( wwwbaby.met_pt()                        >   55.  )) return false;
+    if (!( fabs( get2SFOSMll0() - MZ )             >   20.  )) return false;
+    if (!( fabs( get2SFOSMll1() - MZ )             >   20.  )) return false;
+    if (!( DPhi3lMET()                             >    2.5 )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-bool passSScommon( int Nm1idx, int& cutidx )
+bool pass3LAR0SFOS()
 {
-    setObjectIndices();
-    if (!( ( Nm1idx == 0 ) || ( passSSpresel()                       ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1 ) || ( jetidx["LooseBJet"].size() == 0      ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( MjjW()                     > 60.  &&
-                                MjjW()                     < 100.    ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3 ) || ( MjjLead()                  < 400.    ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4 ) || ( DEtajjLead()               < 1.5     ) )) { cutidx = 4 ; return false; }
-    cutidx = 5;
+    if (!( lepidx["3LTightLepton"].size() == 2 )) return false;
+    if (!( pass3L0SFOS( "LooseLepton" )        )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-bool pass3Lpresel( int Nm1idx, int& cutidx )
+bool pass3LAR1SFOS()
 {
-    setObjectIndices();
-    if (!( ( Nm1idx == 1 ) || ( lepidx["SignalLepton"].size()                     ==  3  ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( wwwbaby.nlep_VVV_cutbased_veto()                  ==  3  ) )) { cutidx = 2 ; return false; }
-    if (!( ( Nm1idx == 3 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]].pt()  >  25. ) )) { cutidx = 3 ; return false; }
-    if (!( ( Nm1idx == 4 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][1]].pt()  >  20. ) )) { cutidx = 4 ; return false; }
-    if (!( ( Nm1idx == 5 ) || ( wwwbaby.lep_p4()[lepidx["SignalLepton"][2]].pt()  >  20. ) )) { cutidx = 5 ; return false; }
-    if (!( ( Nm1idx == 6 ) || ( abs( totalCharge() )                              ==  1  ) )) { cutidx = 6 ; return false; }
-    if (!( ( Nm1idx == 7 ) || ( jetidx["Good3LJet"].size()                        <=  1  ) )) { cutidx = 7 ; return false; }
-    cutidx = 8;
+    if (!( lepidx["3LTightLepton"].size() == 2 )) return false;
+    if (!( pass3L1SFOS( "LooseLepton" )        )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
-bool pass3Lcommon( int Nm1idx, int& cutidx )
+bool pass3LAR2SFOS()
 {
-    setObjectIndices();
-    if (!( ( Nm1idx == 0 ) || ( pass3Lpresel()                   ) )) { cutidx = 0 ; return false; }
-    if (!( ( Nm1idx == 1 ) || ( Pt3l() > 60.                     ) )) { cutidx = 1 ; return false; }
-    if (!( ( Nm1idx == 2 ) || ( jetidx["LooseBJet"].size() ==  0 ) )) { cutidx = 2 ; return false; }
-    cutidx = 3;
+    if (!( lepidx["3LTightLepton"].size() == 2 )) return false;
+    if (!( pass3L2SFOS( "LooseLepton" )        )) return false;
     return true;
 }
 
-////______________________________________________________________________________________
-//bool passSSARMM( int Nm1idx, int& cutidx )
-//{
-//    setObjectIndices();
-//    setSignalLeptonToOneTightAndOneLbnt();
-//    bool pass = passSSMM( Nm1idx, cutidx );
-//    setSignalLeptonToTightLepton();
-//    return pass;
-//}
-//
-////______________________________________________________________________________________
-//bool passSSAREM( int Nm1idx, int& cutidx )
-//{
-//    setObjectIndices();
-//    setSignalLeptonToOneTightAndOneLbnt();
-//    bool pass = passSSEM( Nm1idx, cutidx );
-//    setSignalLeptonToTightLepton();
-//    return pass;
-//}
-//
-////______________________________________________________________________________________
-//bool passSSAREE( int Nm1idx, int& cutidx )
-//{
-//    setObjectIndices();
-//    setSignalLeptonToOneTightAndOneLbnt();
-//    bool pass = passSSEE( Nm1idx, cutidx );
-//    setSignalLeptonToTightLepton();
-//    return pass;
-//}
+//______________________________________________________________________________________
+bool passTrigMM() { return wwwbaby.HLT_DoubleMu() || wwwbaby.HLT_DoubleMu_noiso(); }
+bool passTrigEM() { return wwwbaby.HLT_MuEG() || wwwbaby.HLT_MuEG_noiso(); }
+bool passTrigEE() { return wwwbaby.HLT_DoubleEl() || wwwbaby.HLT_DoubleEl_DZ() || wwwbaby.HLT_DoubleEl_DZ_2() || wwwbaby.HLT_DoubleEl_noiso(); }
 
 //______________________________________________________________________________________
-float weight( bool applyfakefactor )
+float weight( bool applyfakefactor, int isyst )
 {
     float wgt = wwwbaby.isData() ? 1 : wwwbaby.evt_scale1fb() * LUMI;
 
@@ -571,11 +819,21 @@ float weight( bool applyfakefactor )
     if ( wwwbaby.evt_dataset()[0].Contains( "/TEST-www/www-Private80X-v1/USER" ) )
         wgt *= 0.066805*91900./(91900.+164800.);
 
+    int ffsyst = 0;
+    // Handle isyst
+    if      ( isyst == 0 ) ffsyst =  0;
+    else if ( isyst == 1 ) ffsyst = -1;
+    else if ( isyst == 2 ) ffsyst =  1;
+    else
+        std::cerr << "Error: Unrecognized systematics: " << isyst << std::endl;
+
+
     if ( applyfakefactor )
     {
-        if ( passBTagARSSMM() ) wgt *= fakefactor( lepidx["LbntLepton"][0] );
-        if ( passBTagARSSEM() ) wgt *= fakefactor( lepidx["LbntLepton"][0] );
-        if ( passBTagARSSEE() ) wgt *= fakefactor( lepidx["LbntLepton"][0] );
+        if ( lepidx["TightLepton"].size() == 1 && lepidx["LooseLepton"].size() == 2 )
+            wgt *= fakefactor( lepidx["LbntLepton"][0], ffsyst );
+        else if ( lepidx["3LTightLepton"].size() == 2 && lepidx["LooseLepton"].size() == 3 )
+            wgt *= fakefactor( lepidx["Lbn3tLepton"][0], ffsyst );
     }
 
     return wgt;
@@ -674,26 +932,6 @@ void setObjectIndices()
 }
 
 //______________________________________________________________________________________
-void setSignalLeptonToOneTightAndOneLbnt()
-{
-    lepidx["SignalLepton"].clear();
-    if ( lepidx["TightLepton"].size() == 1 &&
-         lepidx["LbntLepton"] .size() == 1 )
-    {
-        lepidx["SignalLepton"].push_back( lepidx["TightLepton"][0] );
-        lepidx["SignalLepton"].push_back( lepidx["LbntLepton"] [0] );
-    }
-}
-
-//______________________________________________________________________________________
-void setSignalLeptonToTightLepton()
-{
-    lepidx["SignalLepton"] = lepidx["TightLepton"];
-    lepidx["SignalMuon"] = lepidx["TightMuon"];
-    lepidx["SignalElec"] = lepidx["TightElec"];
-}
-
-//______________________________________________________________________________________
 bool isObjectSelected()
 {
     if ( objidx_set_to_eventid == wwwbaby.evt() &&
@@ -718,14 +956,20 @@ ObjIdx getLeptonsIndices()
         if ( isLooseLepton  ( ilep ) ) idx["LooseLepton"]  .push_back( ilep );
         if ( isLooseMuon    ( ilep ) ) idx["LooseMuon"]    .push_back( ilep );
         if ( isLooseElec    ( ilep ) ) idx["LooseElec"]    .push_back( ilep );
+        if ( isVetoLepton   ( ilep ) ) idx["VetoLepton"]   .push_back( ilep );
+        if ( isVetoMuon     ( ilep ) ) idx["VetoMuon"]     .push_back( ilep );
+        if ( isVetoElec     ( ilep ) ) idx["VetoElec"]     .push_back( ilep );
         if ( isLbntLepton   ( ilep ) ) idx["LbntLepton"]   .push_back( ilep );
         if ( isLbntMuon     ( ilep ) ) idx["LbntMuon"]     .push_back( ilep );
         if ( isLbntElec     ( ilep ) ) idx["LbntElec"]     .push_back( ilep );
+        if ( isLbn3LtLepton ( ilep ) ) idx["Lbn3LtLepton"] .push_back( ilep );
+        if ( isLbn3LtMuon   ( ilep ) ) idx["Lbn3LtMuon"]   .push_back( ilep );
+        if ( isLbn3LtElec   ( ilep ) ) idx["Lbn3LtElec"]   .push_back( ilep );
     }
     // Default is to set signal leptons to Tight leptons
-    idx["SignalLepton"] = idx["TightLepton"];
-    idx["SignalMuon"] = idx["TightMuon"];
-    idx["SignalElec"] = idx["TightElec"];
+    idx["SignalLepton"] = idx["LooseLepton"];
+    idx["SignalMuon"] = idx["LooseMuon"];
+    idx["SignalElec"] = idx["LooseElec"];
     return idx;
 }
 
@@ -842,13 +1086,31 @@ bool is3LTightElec( int ilep )
 }
 
 //______________________________________________________________________________________
-bool isSUSYSSTightMuon( int ilep )
+bool isVetoLepton( int ilep )
 {
-    if (!(       wwwbaby.lep_pass_VVV_cutbased_tight()[ilep] )) return false;
+    return isVetoMuon( ilep ) || isVetoElec( ilep );
+}
+
+//______________________________________________________________________________________
+bool isVetoMuon( int ilep )
+{
+    // https://github.com/cmstas/CORE/blob/1a7909bdb178a1bea19ed812e695d17154e231b9/MuonSelections.cc#L846
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_veto()[ilep]  )) return false;
     if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 13     )) return false;
-    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.4   )) return false;
-    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.06  )) return false;
-    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool isVetoElec( int ilep )
+{
+    // https://github.com/cmstas/CORE/blob/1a7909bdb178a1bea19ed812e695d17154e231b9/ElectronSelections.cc#L1527
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_fo_noiso()[ilep] )) return false;
+    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 11        )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.5      )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   1.4 ||
+           fabs( wwwbaby.lep_p4()[ilep].eta()   )  >   1.6      )) return false;
+    if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0        )) return false;
+    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.4      )) return false;
     return true;
 }
 
@@ -880,6 +1142,7 @@ bool isLooseElec( int ilep )
     if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0        )) return false;
     if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0        )) return false;
     if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.2      )) return false;
+    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015    )) return false;
     return true;
 }
 
@@ -899,6 +1162,24 @@ bool isLbntMuon( int ilep )
 bool isLbntElec( int ilep )
 {
     return isLooseElec( ilep ) && !isTightElec( ilep );
+}
+
+//______________________________________________________________________________________
+bool isLbn3LtLepton( int ilep )
+{
+    return isLbn3LtMuon( ilep ) || isLbn3LtElec( ilep );
+}
+
+//______________________________________________________________________________________
+bool isLbn3LtMuon( int ilep )
+{
+    return isLooseMuon( ilep ) && !isTightMuon( ilep );
+}
+
+//______________________________________________________________________________________
+bool isLbn3LtElec( int ilep )
+{
+    return isLooseElec( ilep ) && !is3LTightElec( ilep );
 }
 
 //______________________________________________________________________________________
@@ -1303,9 +1584,9 @@ float get2SFOSMll1()
 //______________________________________________________________________________________
 float M4()
 {
-    if ( lepidx["SignalLepton"].size() != 2 )
+    if ( lepidx["SignalLepton"].size() < 2 )
         return -999;
-    if ( jetidx["GoodSSWJet"].size() != 2 )
+    if ( jetidx["GoodSSJet"].size() < 2 )
         return -999;
     return ( wwwbaby.lep_p4()[lepidx["SignalLepton"][0]]
              + wwwbaby.lep_p4()[lepidx["SignalLepton"][1]]
@@ -1404,11 +1685,11 @@ TString sampleCategory( int& priority )
     if ( dsname.Contains( "/ttHTobb_M125_13TeV_powheg_pythia8" ) )                 { priority = 1; return "tth"; }
     if ( dsname.Contains( "/TTGJets_TuneCUETP8M1_13TeV" ) )                        { priority = 1; return "ttg"; }
     if ( dsname.Contains( "/TTTT" ) )                                              { priority = 2; return "tttt"; }
-    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "madgraphMLM" ) )      { priority = 2; return "wg"; }
+    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "madgraphMLM" ) )      { priority = 1; return "wg"; }
     if ( dsname.Contains( "/WGJets_"  ) )                                          { priority = 2; return "wgpt40"; }
     if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "amcatnloFXFX" ) )     { priority = 2; return "wgnlo"; }
     if ( dsname.Contains( "/WGstarTo" ) )                                          { priority = 2; return "wgstar"; }
-    if ( dsname.Contains( "/ZGTo2LG"  ) )                                          { priority = 2; return "zg"; }
+    if ( dsname.Contains( "/ZGTo2LG"  ) )                                          { priority = 1; return "zg"; }
     if ( dsname.Contains( "/WminusH_HToBB" ) )                                     { priority = 2; return "whbb"; }
     if ( dsname.Contains( "/WplusH_HToBB" ) )                                      { priority = 2; return "whbb"; }
     if ( dsname.Contains( "/VHToNonbb" ) && !passWHWWW() )                         { priority = 1; return "vh"; }
@@ -1537,7 +1818,7 @@ TString bkgCategory()
     else
     {
         std::cout << std::endl;
-        std::cout << "bkgCategoryFull() Why am I here?";
+        std::cout << "bkgCategory() Why am I here?";
         std::cout << wwwbaby.evt() << " " << wwwbaby.lumi() << " " << wwwbaby.run() << std::endl;
         return "others";
     }
@@ -1632,6 +1913,45 @@ TString bkgCategory()
 }
 
 //______________________________________________________________________________________
+bool isFakeSample()
+{
+    TString sample = sampleCategory();
+    if ( sample.Contains( "tt1l" ) ) return true;
+    if ( sample.Contains( "singletop" ) ) return true;
+    if ( sample.Contains( "wj" ) ) return true;
+    if ( sample.Contains( "dy" ) ) return true;
+    return false;
+}
+
+//______________________________________________________________________________________
+bool isPhotonConversionSample()
+{
+    TString sample = sampleCategory();
+    if ( sample.EqualTo( "ttg" ) ) return true;
+    if ( sample.EqualTo( "wg" ) ) return true;
+    if ( sample.EqualTo( "zg" ) ) return true;
+    return false;
+}
+
+//______________________________________________________________________________________
+bool isRealLeptonEvent()
+{
+    if ( bkgCategory().Contains( "SSLL" ) ) return true;
+    if ( bkgCategory().Contains( "3lLL" ) ) return true;
+    if ( bkgCategory().Contains( "trueSS" ) ) return true;
+    if ( bkgCategory().Contains( "true3L" ) ) return true;
+    return false;
+}
+
+//______________________________________________________________________________________
+bool isPhotonConversionEvent()
+{
+    if ( bkgCategory().Contains( "photonfakes" ) ) return true;
+    if ( bkgCategory().Contains( "photondoublefakes" ) ) return true;
+    return false;
+}
+
+//______________________________________________________________________________________
 void printEventID()
 {
     std::cout << std::endl;
@@ -1642,6 +1962,8 @@ void printEventID()
 //______________________________________________________________________________________
 double fakerate( int idx, int syst )
 {
+    std::cout << " syst " << syst << std::endl;
+
     if ( abs( wwwbaby.lep_pdgId()[idx] ) == 11 )
     {
         float relIso = wwwbaby.lep_relIso03EAv2()[idx];
@@ -1650,46 +1972,6 @@ double fakerate( int idx, int syst )
             coneptcorr = std::max( 0., relIso - 0.0588 );
         else
             coneptcorr = std::max( 0., relIso - 0.0571 );
-        float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
-        float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
-
-        // fSumw[4][3]=0.0229585 , x=85 , y=2.25 , error=0.0417386
-        // fSumw[4][2]=0.0229585 , x=85 , y=1.65 , error=0.0417386
-        // fSumw[4][1]=0.0760604 , x=85 , y=0.6  , error=0.0334087
-
-        // fSumw[3][3]=0.105424  , x=40 , y=2.25 , error=0.0156435
-        // fSumw[3][2]=0.0727306 , x=40 , y=1.65 , error=0.00683751
-        // fSumw[3][1]=0.0459721 , x=40 , y=0.6  , error=0.00482489
-
-        // fSumw[2][3]=0.12044   , x=25 , y=2.25 , error=0.0282658
-        // fSumw[2][2]=0.0866916 , x=25 , y=1.65 , error=0.0093254
-        // fSumw[2][1]=0.054216  , x=25 , y=0.6  , error=0.00640781
-
-        if ( corrpt >= 50. )
-        {
-            if      ( abseta >= 1.479 ) return 0.0229585 + syst * 0.0417386;
-            else if ( abseta >= 0.8 )   return 0.0229585 + syst * 0.0417386;
-            else                        return 0.0760604 + syst * 0.0334087;
-        }
-        else if ( corrpt >= 30. )
-        {
-            if      ( abseta >= 1.479 ) return 0.105424  + syst * 0.0156435 ;
-            else if ( abseta >= 0.8 )   return 0.0727306 + syst * 0.00683751;
-            else                        return 0.0459721 + syst * 0.00482489;
-        }
-        else if ( corrpt >= 20. )
-        {
-            if      ( abseta >= 1.479 ) return 0.12044   + syst * 0.0282658 ;
-            else if ( abseta >= 0.8 )   return 0.0866916 + syst * 0.0093254 ;
-            else                        return 0.054216  + syst * 0.00640781;
-        }
-        else
-            return 0;
-    }
-    else if ( abs( wwwbaby.lep_pdgId()[idx] ) == 13 )
-    {
-        float relIso = wwwbaby.lep_relIso03EAv2()[idx];
-        float coneptcorr = std::max( 0., relIso - 0.06 );
         float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
         float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
 
@@ -1722,6 +2004,46 @@ double fakerate( int idx, int syst )
             if      ( abseta >= 1.479 ) return 0.217486 + syst * 0.0248149;
             else if ( abseta >= 0.8 )   return 0.191887 + syst * 0.0232803;
             else                        return 0.195776 + syst * 0.0282233;
+        }
+        else
+            return 0;
+    }
+    else if ( abs( wwwbaby.lep_pdgId()[idx] ) == 13 )
+    {
+        float relIso = wwwbaby.lep_relIso03EAv2()[idx];
+        float coneptcorr = std::max( 0., relIso - 0.06 );
+        float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
+        float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
+
+        // fSumw[4][3]=0.0229585 , x=85 , y=2.25 , error=0.0417386
+        // fSumw[4][2]=0.0229585 , x=85 , y=1.65 , error=0.0417386
+        // fSumw[4][1]=0.0760604 , x=85 , y=0.6  , error=0.0334087
+
+        // fSumw[3][3]=0.105424  , x=40 , y=2.25 , error=0.0156435
+        // fSumw[3][2]=0.0727306 , x=40 , y=1.65 , error=0.00683751
+        // fSumw[3][1]=0.0459721 , x=40 , y=0.6  , error=0.00482489
+
+        // fSumw[2][3]=0.12044   , x=25 , y=2.25 , error=0.0282658
+        // fSumw[2][2]=0.0866916 , x=25 , y=1.65 , error=0.0093254
+        // fSumw[2][1]=0.054216  , x=25 , y=0.6  , error=0.00640781
+
+        if ( corrpt >= 50. )
+        {
+            if      ( abseta >= 2.1 ) return 0.0229585 + syst * 0.0417386;
+            else if ( abseta >= 1.2 ) return 0.0229585 + syst * 0.0417386;
+            else                      return 0.0760604 + syst * 0.0334087;
+        }
+        else if ( corrpt >= 30. )
+        {
+            if      ( abseta >= 2.1 ) return 0.105424  + syst * 0.0156435 ;
+            else if ( abseta >= 1.2 ) return 0.0727306 + syst * 0.00683751;
+            else                      return 0.0459721 + syst * 0.00482489;
+        }
+        else if ( corrpt >= 20. )
+        {
+            if      ( abseta >= 2.1 ) return 0.12044   + syst * 0.0282658 ;
+            else if ( abseta >= 1.2 ) return 0.0866916 + syst * 0.0093254 ;
+            else                      return 0.054216  + syst * 0.00640781;
         }
         else
             return 0;
