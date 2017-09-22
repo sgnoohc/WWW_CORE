@@ -1,10 +1,21 @@
 #include "WWWTools.h"
 
-unsigned int objidx_set_to_eventid;
-int objidx_set_to_run;
-int objidx_set_to_lumi;
+unsigned int objidx_set_to_eventid = 0;
+int objidx_set_to_run = 0;
+int objidx_set_to_lumi = 0;
 ObjIdx lepidx;
 ObjIdx jetidx;
+
+unsigned int sample_category_set_to_eventid = 0;
+int sample_category_set_to_run = 0;
+int sample_category_set_to_lumi = 0;
+TString sample_category;
+int sample_priority;
+
+unsigned int bkg_category_set_to_eventid = 0;
+int bkg_category_set_to_run = 0;
+int bkg_category_set_to_lumi = 0;
+TString bkg_category;
 
 #define MZ 91.1876
 #define LUMI 35.87
@@ -805,9 +816,12 @@ bool pass3LAR2SFOS()
 }
 
 //______________________________________________________________________________________
-bool passTrigMM() { return wwwbaby.HLT_DoubleMu() || wwwbaby.HLT_DoubleMu_noiso(); }
-bool passTrigEM() { return wwwbaby.HLT_MuEG() || wwwbaby.HLT_MuEG_noiso(); }
-bool passTrigEE() { return wwwbaby.HLT_DoubleEl() || wwwbaby.HLT_DoubleEl_DZ() || wwwbaby.HLT_DoubleEl_DZ_2() || wwwbaby.HLT_DoubleEl_noiso(); }
+//bool passTrigMM() { return wwwbaby.HLT_DoubleMu() || wwwbaby.HLT_DoubleMu_noiso(); }
+//bool passTrigEM() { return wwwbaby.HLT_MuEG() || wwwbaby.HLT_MuEG_noiso(); }
+//bool passTrigEE() { return wwwbaby.HLT_DoubleEl() || wwwbaby.HLT_DoubleEl_DZ() || wwwbaby.HLT_DoubleEl_DZ_2() || wwwbaby.HLT_DoubleEl_noiso(); }
+bool passTrigMM() { return wwwbaby.HLT_DoubleMu(); }
+bool passTrigEM() { return wwwbaby.HLT_MuEG(); }
+bool passTrigEE() { return wwwbaby.HLT_DoubleEl() || wwwbaby.HLT_DoubleEl_DZ() || wwwbaby.HLT_DoubleEl_DZ_2(); }
 
 //______________________________________________________________________________________
 float weight( bool applyfakefactor, int isyst )
@@ -1104,13 +1118,13 @@ bool isVetoMuon( int ilep )
 bool isVetoElec( int ilep )
 {
     // https://github.com/cmstas/CORE/blob/1a7909bdb178a1bea19ed812e695d17154e231b9/ElectronSelections.cc#L1527
-    if (!(       wwwbaby.lep_pass_VVV_cutbased_fo_noiso()[ilep] )) return false;
-    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 11        )) return false;
-    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.5      )) return false;
-    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   1.4 ||
-           fabs( wwwbaby.lep_p4()[ilep].eta()   )  >   1.6      )) return false;
-    if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0        )) return false;
-    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.4      )) return false;
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_veto_noiso()[ilep] )) return false;
+    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )    == 11        )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )    <   2.5      )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )    <   1.4 ||
+           fabs( wwwbaby.lep_p4()[ilep].eta()   )    >   1.6      )) return false;
+    if (!(       wwwbaby.lep_3ch_agree()[ilep]       !=  0        )) return false;
+    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]    <   0.4      )) return false;
     return true;
 }
 
@@ -1649,64 +1663,89 @@ bool passWHWWW()
 }
 
 //______________________________________________________________________________________
+bool isSampleCategorySet()
+{
+    if ( sample_category_set_to_eventid == wwwbaby.evt() &&
+         sample_category_set_to_run     == wwwbaby.run() &&
+         sample_category_set_to_lumi    == wwwbaby.lumi() )
+        return true;
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
 TString sampleCategory( int& priority )
 {
+
+    if ( isSampleCategorySet() )
+    {
+        priority = sample_priority;
+        return sample_category;
+    }
+
+    // Now set the event id of the event the objects are selected from
+    sample_category_set_to_eventid = wwwbaby.evt();
+    sample_category_set_to_run     = wwwbaby.run();
+    sample_category_set_to_lumi    = wwwbaby.lumi();
+
     const TString& dsname = wwwbaby.evt_dataset()[0];
-    if ( dsname.Contains( "/QCD_HT" ) )                                            { priority = 2; return "qcd"; }
-    if ( dsname.Contains( "/GJets" ) )                                             { priority = 2; return "gj"; }
-    if ( dsname.Contains( "/WJetsToLNu" ) )                                        { priority = 1; return "wj"; }
-    if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "madgraphMLM" ) )  { priority = 1; return "dy"; }
-    if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "amcatnloFXFX" ) ) { priority = 2; return "dynlo"; }
-    if ( dsname.Contains( "/TTJets_Single" ) && dsname.Contains( "ext1" ) )        { priority = 1; return "tt1l"; }
-    if ( dsname.Contains( "/TTJets_Single" ) && !dsname.Contains( "ext1" ) )       { priority = 2; return "tt1lnonext"; }
-    if ( dsname.Contains( "/TTJets_Di" ) && dsname.Contains( "ext1" ) )            { priority = 1; return "tt2l"; }
-    if ( dsname.Contains( "/TTJets_Di" ) && !dsname.Contains( "ext1") )            { priority = 2; return "tt2lnonext"; }
-    if ( dsname.Contains( "/TTTo2L2Nu_" ) )                                        { priority = 2; return "tt2lpowheg"; }
-    if ( dsname.Contains( "TTTo2L2Nu_" ) )                                         { priority = 2; return "tt2lpowheg"; } // some weird ones have weird names
-    if ( dsname.Contains( "/ST_" ) )                                               { priority = 1; return "singletop"; }
-    if ( dsname.Contains( "/tZq" ) )                                               { priority = 1; return "singletop"; }
-    if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "powheg" ) )               { priority = 1; return "ww"; }
-    if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "DoubleScattering" ) )     { priority = 1; return "wwdpi"; }
-    if ( dsname.Contains( "/WpWpJJ_EWK" ) )                                        { priority = 1; return "vbsww"; }
-    if ( dsname.Contains( "/WmWmJJ_13" ) )                                         { priority = 2; return "wwjj"; }
-    if ( dsname.Contains( "/WpWpJJ_13" ) )                                         { priority = 2; return "wwjj"; }
-    if ( dsname.Contains( "/WZTo" ) )                                              { priority = 1; return "wz"; }
-    if ( dsname.Contains( "/GluGluHToZZTo4L" ) )                                   { priority = 2; return "gghzz"; }
-    if ( dsname.Contains( "/EWKWPlus2Jets_WToLNu_M" ) )                            { priority = 2; return "wjj"; }
-    if ( dsname.Contains( "/EWKWMinus2Jets_WToLNu_M" ) )                           { priority = 2; return "wjj"; }
-    if ( dsname.Contains( "/EWKZ2Jets_ZToLL_M" ) )                                 { priority = 2; return "zjj"; }
-    if ( dsname.Contains( "/ZZTo" ) )                                              { priority = 1; return "zz"; }
-    if ( dsname.Contains( "/ttZJets_13TeV_madgraphMLM" ) )                         { priority = 1; return "ttz"; }
-    if ( dsname.Contains( "/TTZToLLNuNu_M" ) )                                     { priority = 2; return "ttznlo"; }
-    if ( dsname.Contains( "/ttWJets_13TeV_madgraphMLM" ) )                         { priority = 1; return "ttw"; }
-    if ( dsname.Contains( "/TTWJetsTo" ) )                                         { priority = 2; return "ttwnlo"; }
-    if ( dsname.Contains( "/ttH_HToZZ_4LFilter" ) )                                { priority = 2; return "tthzz"; }
-    if ( dsname.Contains( "/ttHToNonbb_M125_TuneCUETP8M2_ttHtranche3_13TeV" ) )    { priority = 1; return "tth"; }
-    if ( dsname.Contains( "/ttHTobb_M125_13TeV_powheg_pythia8" ) )                 { priority = 1; return "tth"; }
-    if ( dsname.Contains( "/TTGJets_TuneCUETP8M1_13TeV" ) )                        { priority = 1; return "ttg"; }
-    if ( dsname.Contains( "/TTTT" ) )                                              { priority = 2; return "tttt"; }
-    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "madgraphMLM" ) )      { priority = 1; return "wg"; }
-    if ( dsname.Contains( "/WGJets_"  ) )                                          { priority = 2; return "wgpt40"; }
-    if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "amcatnloFXFX" ) )     { priority = 2; return "wgnlo"; }
-    if ( dsname.Contains( "/WGstarTo" ) )                                          { priority = 2; return "wgstar"; }
-    if ( dsname.Contains( "/ZGTo2LG"  ) )                                          { priority = 1; return "zg"; }
-    if ( dsname.Contains( "/WminusH_HToBB" ) )                                     { priority = 2; return "whbb"; }
-    if ( dsname.Contains( "/WplusH_HToBB" ) )                                      { priority = 2; return "whbb"; }
-    if ( dsname.Contains( "/VHToNonbb" ) && !passWHWWW() )                         { priority = 1; return "vh"; }
-    if ( dsname.Contains( "/VHToNonbb" ) && passWHWWW() )                          { priority = 1; return "whwww"; }
-    if ( dsname.Contains( "/WWW" ) )                                               { priority = 2; return "www_incl"; }
-    if ( dsname.Contains( "/WWZ" ) )                                               { priority = 1; return "wwz_incl"; }
-    if ( dsname.Contains( "/WZZ" ) )                                               { priority = 1; return "wzz_incl"; }
-    if ( dsname.Contains( "/ZZZ" ) )                                               { priority = 1; return "zzz_incl"; }
-    if ( dsname.Contains( "/WZG" ) )                                               { priority = 2; return "wzg_incl"; }
-    if ( dsname.Contains( "/WWG" ) )                                               { priority = 2; return "wwg_incl"; }
-    if ( dsname.Contains( "/TEST-www" ) )                                          { priority = 1; return "www"; }
-    if ( dsname.Contains( "/TEST-tth" ) )                                          { priority = 2; return "tthmia"; }
-    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "DoubleMuon" ) )         { priority = 1; return "data_mm"; }
-    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "DoubleEG" ) )           { priority = 1; return "data_ee"; }
-    if ( dsname.Contains( "Run2016" ) && dsname.Contains( "MuonEG" ) )             { priority = 1; return "data_em"; }
-    if ( dsname.Contains( "Run2016" ) )                                            { priority = 1; return "data_other"; }
-    if ( wwwbaby.evt() == 1532413419 && wwwbaby.lumi() == 962 && wwwbaby.run() == 281797 ) { priority = 1; return "data_ee"; }
+    if      ( dsname.Contains( "/QCD_HT" ) )                                            { priority = 2; sample_category =  "qcd"; }
+    else if ( dsname.Contains( "/GJets" ) )                                             { priority = 2; sample_category =  "gj"; }
+    else if ( dsname.Contains( "/WJetsToLNu" ) )                                        { priority = 1; sample_category =  "wj"; }
+    else if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "madgraphMLM" ) )  { priority = 1; sample_category =  "dy"; }
+    else if ( dsname.Contains( "/DYJetsToLL_M" ) && dsname.Contains( "amcatnloFXFX" ) ) { priority = 2; sample_category =  "dynlo"; }
+    else if ( dsname.Contains( "/TTJets_Single" ) && dsname.Contains( "ext1" ) )        { priority = 1; sample_category =  "tt1l"; }
+    else if ( dsname.Contains( "/TTJets_Single" ) && !dsname.Contains( "ext1" ) )       { priority = 2; sample_category =  "tt1lnonext"; }
+    else if ( dsname.Contains( "/TTJets_Di" ) && dsname.Contains( "ext1" ) )            { priority = 1; sample_category =  "tt2l"; }
+    else if ( dsname.Contains( "/TTJets_Di" ) && !dsname.Contains( "ext1") )            { priority = 2; sample_category =  "tt2lnonext"; }
+    else if ( dsname.Contains( "/TTTo2L2Nu_" ) )                                        { priority = 2; sample_category =  "tt2lpowheg"; }
+    else if ( dsname.Contains( "TTTo2L2Nu_" ) )                                         { priority = 2; sample_category =  "tt2lpowheg"; } // some weird ones have weird names
+    else if ( dsname.Contains( "/ST_" ) )                                               { priority = 1; sample_category =  "singletop"; }
+    else if ( dsname.Contains( "/tZq" ) )                                               { priority = 1; sample_category =  "singletop"; }
+    else if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "powheg" ) )               { priority = 1; sample_category =  "ww"; }
+    else if ( dsname.Contains( "/WWTo" ) && dsname.Contains( "DoubleScattering" ) )     { priority = 1; sample_category =  "wwdpi"; }
+    else if ( dsname.Contains( "/WpWpJJ_EWK" ) )                                        { priority = 1; sample_category =  "vbsww"; }
+    else if ( dsname.Contains( "/WmWmJJ_13" ) )                                         { priority = 2; sample_category =  "wwjj"; }
+    else if ( dsname.Contains( "/WpWpJJ_13" ) )                                         { priority = 2; sample_category =  "wwjj"; }
+    else if ( dsname.Contains( "/WZTo" ) )                                              { priority = 1; sample_category =  "wz"; }
+    else if ( dsname.Contains( "/GluGluHToZZTo4L" ) )                                   { priority = 2; sample_category =  "gghzz"; }
+    else if ( dsname.Contains( "/EWKWPlus2Jets_WToLNu_M" ) )                            { priority = 2; sample_category =  "wjj"; }
+    else if ( dsname.Contains( "/EWKWMinus2Jets_WToLNu_M" ) )                           { priority = 2; sample_category =  "wjj"; }
+    else if ( dsname.Contains( "/EWKZ2Jets_ZToLL_M" ) )                                 { priority = 2; sample_category =  "zjj"; }
+    else if ( dsname.Contains( "/ZZTo" ) )                                              { priority = 1; sample_category =  "zz"; }
+    else if ( dsname.Contains( "/ttZJets_13TeV_madgraphMLM" ) )                         { priority = 1; sample_category =  "ttz"; }
+    else if ( dsname.Contains( "/TTZToLLNuNu_M" ) )                                     { priority = 2; sample_category =  "ttznlo"; }
+    else if ( dsname.Contains( "/ttWJets_13TeV_madgraphMLM" ) )                         { priority = 1; sample_category =  "ttw"; }
+    else if ( dsname.Contains( "/TTWJetsTo" ) )                                         { priority = 2; sample_category =  "ttwnlo"; }
+    else if ( dsname.Contains( "/ttH_HToZZ_4LFilter" ) )                                { priority = 2; sample_category =  "tthzz"; }
+    else if ( dsname.Contains( "/ttHToNonbb_M125_TuneCUETP8M2_ttHtranche3_13TeV" ) )    { priority = 1; sample_category =  "tth"; }
+    else if ( dsname.Contains( "/ttHTobb_M125_13TeV_powheg_pythia8" ) )                 { priority = 1; sample_category =  "tth"; }
+    else if ( dsname.Contains( "/TTGJets_TuneCUETP8M1_13TeV" ) )                        { priority = 1; sample_category =  "ttg"; }
+    else if ( dsname.Contains( "/TTTT" ) )                                              { priority = 2; sample_category =  "tttt"; }
+    else if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "madgraphMLM" ) )      { priority = 1; sample_category =  "wg"; }
+    else if ( dsname.Contains( "/WGJets_"  ) )                                          { priority = 2; sample_category =  "wgpt40"; }
+    else if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "amcatnloFXFX" ) )     { priority = 2; sample_category =  "wgnlo"; }
+    else if ( dsname.Contains( "/WGstarTo" ) )                                          { priority = 2; sample_category =  "wgstar"; }
+    else if ( dsname.Contains( "/ZGTo2LG"  ) )                                          { priority = 1; sample_category =  "zg"; }
+    else if ( dsname.Contains( "/WminusH_HToBB" ) )                                     { priority = 2; sample_category =  "whbb"; }
+    else if ( dsname.Contains( "/WplusH_HToBB" ) )                                      { priority = 2; sample_category =  "whbb"; }
+    else if ( dsname.Contains( "/VHToNonbb" ) && !passWHWWW() )                         { priority = 1; sample_category =  "vh"; }
+    else if ( dsname.Contains( "/VHToNonbb" ) && passWHWWW() )                          { priority = 1; sample_category =  "whwww"; }
+    else if ( dsname.Contains( "/WWW" ) )                                               { priority = 2; sample_category =  "www_incl"; }
+    else if ( dsname.Contains( "/WWZ" ) )                                               { priority = 1; sample_category =  "wwz_incl"; }
+    else if ( dsname.Contains( "/WZZ" ) )                                               { priority = 1; sample_category =  "wzz_incl"; }
+    else if ( dsname.Contains( "/ZZZ" ) )                                               { priority = 1; sample_category =  "zzz_incl"; }
+    else if ( dsname.Contains( "/WZG" ) )                                               { priority = 2; sample_category =  "wzg_incl"; }
+    else if ( dsname.Contains( "/WWG" ) )                                               { priority = 2; sample_category =  "wwg_incl"; }
+    else if ( dsname.Contains( "/TEST-www" ) )                                          { priority = 1; sample_category =  "www"; }
+    else if ( dsname.Contains( "/TEST-tth" ) )                                          { priority = 2; sample_category =  "tthmia"; }
+    else if ( dsname.Contains( "Run2016" ) && dsname.Contains( "DoubleMuon" ) )         { priority = 1; sample_category =  "data_mm"; }
+    else if ( dsname.Contains( "Run2016" ) && dsname.Contains( "DoubleEG" ) )           { priority = 1; sample_category =  "data_ee"; }
+    else if ( dsname.Contains( "Run2016" ) && dsname.Contains( "MuonEG" ) )             { priority = 1; sample_category =  "data_em"; }
+    else if ( dsname.Contains( "Run2016" ) )                                            { priority = 1; sample_category =  "data_other"; }
+    else if ( wwwbaby.evt() == 1532413419 && wwwbaby.lumi() == 962 && wwwbaby.run() == 281797 ) { priority = 1; sample_category =  "data_ee"; }
+    sample_priority = priority;
+    return sample_category;
 
     if ( dsname.Length() == 0 )
     {
@@ -1716,19 +1755,50 @@ TString sampleCategory( int& priority )
     }
 
     TString othername = dsname + "_UNCATEGORIZED";
-    priority = 2;
-    return othername.ReplaceAll( "/", "_" );
+    sample_priority = 2;
+    sample_category = othername.ReplaceAll( "/", "_" );
+    return sample_category;
+}
+
+//______________________________________________________________________________________
+bool isBkgCategorySet()
+{
+    if ( bkg_category_set_to_eventid == wwwbaby.evt() &&
+         bkg_category_set_to_run     == wwwbaby.run() &&
+         bkg_category_set_to_lumi    == wwwbaby.lumi() )
+        return true;
+    else
+        return false;
 }
 
 //______________________________________________________________________________________
 TString bkgCategory()
 {
 
-    if ( wwwbaby.isData() ) return sampleCategory();
+    if ( isBkgCategorySet() ) return bkg_category;
+
+    // Now set the event id of the event the objects are selected from
+    bkg_category_set_to_eventid = wwwbaby.evt();
+    bkg_category_set_to_run     = wwwbaby.run();
+    bkg_category_set_to_lumi    = wwwbaby.lumi();
+
+    if ( wwwbaby.isData() ) 
+    {
+        bkg_category = sampleCategory();
+        return sampleCategory();
+    }
 
     const TString& dsname = wwwbaby.evt_dataset()[0];
-    if ( dsname.Contains( "/VHToNonbb" ) && passWHWWW() ) return "whwww";
-    if ( dsname.Contains( "/TEST-www" ) )                 return "www";
+    if ( dsname.Contains( "/VHToNonbb" ) && passWHWWW() )
+    {
+        bkg_category = "whwww";
+        return bkg_category;
+    }
+    else if ( dsname.Contains( "/TEST-www" ) )
+    {
+        bkg_category = "www";
+        return bkg_category;
+    }
 
     std::vector<unsigned int> iSS = lepidx["TightLepton"];
     std::vector<unsigned int> iaSS = lepidx["LbntLepton"];
@@ -1820,10 +1890,13 @@ TString bkgCategory()
         std::cout << std::endl;
         std::cout << "bkgCategory() Why am I here?";
         std::cout << wwwbaby.evt() << " " << wwwbaby.lumi() << " " << wwwbaby.run() << std::endl;
-        return "others";
+        bkg_category = "others";
+        return bkg_category;
     }
 
-    return sn;
+    bkg_category = sn;
+
+    return bkg_category;
 
 //    if ( ( i3l.size() >= 3 ) || ( i3l.size() == 2 && looseEle >= 0 ) )
 //    {
@@ -1962,8 +2035,6 @@ void printEventID()
 //______________________________________________________________________________________
 double fakerate( int idx, int syst )
 {
-    std::cout << " syst " << syst << std::endl;
-
     if ( abs( wwwbaby.lep_pdgId()[idx] ) == 11 )
     {
         float relIso = wwwbaby.lep_relIso03EAv2()[idx];

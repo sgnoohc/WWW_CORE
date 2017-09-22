@@ -25,6 +25,17 @@ extern int objidx_set_to_lumi;
 extern ObjIdx lepidx;
 extern ObjIdx jetidx;
 
+extern unsigned int sample_category_set_to_eventid;
+extern int sample_category_set_to_run;
+extern int sample_category_set_to_lumi;
+extern TString sample_category;
+extern int sample_priority;
+
+extern unsigned int bkg_category_set_to_eventid;
+extern int bkg_category_set_to_run;
+extern int bkg_category_set_to_lumi;
+extern TString bkg_category;
+
 static int DEBUG;
 
 // SS Signal region definitions
@@ -281,8 +292,14 @@ float M4();
 // If the sample is VHNonbb, check whether this is WHWWW or non-WHWWW
 bool passWHWWW();
 
+// Check the cache
+bool isSampleCategorySet();
+
 // Current events background categorization
 TString sampleCategory( int& priority=DEBUG );
+
+// Check the cache
+bool isBkgCategorySet();
 
 // Current events background categorization (based on what kind of bkg, e.g. trueSS, lost-lepton (LL), or fakes etc.)
 TString bkgCategory();
