@@ -1242,8 +1242,8 @@ void setGenObjectIndices()
         std::cout << wwwbaby.genPart_p4()[igen].pt()  << " ";
         std::cout << wwwbaby.genPart_p4()[igen].eta() << " ";
         std::cout << wwwbaby.genPart_p4()[igen].phi() << " ";
-        std::cout << wwwbaby.genPart_pdgId()[igen].phi() << " ";
-        std::cout << wwwbaby.genPart_motherId()[igen].phi() << " ";
+        std::cout << wwwbaby.genPart_pdgId()[igen] << " ";
+        std::cout << wwwbaby.genPart_motherId()[igen] << " ";
         std::cout << std::endl;
     }
     // Now set the event id of the event the objects are selected from
