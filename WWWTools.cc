@@ -6,6 +6,11 @@ int objidx_set_to_lumi = 0;
 ObjIdx lepidx;
 ObjIdx jetidx;
 
+unsigned int genobjidx_set_to_eventid = 0;
+int genobjidx_set_to_run = 0;
+int genobjidx_set_to_lumi = 0;
+ObjIdx genidx;
+
 unsigned int sample_category_set_to_eventid = 0;
 int sample_category_set_to_run = 0;
 int sample_category_set_to_lumi = 0;
@@ -1219,6 +1224,43 @@ bool isLooseBJet( int ijet )
     if (!( fabs( wwwbaby.jets_p4()[ijet].eta() )   <  2.4    )) return false;
     if (!(       wwwbaby.jets_csv()[ijet]          >  0.5426 )) return false;
     return true;
+}
+
+//______________________________________________________________________________________
+void setGenObjectIndices()
+{
+    // If the object already selected skip
+    if ( isGenObjectSelected() ) return;
+    //otherwise perform object selections
+    std::cout << std::endl;
+    std::cout << wwwbaby.ngenLep() << " " << bkgCategory() << " " << sampleCategory() << std::endl;
+    for ( unsigned int igen = 0; igen < wwwbaby.genPart_pdgId().size(); ++igen )
+    {
+        if ( abs( wwwbaby.genPart_motherId()[igen] ) != 23 &&
+             abs( wwwbaby.genPart_motherId()[igen] ) != 24 ) 
+            continue;
+        std::cout << wwwbaby.genPart_p4()[igen].pt()  << " ";
+        std::cout << wwwbaby.genPart_p4()[igen].eta() << " ";
+        std::cout << wwwbaby.genPart_p4()[igen].phi() << " ";
+        std::cout << wwwbaby.genPart_pdgId()[igen].phi() << " ";
+        std::cout << wwwbaby.genPart_motherId()[igen].phi() << " ";
+        std::cout << std::endl;
+    }
+    // Now set the event id of the event the objects are selected from
+    genobjidx_set_to_eventid = wwwbaby.evt();
+    genobjidx_set_to_run     = wwwbaby.run();
+    genobjidx_set_to_lumi    = wwwbaby.lumi();
+}
+
+//______________________________________________________________________________________
+bool isGenObjectSelected()
+{
+    if ( genobjidx_set_to_eventid == wwwbaby.evt() &&
+         genobjidx_set_to_run     == wwwbaby.run() &&
+         genobjidx_set_to_lumi    == wwwbaby.lumi() )
+        return true;
+    else
+        return false;
 }
 
 //______________________________________________________________________________________

@@ -25,6 +25,11 @@ extern int objidx_set_to_lumi;
 extern ObjIdx lepidx;
 extern ObjIdx jetidx;
 
+extern unsigned int genobjidx_set_to_eventid;
+extern int genobjidx_set_to_run;
+extern int genobjidx_set_to_lumi;
+extern ObjIdx genidx;
+
 extern unsigned int sample_category_set_to_eventid;
 extern int sample_category_set_to_run;
 extern int sample_category_set_to_lumi;
@@ -191,6 +196,12 @@ bool isGood3LJet( int );
 
 // B-tagging
 bool isLooseBJet( int );
+
+// Check whether this event's object selections have been performed
+bool isGenObjectSelected();
+
+// Set object indices for this event
+void setGenObjectIndices();
 
 // Parse the baby version based on the input file path
 int getBabyVersion( TString );
