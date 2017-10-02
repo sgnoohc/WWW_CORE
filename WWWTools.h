@@ -43,6 +43,8 @@ extern TString bkg_category;
 
 static int DEBUG;
 
+bool passPresel();
+
 // SS Signal region definitions
 bool passSSMM( TString="TightLepton", bool=false, bool=false, bool=false );
 bool passSSEM( TString="TightLepton", bool=false, bool=false, bool=false );

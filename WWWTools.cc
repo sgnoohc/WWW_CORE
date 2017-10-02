@@ -25,12 +25,56 @@ TString bkg_category;
 #define MZ 91.1876
 #define LUMI 35.87
 
+//_________________________________________________________________________________________________
+bool passPresel()
+{
+    if (
+        // Same sign two lepton preselection
+        (
+         ( lepidx["TightLepton"].size() == 2 ) &&
+         ( lepidx["GoodSSJet"].size() >= 2 ) &&
+         ( lepidx["VetoLepton"].size() == 2 ) &&
+         ( ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]] * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]] ) > 0 ) &&
+         ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt() >= 30.)  &&
+         ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt() >= 30.) )
+        ||
+        // Three lepton preselection
+        (
+         ( lepidx["TightLepton"].size() == 3                      )  &&
+         ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt() >= 25. )  &&
+         ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt() >= 20. )  &&
+         ( wwwbaby.lep_p4()[lepidx["TightLepton"][2]].pt() >= 20. ) )
+        ||
+        // One loose but not tight + one tight preselection
+        (
+         ( lepidx["TightLepton"].size() == 1 ) &&
+         ( lepidx["LooseLepton"].size() == 2 ) &&
+         ( lepidx["GoodSSJet"].size() >= 2 ) &&
+         ( lepidx["VetoLepton"].size() == 2 ) &&
+         ( ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]] * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]] ) > 0 ) &&
+         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt() >= 30.)  &&
+         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt() >= 30.) )
+        ||
+        // One loose but not tight + two tight preselection
+        (
+         ( lepidx["TightLepton"].size() == 2 ) &&
+         ( lepidx["LooseLepton"].size() == 3 ) &&
+         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt() >= 25.)  &&
+         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt() >= 20.)  &&
+         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][2]].pt() >= 20.) )
+       )
+        return true;
+    else
+        return false;
+}
+
 //______________________________________________________________________________________
 bool passSSMM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
 {
     setObjectIndices();
     if (!( passTrigMM()                                                             )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                                            )) return false;
+    if (!( wwwbaby.firstgoodvertex()                         ==   0                 )) return false;
     if (!( lepidx[lepid].size()                              ==   2                 )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                )) return false;
@@ -57,6 +101,7 @@ bool passSSEM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
     setObjectIndices();
     if (!( passTrigEM()                                                             )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                                            )) return false;
+    if (!( wwwbaby.firstgoodvertex()                         ==   0                 )) return false;
     if (!( lepidx[lepid].size()                              ==   2                 )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                )) return false;
@@ -85,6 +130,7 @@ bool passSSEE( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
     setObjectIndices();
     if (!( passTrigEE()                                                              )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                                             )) return false;
+    if (!( wwwbaby.firstgoodvertex()                         ==   0                 )) return false;
     if (!( lepidx[lepid].size()                              ==   2                  )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                 )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                 )) return false;
@@ -734,6 +780,7 @@ bool pass3L0SFOS( TString lepid )
 {
     setObjectIndices();
     if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
+    if (!( wwwbaby.firstgoodvertex()               ==   0   )) return false;
     if (!( lepidx[lepid].size()                    ==   3   )) return false;
     if (!( lepidx["VetoLepton"].size()             ==   3   )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.  )) return false;
@@ -756,6 +803,7 @@ bool pass3L1SFOS( TString lepid )
 {
     setObjectIndices();
     if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
+    if (!( wwwbaby.firstgoodvertex()               ==   0   )) return false;
     if (!( lepidx[lepid].size()                    ==   3   )) return false;
     if (!( lepidx["VetoLepton"].size()             ==   3   )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.  )) return false;
@@ -779,6 +827,7 @@ bool pass3L2SFOS( TString lepid )
 {
     setObjectIndices();
     if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
+    if (!( wwwbaby.firstgoodvertex()               ==   0   )) return false;
     if (!( lepidx[lepid].size()                    ==   3   )) return false;
     if (!( lepidx["VetoLepton"].size()             ==   3   )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.  )) return false;
@@ -1074,6 +1123,7 @@ bool isTightElec( int ilep )
     if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
     if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0     )) return false;
     if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0     )) return false;
+    if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]        )) return false;
     return true;
 }
 
@@ -1130,6 +1180,7 @@ bool isVetoElec( int ilep )
            fabs( wwwbaby.lep_p4()[ilep].eta()   )    >   1.6      )) return false;
     if (!(       wwwbaby.lep_3ch_agree()[ilep]       !=  0        )) return false;
     if (!(       wwwbaby.lep_relIso03EAv2()[ilep]    <   0.4      )) return false;
+    if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]             )) return false;
     return true;
 }
 
@@ -1162,6 +1213,7 @@ bool isLooseElec( int ilep )
     if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0        )) return false;
     if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.2      )) return false;
     if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015    )) return false;
+    if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]           )) return false;
     return true;
 }
 
@@ -1272,6 +1324,8 @@ int getBabyVersion( TString path )
     if ( path.Contains( "v0_1_5" ) ) return 5;
     if ( path.Contains( "v0_1_9" ) ) return 9;
     if ( path.Contains( "v0_1_11" ) ) return 11;
+    if ( path.Contains( "v0.1.16" ) ) return 16;
+    if ( path.Contains( "v0_1_16" ) ) return 16;
     std::cout << "Error:: Unrecognized version number!" << std::endl;
     exit(-1);
     return -1;
