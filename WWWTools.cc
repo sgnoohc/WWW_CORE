@@ -848,7 +848,7 @@ bool pass3L2SFOS( TString lepid )
 //______________________________________________________________________________________
 bool pass3LAR0SFOS()
 {
-    if (!( lepidx["3LTightLepton"].size() == 2 )) return false;
+    if (!( lepidx["Tight3lLepton"].size() == 2 )) return false;
     if (!( pass3L0SFOS( "LooseLepton" )        )) return false;
     return true;
 }
@@ -856,7 +856,7 @@ bool pass3LAR0SFOS()
 //______________________________________________________________________________________
 bool pass3LAR1SFOS()
 {
-    if (!( lepidx["3LTightLepton"].size() == 2 )) return false;
+    if (!( lepidx["Tight3lLepton"].size() == 2 )) return false;
     if (!( pass3L1SFOS( "LooseLepton" )        )) return false;
     return true;
 }
@@ -864,7 +864,7 @@ bool pass3LAR1SFOS()
 //______________________________________________________________________________________
 bool pass3LAR2SFOS()
 {
-    if (!( lepidx["3LTightLepton"].size() == 2 )) return false;
+    if (!( lepidx["Tight3lLepton"].size() == 2 )) return false;
     if (!( pass3L2SFOS( "LooseLepton" )        )) return false;
     return true;
 }
@@ -900,7 +900,7 @@ float weight( bool applyfakefactor, int isyst )
     {
         if ( lepidx["TightLepton"].size() == 1 && lepidx["LooseLepton"].size() == 2 )
             wgt *= fakefactor( lepidx["LbntLepton"][0], ffsyst );
-        else if ( lepidx["3LTightLepton"].size() == 2 && lepidx["LooseLepton"].size() == 3 )
+        else if ( lepidx["Tight3lLepton"].size() == 2 && lepidx["LooseLepton"].size() == 3 )
             wgt *= fakefactor( lepidx["Lbn3tLepton"][0], ffsyst );
     }
 
@@ -986,13 +986,19 @@ void printEvent()
 }
 
 //______________________________________________________________________________________
-void setObjectIndices()
+void setObjectIndices( bool preload )
 {
     // If the object already selected skip
     if ( isObjectSelected() ) return;
-    //otherwise perform object selections
-    lepidx = getLeptonsIndices();
-    jetidx = getJetsIndices();
+    if ( preload )
+    {
+    }
+    else
+    {
+        //otherwise perform object selections
+        lepidx = getLeptonsIndices();
+        jetidx = getJetsIndices();
+    }
     // Now set the event id of the event the objects are selected from
     objidx_set_to_eventid = wwwbaby.evt();
     objidx_set_to_run     = wwwbaby.run();
@@ -1016,8 +1022,8 @@ ObjIdx getLeptonsIndices()
     ObjIdx idx;
     for ( unsigned int ilep = 0; ilep < wwwbaby.lep_p4().size(); ++ilep )
     {
-        if ( is3LTightLepton( ilep ) ) idx["3LTightLepton"].push_back( ilep );
-        if ( is3LTightElec  ( ilep ) ) idx["3LTightElec"]  .push_back( ilep );
+        if ( isTight3lLepton( ilep ) ) idx["Tight3lLepton"].push_back( ilep );
+        if ( isTight3lElec  ( ilep ) ) idx["Tight3lElec"]  .push_back( ilep );
         if ( isTightLepton  ( ilep ) ) idx["TightLepton"]  .push_back( ilep );
         if ( isTightMuon    ( ilep ) ) idx["TightMuon"]    .push_back( ilep );
         if ( isTightElec    ( ilep ) ) idx["TightElec"]    .push_back( ilep );
@@ -1128,13 +1134,13 @@ bool isTightElec( int ilep )
 }
 
 //______________________________________________________________________________________
-bool is3LTightLepton( int ilep )
+bool isTight3lLepton( int ilep )
 {
-    return isTightMuon( ilep ) || is3LTightElec( ilep );
+    return isTightMuon( ilep ) || isTight3lElec( ilep );
 }
 
 //______________________________________________________________________________________
-bool is3LTightElec( int ilep )
+bool isTight3lElec( int ilep )
 {
     if (!(       wwwbaby.lep_pass_VVV_cutbased_tight()[ilep] )) return false;
     if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 11     )) return false;
@@ -1250,7 +1256,7 @@ bool isLbn3LtMuon( int ilep )
 //______________________________________________________________________________________
 bool isLbn3LtElec( int ilep )
 {
-    return isLooseElec( ilep ) && !is3LTightElec( ilep );
+    return isLooseElec( ilep ) && !isTight3lElec( ilep );
 }
 
 //______________________________________________________________________________________
@@ -1409,26 +1415,26 @@ float DEtall()
 //______________________________________________________________________________________
 float Pt3l()
 {
-    if ( lepidx["3LTightLepton"].size() != 3 )
+    if ( lepidx["Tight3lLepton"].size() != 3 )
         return -999;
-    return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-             + wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]]
-             + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).pt();
+    return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+             + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+             + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).pt();
 }
 
 //______________________________________________________________________________________
 float DPhi3lMET()
 {
-    if ( lepidx["3LTightLepton"].size() != 3 )
+    if ( lepidx["Tight3lLepton"].size() != 3 )
         return -999;
     TLorentzVector met;
     met.SetPtEtaPhiM( wwwbaby.met_pt(), 0, wwwbaby.met_phi(), 0 );
     LorentzVector metlv;
     metlv.SetPxPyPzE( met.Px(), met.Py(), met.Pz(), met.E() );
     return fabs( ROOT::Math::VectorUtil::DeltaPhi(
-                wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                + wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]]
-                + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]],
+                wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+                + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]],
                 met ));
 }
 
@@ -1546,7 +1552,7 @@ bool isSSMM() { return LepFlavProduct() == 169; }
 int totalCharge()
 {
     int charge = 0;
-    for ( auto& ilep : lepidx["3LTightLepton"] )
+    for ( auto& ilep : lepidx["Tight3lLepton"] )
         charge += wwwbaby.lep_charge()[ilep];
     return charge;
 }
@@ -1554,17 +1560,17 @@ int totalCharge()
 //______________________________________________________________________________________
 int getNumSFOS()
 {
-    if ( lepidx["3LTightLepton"].size() != 3 )
+    if ( lepidx["Tight3lLepton"].size() != 3 )
         return -999;
     /* Loops through pairs of entries in the lep_pdgId vector
        and counts how many have opposite value*/
     int num_SFOS = 0;
-    for ( int i = 0; i < ( int ) lepidx["3LTightLepton"].size(); i++ )
+    for ( int i = 0; i < ( int ) lepidx["Tight3lLepton"].size(); i++ )
     {
-        for ( int j = i + 1; j < ( int ) lepidx["3LTightLepton"].size(); j++ )
+        for ( int j = i + 1; j < ( int ) lepidx["Tight3lLepton"].size(); j++ )
         {
-            if ( wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][i]] ==
-                    -( wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][j]] ) )
+            if ( wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][i]] ==
+                    -( wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][j]] ) )
                 num_SFOS++;
         }
     }
@@ -1574,20 +1580,20 @@ int getNumSFOS()
 //______________________________________________________________________________________
 float get0SFOSMll()
 {
-    if ( lepidx["3LTightLepton"].size() != 3 )
+    if ( lepidx["Tight3lLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][2]];
     if ( pdgid0 == pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]] ).mass();
     else if ( pdgid0 == pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     else if ( pdgid1 == pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
@@ -1599,40 +1605,40 @@ float get0SFOSMll()
 //______________________________________________________________________________________
 float get0SFOSMee()
 {
-    if ( lepidx["3LTightLepton"].size() != 3 )
+    if ( lepidx["Tight3lLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][2]];
     if ( pdgid0 == pdgid1 && abs( pdgid0 ) == 11 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]] ).mass();
     else if ( pdgid0 == pdgid2 && abs( pdgid0 ) == 11 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     else if ( pdgid1 == pdgid2 && abs( pdgid1 ) == 11 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     return -999;
 }
 
 //______________________________________________________________________________________
 float get1SFOSMll()
 {
-    if ( lepidx["3LTightLepton"].size() != 3 )
+    if ( lepidx["Tight3lLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][2]];
     if ( pdgid0 == -pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]] ).mass();
     else if ( pdgid0 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     else if ( pdgid1 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
@@ -1644,20 +1650,20 @@ float get1SFOSMll()
 //______________________________________________________________________________________
 float get2SFOSMll0()
 {
-    if ( lepidx["3LTightLepton"].size() != 3 )
+    if ( lepidx["Tight3lLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][2]];
     if ( pdgid0 == -pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]] ).mass();
     else if ( pdgid0 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     else if ( pdgid1 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
@@ -1669,20 +1675,20 @@ float get2SFOSMll0()
 //______________________________________________________________________________________
 float get2SFOSMll1()
 {
-    if ( lepidx["3LTightLepton"].size() != 3 )
+    if ( lepidx["Tight3lLepton"].size() != 3 )
         return -999;
-    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][0]];
-    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][1]];
-    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["3LTightLepton"][2]];
+    int pdgid0 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][0]];
+    int pdgid1 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][1]];
+    int pdgid2 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][2]];
     if ( pdgid2 == -pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]] ).mass();
     else if ( pdgid0 == -pdgid2 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     else if ( pdgid1 == -pdgid0 )
-        return ( wwwbaby.lep_p4()[lepidx["3LTightLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["3LTightLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
@@ -1896,9 +1902,9 @@ TString bkgCategory()
         return bkg_category;
     }
 
-    std::vector<unsigned int> iSS = lepidx["TightLepton"];
-    std::vector<unsigned int> iaSS = lepidx["LbntLepton"];
-    std::vector<unsigned int> ilSS = lepidx["LooseLepton"];
+    std::vector<Int_t> iSS = lepidx["TightLepton"];
+    std::vector<Int_t> iaSS = lepidx["LbntLepton"];
+    std::vector<Int_t> ilSS = lepidx["LooseLepton"];
 
     TString sn = "";
     TString sn2 = "";

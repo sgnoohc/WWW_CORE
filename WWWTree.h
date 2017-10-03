@@ -1,6 +1,6 @@
 // -*- C++ -*-
 // This is a header file generated with the command:
-// makeCMS3ClassFiles("/hadoop/cms/store/user/bhashemi/AutoTwopler_babies/merged/VVV/WWW_v0.1.16/skim/www_incl_amcnlo_skim_1.root", "t", "WWWTree", "www", "wwwbaby")
+// makeCMS3ClassFiles("/home/users/phchang/public_html/analysis/www/studies/v0.1.16_20171002/output.root", "t", "WWWTree", "www", "wwwbaby")
 
 #ifndef WWWTree_H
 #define WWWTree_H
@@ -1387,6 +1387,60 @@ class WWWTree {
   double   weight_alphas_up_;
   TBranch *weight_alphas_up_branch;
   bool     weight_alphas_up_isLoaded;
+  vector<int> *LooseElec_;
+  TBranch *LooseElec_branch;
+  bool     LooseElec_isLoaded;
+  vector<int> *LooseLepton_;
+  TBranch *LooseLepton_branch;
+  bool     LooseLepton_isLoaded;
+  vector<int> *LooseMuon_;
+  TBranch *LooseMuon_branch;
+  bool     LooseMuon_isLoaded;
+  vector<int> *SignalElec_;
+  TBranch *SignalElec_branch;
+  bool     SignalElec_isLoaded;
+  vector<int> *SignalLepton_;
+  TBranch *SignalLepton_branch;
+  bool     SignalLepton_isLoaded;
+  vector<int> *SignalMuon_;
+  TBranch *SignalMuon_branch;
+  bool     SignalMuon_isLoaded;
+  vector<int> *Tight3lElec_;
+  TBranch *Tight3lElec_branch;
+  bool     Tight3lElec_isLoaded;
+  vector<int> *Tight3lLepton_;
+  TBranch *Tight3lLepton_branch;
+  bool     Tight3lLepton_isLoaded;
+  vector<int> *TightElec_;
+  TBranch *TightElec_branch;
+  bool     TightElec_isLoaded;
+  vector<int> *TightLepton_;
+  TBranch *TightLepton_branch;
+  bool     TightLepton_isLoaded;
+  vector<int> *TightMuon_;
+  TBranch *TightMuon_branch;
+  bool     TightMuon_isLoaded;
+  vector<int> *VetoElec_;
+  TBranch *VetoElec_branch;
+  bool     VetoElec_isLoaded;
+  vector<int> *VetoLepton_;
+  TBranch *VetoLepton_branch;
+  bool     VetoLepton_isLoaded;
+  vector<int> *VetoMuon_;
+  TBranch *VetoMuon_branch;
+  bool     VetoMuon_isLoaded;
+  vector<int> *Good3LJet_;
+  TBranch *Good3LJet_branch;
+  bool     Good3LJet_isLoaded;
+  vector<int> *GoodSSJet_;
+  TBranch *GoodSSJet_branch;
+  bool     GoodSSJet_isLoaded;
+  vector<int> *GoodSSWJet_;
+  TBranch *GoodSSWJet_branch;
+  bool     GoodSSWJet_isLoaded;
+  vector<int> *LooseBJet_;
+  TBranch *LooseBJet_branch;
+  bool     LooseBJet_isLoaded;
 public: 
 void Init(TTree *tree);
 void GetEntry(unsigned int idx); 
@@ -1846,6 +1900,24 @@ void LoadAllBranches();
   const double &weight_pdf_down();
   const double &weight_alphas_down();
   const double &weight_alphas_up();
+  const vector<int> &LooseElec();
+  const vector<int> &LooseLepton();
+  const vector<int> &LooseMuon();
+  const vector<int> &SignalElec();
+  const vector<int> &SignalLepton();
+  const vector<int> &SignalMuon();
+  const vector<int> &Tight3lElec();
+  const vector<int> &Tight3lLepton();
+  const vector<int> &TightElec();
+  const vector<int> &TightLepton();
+  const vector<int> &TightMuon();
+  const vector<int> &VetoElec();
+  const vector<int> &VetoLepton();
+  const vector<int> &VetoMuon();
+  const vector<int> &Good3LJet();
+  const vector<int> &GoodSSJet();
+  const vector<int> &GoodSSWJet();
+  const vector<int> &LooseBJet();
 
   static void progress(int nEventsTotal, int nEventsChain);
 };
@@ -2310,5 +2382,23 @@ namespace www {
   const double &weight_pdf_down();
   const double &weight_alphas_down();
   const double &weight_alphas_up();
+  const vector<int> &LooseElec();
+  const vector<int> &LooseLepton();
+  const vector<int> &LooseMuon();
+  const vector<int> &SignalElec();
+  const vector<int> &SignalLepton();
+  const vector<int> &SignalMuon();
+  const vector<int> &Tight3lElec();
+  const vector<int> &Tight3lLepton();
+  const vector<int> &TightElec();
+  const vector<int> &TightLepton();
+  const vector<int> &TightMuon();
+  const vector<int> &VetoElec();
+  const vector<int> &VetoLepton();
+  const vector<int> &VetoMuon();
+  const vector<int> &Good3LJet();
+  const vector<int> &GoodSSJet();
+  const vector<int> &GoodSSWJet();
+  const vector<int> &LooseBJet();
 }
 #endif

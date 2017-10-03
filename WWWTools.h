@@ -13,7 +13,7 @@
 #include <map>
 #include <vector>
 
-typedef std::map<TString, std::vector<unsigned int>> ObjIdx;
+typedef std::map<TString, std::vector<Int_t>> ObjIdx;
 // comparators
 bool comparator_abspdgId( int i, int j ) { return abs( wwwbaby.lep_pdgId()[i] ) > abs( wwwbaby.lep_pdgId()[j] ); }
 bool comparator_pdgId   ( int i, int j ) { return      wwwbaby.lep_pdgId()[i]   >      wwwbaby.lep_pdgId()[j]  ; }
@@ -126,9 +126,9 @@ bool passMjjSBPRARSSEMPred();
 bool passMjjSBPRARSSEEPred();
 
 // 3L Signal region definitions
-bool pass3L0SFOS( TString="3LTightLepton" );
-bool pass3L1SFOS( TString="3LTightLepton" );
-bool pass3L2SFOS( TString="3LTightLepton" );
+bool pass3L0SFOS( TString="Tight3lLepton" );
+bool pass3L1SFOS( TString="Tight3lLepton" );
+bool pass3L2SFOS( TString="Tight3lLepton" );
 
 // Application region definitions
 bool pass3LAR0SFOS();
@@ -150,7 +150,7 @@ void printEvent();
 bool isObjectSelected();
 
 // Set object indices for this event
-void setObjectIndices();
+void setObjectIndices( bool preload=false );
 
 // Returns a collection of indices for selected leptons
 ObjIdx getLeptonsIndices();
@@ -177,8 +177,8 @@ bool isTightMuon( int );
 bool isTightElec( int );
 
 // Tight 3L electrons
-bool is3LTightLepton( int );
-bool is3LTightElec( int );
+bool isTight3lLepton( int );
+bool isTight3lElec( int );
 
 // Loose
 bool isLooseLepton( int );
