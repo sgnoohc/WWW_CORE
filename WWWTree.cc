@@ -915,40 +915,76 @@ void WWWTree::Init(TTree *tree) {
   if (weight_alphas_down_branch) weight_alphas_down_branch->SetAddress(&weight_alphas_down_);
   weight_alphas_up_branch = tree->GetBranch("weight_alphas_up");
   if (weight_alphas_up_branch) weight_alphas_up_branch->SetAddress(&weight_alphas_up_);
+  nLooseElec_branch = tree->GetBranch("nLooseElec");
+  if (nLooseElec_branch) nLooseElec_branch->SetAddress(&nLooseElec_);
   LooseElec_branch = tree->GetBranch("LooseElec");
   if (LooseElec_branch) LooseElec_branch->SetAddress(&LooseElec_);
+  nLooseLepton_branch = tree->GetBranch("nLooseLepton");
+  if (nLooseLepton_branch) nLooseLepton_branch->SetAddress(&nLooseLepton_);
   LooseLepton_branch = tree->GetBranch("LooseLepton");
   if (LooseLepton_branch) LooseLepton_branch->SetAddress(&LooseLepton_);
+  nLooseMuon_branch = tree->GetBranch("nLooseMuon");
+  if (nLooseMuon_branch) nLooseMuon_branch->SetAddress(&nLooseMuon_);
   LooseMuon_branch = tree->GetBranch("LooseMuon");
   if (LooseMuon_branch) LooseMuon_branch->SetAddress(&LooseMuon_);
+  nSignalElec_branch = tree->GetBranch("nSignalElec");
+  if (nSignalElec_branch) nSignalElec_branch->SetAddress(&nSignalElec_);
   SignalElec_branch = tree->GetBranch("SignalElec");
   if (SignalElec_branch) SignalElec_branch->SetAddress(&SignalElec_);
+  nSignalLepton_branch = tree->GetBranch("nSignalLepton");
+  if (nSignalLepton_branch) nSignalLepton_branch->SetAddress(&nSignalLepton_);
   SignalLepton_branch = tree->GetBranch("SignalLepton");
   if (SignalLepton_branch) SignalLepton_branch->SetAddress(&SignalLepton_);
+  nSignalMuon_branch = tree->GetBranch("nSignalMuon");
+  if (nSignalMuon_branch) nSignalMuon_branch->SetAddress(&nSignalMuon_);
   SignalMuon_branch = tree->GetBranch("SignalMuon");
   if (SignalMuon_branch) SignalMuon_branch->SetAddress(&SignalMuon_);
+  nTight3lElec_branch = tree->GetBranch("nTight3lElec");
+  if (nTight3lElec_branch) nTight3lElec_branch->SetAddress(&nTight3lElec_);
   Tight3lElec_branch = tree->GetBranch("Tight3lElec");
   if (Tight3lElec_branch) Tight3lElec_branch->SetAddress(&Tight3lElec_);
+  nTight3lLepton_branch = tree->GetBranch("nTight3lLepton");
+  if (nTight3lLepton_branch) nTight3lLepton_branch->SetAddress(&nTight3lLepton_);
   Tight3lLepton_branch = tree->GetBranch("Tight3lLepton");
   if (Tight3lLepton_branch) Tight3lLepton_branch->SetAddress(&Tight3lLepton_);
+  nTightElec_branch = tree->GetBranch("nTightElec");
+  if (nTightElec_branch) nTightElec_branch->SetAddress(&nTightElec_);
   TightElec_branch = tree->GetBranch("TightElec");
   if (TightElec_branch) TightElec_branch->SetAddress(&TightElec_);
+  nTightLepton_branch = tree->GetBranch("nTightLepton");
+  if (nTightLepton_branch) nTightLepton_branch->SetAddress(&nTightLepton_);
   TightLepton_branch = tree->GetBranch("TightLepton");
   if (TightLepton_branch) TightLepton_branch->SetAddress(&TightLepton_);
+  nTightMuon_branch = tree->GetBranch("nTightMuon");
+  if (nTightMuon_branch) nTightMuon_branch->SetAddress(&nTightMuon_);
   TightMuon_branch = tree->GetBranch("TightMuon");
   if (TightMuon_branch) TightMuon_branch->SetAddress(&TightMuon_);
+  nVetoElec_branch = tree->GetBranch("nVetoElec");
+  if (nVetoElec_branch) nVetoElec_branch->SetAddress(&nVetoElec_);
   VetoElec_branch = tree->GetBranch("VetoElec");
   if (VetoElec_branch) VetoElec_branch->SetAddress(&VetoElec_);
+  nVetoLepton_branch = tree->GetBranch("nVetoLepton");
+  if (nVetoLepton_branch) nVetoLepton_branch->SetAddress(&nVetoLepton_);
   VetoLepton_branch = tree->GetBranch("VetoLepton");
   if (VetoLepton_branch) VetoLepton_branch->SetAddress(&VetoLepton_);
+  nVetoMuon_branch = tree->GetBranch("nVetoMuon");
+  if (nVetoMuon_branch) nVetoMuon_branch->SetAddress(&nVetoMuon_);
   VetoMuon_branch = tree->GetBranch("VetoMuon");
   if (VetoMuon_branch) VetoMuon_branch->SetAddress(&VetoMuon_);
+  nGood3LJet_branch = tree->GetBranch("nGood3LJet");
+  if (nGood3LJet_branch) nGood3LJet_branch->SetAddress(&nGood3LJet_);
   Good3LJet_branch = tree->GetBranch("Good3LJet");
   if (Good3LJet_branch) Good3LJet_branch->SetAddress(&Good3LJet_);
+  nGoodSSJet_branch = tree->GetBranch("nGoodSSJet");
+  if (nGoodSSJet_branch) nGoodSSJet_branch->SetAddress(&nGoodSSJet_);
   GoodSSJet_branch = tree->GetBranch("GoodSSJet");
   if (GoodSSJet_branch) GoodSSJet_branch->SetAddress(&GoodSSJet_);
+  nGoodSSWJet_branch = tree->GetBranch("nGoodSSWJet");
+  if (nGoodSSWJet_branch) nGoodSSWJet_branch->SetAddress(&nGoodSSWJet_);
   GoodSSWJet_branch = tree->GetBranch("GoodSSWJet");
   if (GoodSSWJet_branch) GoodSSWJet_branch->SetAddress(&GoodSSWJet_);
+  nLooseBJet_branch = tree->GetBranch("nLooseBJet");
+  if (nLooseBJet_branch) nLooseBJet_branch->SetAddress(&nLooseBJet_);
   LooseBJet_branch = tree->GetBranch("LooseBJet");
   if (LooseBJet_branch) LooseBJet_branch->SetAddress(&LooseBJet_);
 
@@ -1413,23 +1449,41 @@ void WWWTree::GetEntry(unsigned int idx) {
   weight_pdf_down_isLoaded = false;
   weight_alphas_down_isLoaded = false;
   weight_alphas_up_isLoaded = false;
+  nLooseElec_isLoaded = false;
   LooseElec_isLoaded = false;
+  nLooseLepton_isLoaded = false;
   LooseLepton_isLoaded = false;
+  nLooseMuon_isLoaded = false;
   LooseMuon_isLoaded = false;
+  nSignalElec_isLoaded = false;
   SignalElec_isLoaded = false;
+  nSignalLepton_isLoaded = false;
   SignalLepton_isLoaded = false;
+  nSignalMuon_isLoaded = false;
   SignalMuon_isLoaded = false;
+  nTight3lElec_isLoaded = false;
   Tight3lElec_isLoaded = false;
+  nTight3lLepton_isLoaded = false;
   Tight3lLepton_isLoaded = false;
+  nTightElec_isLoaded = false;
   TightElec_isLoaded = false;
+  nTightLepton_isLoaded = false;
   TightLepton_isLoaded = false;
+  nTightMuon_isLoaded = false;
   TightMuon_isLoaded = false;
+  nVetoElec_isLoaded = false;
   VetoElec_isLoaded = false;
+  nVetoLepton_isLoaded = false;
   VetoLepton_isLoaded = false;
+  nVetoMuon_isLoaded = false;
   VetoMuon_isLoaded = false;
+  nGood3LJet_isLoaded = false;
   Good3LJet_isLoaded = false;
+  nGoodSSJet_isLoaded = false;
   GoodSSJet_isLoaded = false;
+  nGoodSSWJet_isLoaded = false;
   GoodSSWJet_isLoaded = false;
+  nLooseBJet_isLoaded = false;
   LooseBJet_isLoaded = false;
 }
 
@@ -1890,23 +1944,41 @@ void WWWTree::LoadAllBranches() {
   if (weight_pdf_down_branch != 0) weight_pdf_down();
   if (weight_alphas_down_branch != 0) weight_alphas_down();
   if (weight_alphas_up_branch != 0) weight_alphas_up();
+  if (nLooseElec_branch != 0) nLooseElec();
   if (LooseElec_branch != 0) LooseElec();
+  if (nLooseLepton_branch != 0) nLooseLepton();
   if (LooseLepton_branch != 0) LooseLepton();
+  if (nLooseMuon_branch != 0) nLooseMuon();
   if (LooseMuon_branch != 0) LooseMuon();
+  if (nSignalElec_branch != 0) nSignalElec();
   if (SignalElec_branch != 0) SignalElec();
+  if (nSignalLepton_branch != 0) nSignalLepton();
   if (SignalLepton_branch != 0) SignalLepton();
+  if (nSignalMuon_branch != 0) nSignalMuon();
   if (SignalMuon_branch != 0) SignalMuon();
+  if (nTight3lElec_branch != 0) nTight3lElec();
   if (Tight3lElec_branch != 0) Tight3lElec();
+  if (nTight3lLepton_branch != 0) nTight3lLepton();
   if (Tight3lLepton_branch != 0) Tight3lLepton();
+  if (nTightElec_branch != 0) nTightElec();
   if (TightElec_branch != 0) TightElec();
+  if (nTightLepton_branch != 0) nTightLepton();
   if (TightLepton_branch != 0) TightLepton();
+  if (nTightMuon_branch != 0) nTightMuon();
   if (TightMuon_branch != 0) TightMuon();
+  if (nVetoElec_branch != 0) nVetoElec();
   if (VetoElec_branch != 0) VetoElec();
+  if (nVetoLepton_branch != 0) nVetoLepton();
   if (VetoLepton_branch != 0) VetoLepton();
+  if (nVetoMuon_branch != 0) nVetoMuon();
   if (VetoMuon_branch != 0) VetoMuon();
+  if (nGood3LJet_branch != 0) nGood3LJet();
   if (Good3LJet_branch != 0) Good3LJet();
+  if (nGoodSSJet_branch != 0) nGoodSSJet();
   if (GoodSSJet_branch != 0) GoodSSJet();
+  if (nGoodSSWJet_branch != 0) nGoodSSWJet();
   if (GoodSSWJet_branch != 0) GoodSSWJet();
+  if (nLooseBJet_branch != 0) nLooseBJet();
   if (LooseBJet_branch != 0) LooseBJet();
 }
 
@@ -7825,6 +7897,19 @@ const double &WWWTree::weight_alphas_up() {
   return weight_alphas_up_;
 }
 
+const int &WWWTree::nLooseElec() {
+  if (not nLooseElec_isLoaded) {
+    if (nLooseElec_branch != 0) {
+      nLooseElec_branch->GetEntry(index);
+    } else {
+      printf("branch nLooseElec_branch does not exist!\n");
+      exit(1);
+    }
+    nLooseElec_isLoaded = true;
+  }
+  return nLooseElec_;
+}
+
 const vector<int> &WWWTree::LooseElec() {
   if (not LooseElec_isLoaded) {
     if (LooseElec_branch != 0) {
@@ -7836,6 +7921,19 @@ const vector<int> &WWWTree::LooseElec() {
     LooseElec_isLoaded = true;
   }
   return *LooseElec_;
+}
+
+const int &WWWTree::nLooseLepton() {
+  if (not nLooseLepton_isLoaded) {
+    if (nLooseLepton_branch != 0) {
+      nLooseLepton_branch->GetEntry(index);
+    } else {
+      printf("branch nLooseLepton_branch does not exist!\n");
+      exit(1);
+    }
+    nLooseLepton_isLoaded = true;
+  }
+  return nLooseLepton_;
 }
 
 const vector<int> &WWWTree::LooseLepton() {
@@ -7851,6 +7949,19 @@ const vector<int> &WWWTree::LooseLepton() {
   return *LooseLepton_;
 }
 
+const int &WWWTree::nLooseMuon() {
+  if (not nLooseMuon_isLoaded) {
+    if (nLooseMuon_branch != 0) {
+      nLooseMuon_branch->GetEntry(index);
+    } else {
+      printf("branch nLooseMuon_branch does not exist!\n");
+      exit(1);
+    }
+    nLooseMuon_isLoaded = true;
+  }
+  return nLooseMuon_;
+}
+
 const vector<int> &WWWTree::LooseMuon() {
   if (not LooseMuon_isLoaded) {
     if (LooseMuon_branch != 0) {
@@ -7862,6 +7973,19 @@ const vector<int> &WWWTree::LooseMuon() {
     LooseMuon_isLoaded = true;
   }
   return *LooseMuon_;
+}
+
+const int &WWWTree::nSignalElec() {
+  if (not nSignalElec_isLoaded) {
+    if (nSignalElec_branch != 0) {
+      nSignalElec_branch->GetEntry(index);
+    } else {
+      printf("branch nSignalElec_branch does not exist!\n");
+      exit(1);
+    }
+    nSignalElec_isLoaded = true;
+  }
+  return nSignalElec_;
 }
 
 const vector<int> &WWWTree::SignalElec() {
@@ -7877,6 +8001,19 @@ const vector<int> &WWWTree::SignalElec() {
   return *SignalElec_;
 }
 
+const int &WWWTree::nSignalLepton() {
+  if (not nSignalLepton_isLoaded) {
+    if (nSignalLepton_branch != 0) {
+      nSignalLepton_branch->GetEntry(index);
+    } else {
+      printf("branch nSignalLepton_branch does not exist!\n");
+      exit(1);
+    }
+    nSignalLepton_isLoaded = true;
+  }
+  return nSignalLepton_;
+}
+
 const vector<int> &WWWTree::SignalLepton() {
   if (not SignalLepton_isLoaded) {
     if (SignalLepton_branch != 0) {
@@ -7888,6 +8025,19 @@ const vector<int> &WWWTree::SignalLepton() {
     SignalLepton_isLoaded = true;
   }
   return *SignalLepton_;
+}
+
+const int &WWWTree::nSignalMuon() {
+  if (not nSignalMuon_isLoaded) {
+    if (nSignalMuon_branch != 0) {
+      nSignalMuon_branch->GetEntry(index);
+    } else {
+      printf("branch nSignalMuon_branch does not exist!\n");
+      exit(1);
+    }
+    nSignalMuon_isLoaded = true;
+  }
+  return nSignalMuon_;
 }
 
 const vector<int> &WWWTree::SignalMuon() {
@@ -7903,6 +8053,19 @@ const vector<int> &WWWTree::SignalMuon() {
   return *SignalMuon_;
 }
 
+const int &WWWTree::nTight3lElec() {
+  if (not nTight3lElec_isLoaded) {
+    if (nTight3lElec_branch != 0) {
+      nTight3lElec_branch->GetEntry(index);
+    } else {
+      printf("branch nTight3lElec_branch does not exist!\n");
+      exit(1);
+    }
+    nTight3lElec_isLoaded = true;
+  }
+  return nTight3lElec_;
+}
+
 const vector<int> &WWWTree::Tight3lElec() {
   if (not Tight3lElec_isLoaded) {
     if (Tight3lElec_branch != 0) {
@@ -7914,6 +8077,19 @@ const vector<int> &WWWTree::Tight3lElec() {
     Tight3lElec_isLoaded = true;
   }
   return *Tight3lElec_;
+}
+
+const int &WWWTree::nTight3lLepton() {
+  if (not nTight3lLepton_isLoaded) {
+    if (nTight3lLepton_branch != 0) {
+      nTight3lLepton_branch->GetEntry(index);
+    } else {
+      printf("branch nTight3lLepton_branch does not exist!\n");
+      exit(1);
+    }
+    nTight3lLepton_isLoaded = true;
+  }
+  return nTight3lLepton_;
 }
 
 const vector<int> &WWWTree::Tight3lLepton() {
@@ -7929,6 +8105,19 @@ const vector<int> &WWWTree::Tight3lLepton() {
   return *Tight3lLepton_;
 }
 
+const int &WWWTree::nTightElec() {
+  if (not nTightElec_isLoaded) {
+    if (nTightElec_branch != 0) {
+      nTightElec_branch->GetEntry(index);
+    } else {
+      printf("branch nTightElec_branch does not exist!\n");
+      exit(1);
+    }
+    nTightElec_isLoaded = true;
+  }
+  return nTightElec_;
+}
+
 const vector<int> &WWWTree::TightElec() {
   if (not TightElec_isLoaded) {
     if (TightElec_branch != 0) {
@@ -7940,6 +8129,19 @@ const vector<int> &WWWTree::TightElec() {
     TightElec_isLoaded = true;
   }
   return *TightElec_;
+}
+
+const int &WWWTree::nTightLepton() {
+  if (not nTightLepton_isLoaded) {
+    if (nTightLepton_branch != 0) {
+      nTightLepton_branch->GetEntry(index);
+    } else {
+      printf("branch nTightLepton_branch does not exist!\n");
+      exit(1);
+    }
+    nTightLepton_isLoaded = true;
+  }
+  return nTightLepton_;
 }
 
 const vector<int> &WWWTree::TightLepton() {
@@ -7955,6 +8157,19 @@ const vector<int> &WWWTree::TightLepton() {
   return *TightLepton_;
 }
 
+const int &WWWTree::nTightMuon() {
+  if (not nTightMuon_isLoaded) {
+    if (nTightMuon_branch != 0) {
+      nTightMuon_branch->GetEntry(index);
+    } else {
+      printf("branch nTightMuon_branch does not exist!\n");
+      exit(1);
+    }
+    nTightMuon_isLoaded = true;
+  }
+  return nTightMuon_;
+}
+
 const vector<int> &WWWTree::TightMuon() {
   if (not TightMuon_isLoaded) {
     if (TightMuon_branch != 0) {
@@ -7966,6 +8181,19 @@ const vector<int> &WWWTree::TightMuon() {
     TightMuon_isLoaded = true;
   }
   return *TightMuon_;
+}
+
+const int &WWWTree::nVetoElec() {
+  if (not nVetoElec_isLoaded) {
+    if (nVetoElec_branch != 0) {
+      nVetoElec_branch->GetEntry(index);
+    } else {
+      printf("branch nVetoElec_branch does not exist!\n");
+      exit(1);
+    }
+    nVetoElec_isLoaded = true;
+  }
+  return nVetoElec_;
 }
 
 const vector<int> &WWWTree::VetoElec() {
@@ -7981,6 +8209,19 @@ const vector<int> &WWWTree::VetoElec() {
   return *VetoElec_;
 }
 
+const int &WWWTree::nVetoLepton() {
+  if (not nVetoLepton_isLoaded) {
+    if (nVetoLepton_branch != 0) {
+      nVetoLepton_branch->GetEntry(index);
+    } else {
+      printf("branch nVetoLepton_branch does not exist!\n");
+      exit(1);
+    }
+    nVetoLepton_isLoaded = true;
+  }
+  return nVetoLepton_;
+}
+
 const vector<int> &WWWTree::VetoLepton() {
   if (not VetoLepton_isLoaded) {
     if (VetoLepton_branch != 0) {
@@ -7992,6 +8233,19 @@ const vector<int> &WWWTree::VetoLepton() {
     VetoLepton_isLoaded = true;
   }
   return *VetoLepton_;
+}
+
+const int &WWWTree::nVetoMuon() {
+  if (not nVetoMuon_isLoaded) {
+    if (nVetoMuon_branch != 0) {
+      nVetoMuon_branch->GetEntry(index);
+    } else {
+      printf("branch nVetoMuon_branch does not exist!\n");
+      exit(1);
+    }
+    nVetoMuon_isLoaded = true;
+  }
+  return nVetoMuon_;
 }
 
 const vector<int> &WWWTree::VetoMuon() {
@@ -8007,6 +8261,19 @@ const vector<int> &WWWTree::VetoMuon() {
   return *VetoMuon_;
 }
 
+const int &WWWTree::nGood3LJet() {
+  if (not nGood3LJet_isLoaded) {
+    if (nGood3LJet_branch != 0) {
+      nGood3LJet_branch->GetEntry(index);
+    } else {
+      printf("branch nGood3LJet_branch does not exist!\n");
+      exit(1);
+    }
+    nGood3LJet_isLoaded = true;
+  }
+  return nGood3LJet_;
+}
+
 const vector<int> &WWWTree::Good3LJet() {
   if (not Good3LJet_isLoaded) {
     if (Good3LJet_branch != 0) {
@@ -8018,6 +8285,19 @@ const vector<int> &WWWTree::Good3LJet() {
     Good3LJet_isLoaded = true;
   }
   return *Good3LJet_;
+}
+
+const int &WWWTree::nGoodSSJet() {
+  if (not nGoodSSJet_isLoaded) {
+    if (nGoodSSJet_branch != 0) {
+      nGoodSSJet_branch->GetEntry(index);
+    } else {
+      printf("branch nGoodSSJet_branch does not exist!\n");
+      exit(1);
+    }
+    nGoodSSJet_isLoaded = true;
+  }
+  return nGoodSSJet_;
 }
 
 const vector<int> &WWWTree::GoodSSJet() {
@@ -8033,6 +8313,19 @@ const vector<int> &WWWTree::GoodSSJet() {
   return *GoodSSJet_;
 }
 
+const int &WWWTree::nGoodSSWJet() {
+  if (not nGoodSSWJet_isLoaded) {
+    if (nGoodSSWJet_branch != 0) {
+      nGoodSSWJet_branch->GetEntry(index);
+    } else {
+      printf("branch nGoodSSWJet_branch does not exist!\n");
+      exit(1);
+    }
+    nGoodSSWJet_isLoaded = true;
+  }
+  return nGoodSSWJet_;
+}
+
 const vector<int> &WWWTree::GoodSSWJet() {
   if (not GoodSSWJet_isLoaded) {
     if (GoodSSWJet_branch != 0) {
@@ -8044,6 +8337,19 @@ const vector<int> &WWWTree::GoodSSWJet() {
     GoodSSWJet_isLoaded = true;
   }
   return *GoodSSWJet_;
+}
+
+const int &WWWTree::nLooseBJet() {
+  if (not nLooseBJet_isLoaded) {
+    if (nLooseBJet_branch != 0) {
+      nLooseBJet_branch->GetEntry(index);
+    } else {
+      printf("branch nLooseBJet_branch does not exist!\n");
+      exit(1);
+    }
+    nLooseBJet_isLoaded = true;
+  }
+  return nLooseBJet_;
 }
 
 const vector<int> &WWWTree::LooseBJet() {
@@ -8537,23 +8843,41 @@ const double &weight_pdf_up() { return wwwbaby.weight_pdf_up(); }
 const double &weight_pdf_down() { return wwwbaby.weight_pdf_down(); }
 const double &weight_alphas_down() { return wwwbaby.weight_alphas_down(); }
 const double &weight_alphas_up() { return wwwbaby.weight_alphas_up(); }
+const int &nLooseElec() { return wwwbaby.nLooseElec(); }
 const vector<int> &LooseElec() { return wwwbaby.LooseElec(); }
+const int &nLooseLepton() { return wwwbaby.nLooseLepton(); }
 const vector<int> &LooseLepton() { return wwwbaby.LooseLepton(); }
+const int &nLooseMuon() { return wwwbaby.nLooseMuon(); }
 const vector<int> &LooseMuon() { return wwwbaby.LooseMuon(); }
+const int &nSignalElec() { return wwwbaby.nSignalElec(); }
 const vector<int> &SignalElec() { return wwwbaby.SignalElec(); }
+const int &nSignalLepton() { return wwwbaby.nSignalLepton(); }
 const vector<int> &SignalLepton() { return wwwbaby.SignalLepton(); }
+const int &nSignalMuon() { return wwwbaby.nSignalMuon(); }
 const vector<int> &SignalMuon() { return wwwbaby.SignalMuon(); }
+const int &nTight3lElec() { return wwwbaby.nTight3lElec(); }
 const vector<int> &Tight3lElec() { return wwwbaby.Tight3lElec(); }
+const int &nTight3lLepton() { return wwwbaby.nTight3lLepton(); }
 const vector<int> &Tight3lLepton() { return wwwbaby.Tight3lLepton(); }
+const int &nTightElec() { return wwwbaby.nTightElec(); }
 const vector<int> &TightElec() { return wwwbaby.TightElec(); }
+const int &nTightLepton() { return wwwbaby.nTightLepton(); }
 const vector<int> &TightLepton() { return wwwbaby.TightLepton(); }
+const int &nTightMuon() { return wwwbaby.nTightMuon(); }
 const vector<int> &TightMuon() { return wwwbaby.TightMuon(); }
+const int &nVetoElec() { return wwwbaby.nVetoElec(); }
 const vector<int> &VetoElec() { return wwwbaby.VetoElec(); }
+const int &nVetoLepton() { return wwwbaby.nVetoLepton(); }
 const vector<int> &VetoLepton() { return wwwbaby.VetoLepton(); }
+const int &nVetoMuon() { return wwwbaby.nVetoMuon(); }
 const vector<int> &VetoMuon() { return wwwbaby.VetoMuon(); }
+const int &nGood3LJet() { return wwwbaby.nGood3LJet(); }
 const vector<int> &Good3LJet() { return wwwbaby.Good3LJet(); }
+const int &nGoodSSJet() { return wwwbaby.nGoodSSJet(); }
 const vector<int> &GoodSSJet() { return wwwbaby.GoodSSJet(); }
+const int &nGoodSSWJet() { return wwwbaby.nGoodSSWJet(); }
 const vector<int> &GoodSSWJet() { return wwwbaby.GoodSSWJet(); }
+const int &nLooseBJet() { return wwwbaby.nLooseBJet(); }
 const vector<int> &LooseBJet() { return wwwbaby.LooseBJet(); }
 
 }
