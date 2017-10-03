@@ -153,8 +153,16 @@ bool isObjectSelected();
 void setObjectIndices( bool preload=false );
 
 // Returns a collection of indices for selected leptons
+ObjIdx makeEmptyLepidx();
+ObjIdx makeEmptyJetidx();
+
+// Returns a collection of indices for selected leptons
 ObjIdx getLeptonsIndices();
 ObjIdx getJetsIndices();
+
+// Loads collection of indices for selected objects
+void loadLeptonIndices();
+void loadJetsIndices();
 
 // Loose
 bool isVetoLepton( int );
@@ -186,9 +194,9 @@ bool isLooseMuon( int );
 bool isLooseElec( int );
 
 // Loose But Not Tight (Lbnt)
-bool isLbn3LtLepton( int );
-bool isLbn3LtMuon( int );
-bool isLbn3LtElec( int );
+bool isLbnt3lLepton( int );
+bool isLbnt3lMuon( int );
+bool isLbnt3lElec( int );
 
 // Good SS category jet
 bool isGoodSSJet( int );

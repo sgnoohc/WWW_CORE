@@ -992,6 +992,8 @@ void setObjectIndices( bool preload )
     if ( isObjectSelected() ) return;
     if ( preload )
     {
+        loadLeptonIndices();
+        loadJetsIndices();
     }
     else
     {
@@ -1017,9 +1019,47 @@ bool isObjectSelected()
 }
 
 //______________________________________________________________________________________
-ObjIdx getLeptonsIndices()
+ObjIdx makeEmptyLepidx()
 {
     ObjIdx idx;
+    idx["Tight3lLepton"].clear();
+    idx["Tight3lElec"].clear();
+    idx["TightLepton"].clear();
+    idx["TightMuon"].clear();
+    idx["TightElec"].clear();
+    idx["LooseLepton"].clear();
+    idx["LooseMuon"].clear();
+    idx["LooseElec"].clear();
+    idx["VetoLepton"].clear();
+    idx["VetoMuon"].clear();
+    idx["VetoElec"].clear();
+    idx["LbntLepton"].clear();
+    idx["LbntMuon"].clear();
+    idx["LbntElec"].clear();
+    idx["Lbnt3lLepton"].clear();
+    idx["Lbnt3lMuon"].clear();
+    idx["Lbnt3lElec"].clear();
+    idx["SignalLepton"].clear();
+    idx["SignalMuon"].clear();
+    idx["SignalElec"].clear();
+    return idx;
+}
+
+//______________________________________________________________________________________
+ObjIdx makeEmptyJetidx()
+{
+    ObjIdx idx;
+    idx["GoodSSJet"].clear();
+    idx["Good3LJet"].clear();
+    idx["LooseElec"].clear();
+    idx["GoodSSWJet"].clear();
+    return idx;
+}
+
+//______________________________________________________________________________________
+ObjIdx getLeptonsIndices()
+{
+    ObjIdx idx = makeEmptyLepidx();
     for ( unsigned int ilep = 0; ilep < wwwbaby.lep_p4().size(); ++ilep )
     {
         if ( isTight3lLepton( ilep ) ) idx["Tight3lLepton"].push_back( ilep );
@@ -1036,9 +1076,9 @@ ObjIdx getLeptonsIndices()
         if ( isLbntLepton   ( ilep ) ) idx["LbntLepton"]   .push_back( ilep );
         if ( isLbntMuon     ( ilep ) ) idx["LbntMuon"]     .push_back( ilep );
         if ( isLbntElec     ( ilep ) ) idx["LbntElec"]     .push_back( ilep );
-        if ( isLbn3LtLepton ( ilep ) ) idx["Lbn3LtLepton"] .push_back( ilep );
-        if ( isLbn3LtMuon   ( ilep ) ) idx["Lbn3LtMuon"]   .push_back( ilep );
-        if ( isLbn3LtElec   ( ilep ) ) idx["Lbn3LtElec"]   .push_back( ilep );
+        if ( isLbnt3lLepton ( ilep ) ) idx["Lbnt3lLepton"] .push_back( ilep );
+        if ( isLbnt3lMuon   ( ilep ) ) idx["Lbnt3lMuon"]   .push_back( ilep );
+        if ( isLbnt3lElec   ( ilep ) ) idx["Lbnt3lElec"]   .push_back( ilep );
     }
     // Default is to set signal leptons to Tight leptons
     idx["SignalLepton"] = idx["LooseLepton"];
@@ -1048,9 +1088,34 @@ ObjIdx getLeptonsIndices()
 }
 
 //______________________________________________________________________________________
+void loadLeptonIndices()
+{
+//    lepidx["Tight3lLepton"] = wwwbaby.Tight3lLepton();
+//    lepidx["Tight3lElec"]   = wwwbaby.Tight3lElec();
+//    lepidx["TightLepton"]   = wwwbaby.TightLepton();
+//    lepidx["TightMuon"]     = wwwbaby.TightMuon();
+//    lepidx["TightElec"]     = wwwbaby.TightElec();
+//    lepidx["LooseLepton"]   = wwwbaby.LooseLepton();
+//    lepidx["LooseMuon"]     = wwwbaby.LooseMuon();
+//    lepidx["LooseElec"]     = wwwbaby.LooseElec();
+//    lepidx["VetoLepton"]    = wwwbaby.VetoLepton();
+//    lepidx["VetoMuon"]      = wwwbaby.VetoMuon();
+//    lepidx["VetoElec"]      = wwwbaby.VetoElec();
+//    lepidx["LbntLepton"]    = wwwbaby.LbntLepton();
+//    lepidx["LbntMuon"]      = wwwbaby.LbntMuon();
+//    lepidx["LbntElec"]      = wwwbaby.LbntElec();
+//    lepidx["Lbnt3lLepton"]  = wwwbaby.Lbnt3lLepton();
+//    lepidx["Lbnt3lMuon"]    = wwwbaby.Lbnt3lMuon();
+//    lepidx["Lbnt3lElec"]    = wwwbaby.Lbnt3lElec();
+//    lepidx["SignalLepton"]  = wwwbaby.SignalLepton();
+//    lepidx["SignalMuon"]    = wwwbaby.SignalMuon();
+//    lepidx["SignalElec"]    = wwwbaby.SignalElec();
+}
+
+//______________________________________________________________________________________
 ObjIdx getJetsIndices()
 {
-    ObjIdx idx;
+    ObjIdx idx = makeEmptyJetidx();
     for ( unsigned int ijet = 0; ijet < wwwbaby.jets_p4().size(); ++ijet )
     {
         if ( isGoodSSJet( ijet ) ) idx["GoodSSJet"].push_back( ijet );
@@ -1090,6 +1155,15 @@ ObjIdx getJetsIndices()
     }
 
     return idx;
+}
+
+//______________________________________________________________________________________
+void loadJetsIndices()
+{
+//    jetidx["GoodSSJet"]  = wwwbaby.GoodSSJet();
+//    jetidx["Good3LJet"]  = wwwbaby.Good3LJet();
+//    jetidx["LooseBJet"]  = wwwbaby.LooseBJet();
+//    jetidx["GoodSSWJet"] = wwwbaby.GoodSSWJet();
 }
 
 //______________________________________________________________________________________
@@ -1242,19 +1316,19 @@ bool isLbntElec( int ilep )
 }
 
 //______________________________________________________________________________________
-bool isLbn3LtLepton( int ilep )
+bool isLbnt3lLepton( int ilep )
 {
-    return isLbn3LtMuon( ilep ) || isLbn3LtElec( ilep );
+    return isLbnt3lMuon( ilep ) || isLbnt3lElec( ilep );
 }
 
 //______________________________________________________________________________________
-bool isLbn3LtMuon( int ilep )
+bool isLbnt3lMuon( int ilep )
 {
     return isLooseMuon( ilep ) && !isTightMuon( ilep );
 }
 
 //______________________________________________________________________________________
-bool isLbn3LtElec( int ilep )
+bool isLbnt3lElec( int ilep )
 {
     return isLooseElec( ilep ) && !isTight3lElec( ilep );
 }
