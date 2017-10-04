@@ -1051,7 +1051,7 @@ ObjIdx makeEmptyJetidx()
     ObjIdx idx;
     idx["GoodSSJet"].clear();
     idx["Good3LJet"].clear();
-    idx["LooseElec"].clear();
+    idx["LooseBJet"].clear();
     idx["GoodSSWJet"].clear();
     return idx;
 }
@@ -1090,26 +1090,26 @@ ObjIdx getLeptonsIndices()
 //______________________________________________________________________________________
 void loadLeptonIndices()
 {
-//    lepidx["Tight3lLepton"] = wwwbaby.Tight3lLepton();
-//    lepidx["Tight3lElec"]   = wwwbaby.Tight3lElec();
-//    lepidx["TightLepton"]   = wwwbaby.TightLepton();
-//    lepidx["TightMuon"]     = wwwbaby.TightMuon();
-//    lepidx["TightElec"]     = wwwbaby.TightElec();
-//    lepidx["LooseLepton"]   = wwwbaby.LooseLepton();
-//    lepidx["LooseMuon"]     = wwwbaby.LooseMuon();
-//    lepidx["LooseElec"]     = wwwbaby.LooseElec();
-//    lepidx["VetoLepton"]    = wwwbaby.VetoLepton();
-//    lepidx["VetoMuon"]      = wwwbaby.VetoMuon();
-//    lepidx["VetoElec"]      = wwwbaby.VetoElec();
-//    lepidx["LbntLepton"]    = wwwbaby.LbntLepton();
-//    lepidx["LbntMuon"]      = wwwbaby.LbntMuon();
-//    lepidx["LbntElec"]      = wwwbaby.LbntElec();
-//    lepidx["Lbnt3lLepton"]  = wwwbaby.Lbnt3lLepton();
-//    lepidx["Lbnt3lMuon"]    = wwwbaby.Lbnt3lMuon();
-//    lepidx["Lbnt3lElec"]    = wwwbaby.Lbnt3lElec();
-//    lepidx["SignalLepton"]  = wwwbaby.SignalLepton();
-//    lepidx["SignalMuon"]    = wwwbaby.SignalMuon();
-//    lepidx["SignalElec"]    = wwwbaby.SignalElec();
+    lepidx["Tight3lLepton"] = wwwbaby.Tight3lLepton();
+    lepidx["Tight3lElec"]   = wwwbaby.Tight3lElec();
+    lepidx["TightLepton"]   = wwwbaby.TightLepton();
+    lepidx["TightMuon"]     = wwwbaby.TightMuon();
+    lepidx["TightElec"]     = wwwbaby.TightElec();
+    lepidx["LooseLepton"]   = wwwbaby.LooseLepton();
+    lepidx["LooseMuon"]     = wwwbaby.LooseMuon();
+    lepidx["LooseElec"]     = wwwbaby.LooseElec();
+    lepidx["VetoLepton"]    = wwwbaby.VetoLepton();
+    lepidx["VetoMuon"]      = wwwbaby.VetoMuon();
+    lepidx["VetoElec"]      = wwwbaby.VetoElec();
+    lepidx["LbntLepton"]    = wwwbaby.LbntLepton();
+    lepidx["LbntMuon"]      = wwwbaby.LbntMuon();
+    lepidx["LbntElec"]      = wwwbaby.LbntElec();
+    lepidx["Lbnt3lLepton"]  = wwwbaby.Lbnt3lLepton();
+    lepidx["Lbnt3lMuon"]    = wwwbaby.Lbnt3lMuon();
+    lepidx["Lbnt3lElec"]    = wwwbaby.Lbnt3lElec();
+    lepidx["SignalLepton"]  = wwwbaby.SignalLepton();
+    lepidx["SignalMuon"]    = wwwbaby.SignalMuon();
+    lepidx["SignalElec"]    = wwwbaby.SignalElec();
 }
 
 //______________________________________________________________________________________
@@ -1160,10 +1160,10 @@ ObjIdx getJetsIndices()
 //______________________________________________________________________________________
 void loadJetsIndices()
 {
-//    jetidx["GoodSSJet"]  = wwwbaby.GoodSSJet();
-//    jetidx["Good3LJet"]  = wwwbaby.Good3LJet();
-//    jetidx["LooseBJet"]  = wwwbaby.LooseBJet();
-//    jetidx["GoodSSWJet"] = wwwbaby.GoodSSWJet();
+    jetidx["GoodSSJet"]  = wwwbaby.GoodSSJet();
+    jetidx["Good3LJet"]  = wwwbaby.Good3LJet();
+    jetidx["LooseBJet"]  = wwwbaby.LooseBJet();
+    jetidx["GoodSSWJet"] = wwwbaby.GoodSSWJet();
 }
 
 //______________________________________________________________________________________
@@ -2063,9 +2063,11 @@ TString bkgCategory()
     }
     else
     {
-        std::cout << std::endl;
-        std::cout << "bkgCategory() Why am I here?";
-        std::cout << wwwbaby.evt() << " " << wwwbaby.lumi() << " " << wwwbaby.run() << std::endl;
+//        std::cout << iSS.size() << " " << iaSS.size() << " " << ilSS.size() << std::endl;
+
+//        std::cout << std::endl;
+//        std::cout << "bkgCategory() Why am I here?";
+//        std::cout << wwwbaby.evt() << " " << wwwbaby.lumi() << " " << wwwbaby.run() << std::endl;
         bkg_category = "others";
         return bkg_category;
     }

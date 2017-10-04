@@ -915,6 +915,30 @@ void WWWTree::Init(TTree *tree) {
   if (weight_alphas_down_branch) weight_alphas_down_branch->SetAddress(&weight_alphas_down_);
   weight_alphas_up_branch = tree->GetBranch("weight_alphas_up");
   if (weight_alphas_up_branch) weight_alphas_up_branch->SetAddress(&weight_alphas_up_);
+  nLbnt3lElec_branch = tree->GetBranch("nLbnt3lElec");
+  if (nLbnt3lElec_branch) nLbnt3lElec_branch->SetAddress(&nLbnt3lElec_);
+  Lbnt3lElec_branch = tree->GetBranch("Lbnt3lElec");
+  if (Lbnt3lElec_branch) Lbnt3lElec_branch->SetAddress(&Lbnt3lElec_);
+  nLbnt3lLepton_branch = tree->GetBranch("nLbnt3lLepton");
+  if (nLbnt3lLepton_branch) nLbnt3lLepton_branch->SetAddress(&nLbnt3lLepton_);
+  Lbnt3lLepton_branch = tree->GetBranch("Lbnt3lLepton");
+  if (Lbnt3lLepton_branch) Lbnt3lLepton_branch->SetAddress(&Lbnt3lLepton_);
+  nLbnt3lMuon_branch = tree->GetBranch("nLbnt3lMuon");
+  if (nLbnt3lMuon_branch) nLbnt3lMuon_branch->SetAddress(&nLbnt3lMuon_);
+  Lbnt3lMuon_branch = tree->GetBranch("Lbnt3lMuon");
+  if (Lbnt3lMuon_branch) Lbnt3lMuon_branch->SetAddress(&Lbnt3lMuon_);
+  nLbntElec_branch = tree->GetBranch("nLbntElec");
+  if (nLbntElec_branch) nLbntElec_branch->SetAddress(&nLbntElec_);
+  LbntElec_branch = tree->GetBranch("LbntElec");
+  if (LbntElec_branch) LbntElec_branch->SetAddress(&LbntElec_);
+  nLbntLepton_branch = tree->GetBranch("nLbntLepton");
+  if (nLbntLepton_branch) nLbntLepton_branch->SetAddress(&nLbntLepton_);
+  LbntLepton_branch = tree->GetBranch("LbntLepton");
+  if (LbntLepton_branch) LbntLepton_branch->SetAddress(&LbntLepton_);
+  nLbntMuon_branch = tree->GetBranch("nLbntMuon");
+  if (nLbntMuon_branch) nLbntMuon_branch->SetAddress(&nLbntMuon_);
+  LbntMuon_branch = tree->GetBranch("LbntMuon");
+  if (LbntMuon_branch) LbntMuon_branch->SetAddress(&LbntMuon_);
   nLooseElec_branch = tree->GetBranch("nLooseElec");
   if (nLooseElec_branch) nLooseElec_branch->SetAddress(&nLooseElec_);
   LooseElec_branch = tree->GetBranch("LooseElec");
@@ -1449,6 +1473,18 @@ void WWWTree::GetEntry(unsigned int idx) {
   weight_pdf_down_isLoaded = false;
   weight_alphas_down_isLoaded = false;
   weight_alphas_up_isLoaded = false;
+  nLbnt3lElec_isLoaded = false;
+  Lbnt3lElec_isLoaded = false;
+  nLbnt3lLepton_isLoaded = false;
+  Lbnt3lLepton_isLoaded = false;
+  nLbnt3lMuon_isLoaded = false;
+  Lbnt3lMuon_isLoaded = false;
+  nLbntElec_isLoaded = false;
+  LbntElec_isLoaded = false;
+  nLbntLepton_isLoaded = false;
+  LbntLepton_isLoaded = false;
+  nLbntMuon_isLoaded = false;
+  LbntMuon_isLoaded = false;
   nLooseElec_isLoaded = false;
   LooseElec_isLoaded = false;
   nLooseLepton_isLoaded = false;
@@ -1944,6 +1980,18 @@ void WWWTree::LoadAllBranches() {
   if (weight_pdf_down_branch != 0) weight_pdf_down();
   if (weight_alphas_down_branch != 0) weight_alphas_down();
   if (weight_alphas_up_branch != 0) weight_alphas_up();
+  if (nLbnt3lElec_branch != 0) nLbnt3lElec();
+  if (Lbnt3lElec_branch != 0) Lbnt3lElec();
+  if (nLbnt3lLepton_branch != 0) nLbnt3lLepton();
+  if (Lbnt3lLepton_branch != 0) Lbnt3lLepton();
+  if (nLbnt3lMuon_branch != 0) nLbnt3lMuon();
+  if (Lbnt3lMuon_branch != 0) Lbnt3lMuon();
+  if (nLbntElec_branch != 0) nLbntElec();
+  if (LbntElec_branch != 0) LbntElec();
+  if (nLbntLepton_branch != 0) nLbntLepton();
+  if (LbntLepton_branch != 0) LbntLepton();
+  if (nLbntMuon_branch != 0) nLbntMuon();
+  if (LbntMuon_branch != 0) LbntMuon();
   if (nLooseElec_branch != 0) nLooseElec();
   if (LooseElec_branch != 0) LooseElec();
   if (nLooseLepton_branch != 0) nLooseLepton();
@@ -7897,6 +7945,162 @@ const double &WWWTree::weight_alphas_up() {
   return weight_alphas_up_;
 }
 
+const int &WWWTree::nLbnt3lElec() {
+  if (not nLbnt3lElec_isLoaded) {
+    if (nLbnt3lElec_branch != 0) {
+      nLbnt3lElec_branch->GetEntry(index);
+    } else {
+      printf("branch nLbnt3lElec_branch does not exist!\n");
+      exit(1);
+    }
+    nLbnt3lElec_isLoaded = true;
+  }
+  return nLbnt3lElec_;
+}
+
+const vector<int> &WWWTree::Lbnt3lElec() {
+  if (not Lbnt3lElec_isLoaded) {
+    if (Lbnt3lElec_branch != 0) {
+      Lbnt3lElec_branch->GetEntry(index);
+    } else {
+      printf("branch Lbnt3lElec_branch does not exist!\n");
+      exit(1);
+    }
+    Lbnt3lElec_isLoaded = true;
+  }
+  return *Lbnt3lElec_;
+}
+
+const int &WWWTree::nLbnt3lLepton() {
+  if (not nLbnt3lLepton_isLoaded) {
+    if (nLbnt3lLepton_branch != 0) {
+      nLbnt3lLepton_branch->GetEntry(index);
+    } else {
+      printf("branch nLbnt3lLepton_branch does not exist!\n");
+      exit(1);
+    }
+    nLbnt3lLepton_isLoaded = true;
+  }
+  return nLbnt3lLepton_;
+}
+
+const vector<int> &WWWTree::Lbnt3lLepton() {
+  if (not Lbnt3lLepton_isLoaded) {
+    if (Lbnt3lLepton_branch != 0) {
+      Lbnt3lLepton_branch->GetEntry(index);
+    } else {
+      printf("branch Lbnt3lLepton_branch does not exist!\n");
+      exit(1);
+    }
+    Lbnt3lLepton_isLoaded = true;
+  }
+  return *Lbnt3lLepton_;
+}
+
+const int &WWWTree::nLbnt3lMuon() {
+  if (not nLbnt3lMuon_isLoaded) {
+    if (nLbnt3lMuon_branch != 0) {
+      nLbnt3lMuon_branch->GetEntry(index);
+    } else {
+      printf("branch nLbnt3lMuon_branch does not exist!\n");
+      exit(1);
+    }
+    nLbnt3lMuon_isLoaded = true;
+  }
+  return nLbnt3lMuon_;
+}
+
+const vector<int> &WWWTree::Lbnt3lMuon() {
+  if (not Lbnt3lMuon_isLoaded) {
+    if (Lbnt3lMuon_branch != 0) {
+      Lbnt3lMuon_branch->GetEntry(index);
+    } else {
+      printf("branch Lbnt3lMuon_branch does not exist!\n");
+      exit(1);
+    }
+    Lbnt3lMuon_isLoaded = true;
+  }
+  return *Lbnt3lMuon_;
+}
+
+const int &WWWTree::nLbntElec() {
+  if (not nLbntElec_isLoaded) {
+    if (nLbntElec_branch != 0) {
+      nLbntElec_branch->GetEntry(index);
+    } else {
+      printf("branch nLbntElec_branch does not exist!\n");
+      exit(1);
+    }
+    nLbntElec_isLoaded = true;
+  }
+  return nLbntElec_;
+}
+
+const vector<int> &WWWTree::LbntElec() {
+  if (not LbntElec_isLoaded) {
+    if (LbntElec_branch != 0) {
+      LbntElec_branch->GetEntry(index);
+    } else {
+      printf("branch LbntElec_branch does not exist!\n");
+      exit(1);
+    }
+    LbntElec_isLoaded = true;
+  }
+  return *LbntElec_;
+}
+
+const int &WWWTree::nLbntLepton() {
+  if (not nLbntLepton_isLoaded) {
+    if (nLbntLepton_branch != 0) {
+      nLbntLepton_branch->GetEntry(index);
+    } else {
+      printf("branch nLbntLepton_branch does not exist!\n");
+      exit(1);
+    }
+    nLbntLepton_isLoaded = true;
+  }
+  return nLbntLepton_;
+}
+
+const vector<int> &WWWTree::LbntLepton() {
+  if (not LbntLepton_isLoaded) {
+    if (LbntLepton_branch != 0) {
+      LbntLepton_branch->GetEntry(index);
+    } else {
+      printf("branch LbntLepton_branch does not exist!\n");
+      exit(1);
+    }
+    LbntLepton_isLoaded = true;
+  }
+  return *LbntLepton_;
+}
+
+const int &WWWTree::nLbntMuon() {
+  if (not nLbntMuon_isLoaded) {
+    if (nLbntMuon_branch != 0) {
+      nLbntMuon_branch->GetEntry(index);
+    } else {
+      printf("branch nLbntMuon_branch does not exist!\n");
+      exit(1);
+    }
+    nLbntMuon_isLoaded = true;
+  }
+  return nLbntMuon_;
+}
+
+const vector<int> &WWWTree::LbntMuon() {
+  if (not LbntMuon_isLoaded) {
+    if (LbntMuon_branch != 0) {
+      LbntMuon_branch->GetEntry(index);
+    } else {
+      printf("branch LbntMuon_branch does not exist!\n");
+      exit(1);
+    }
+    LbntMuon_isLoaded = true;
+  }
+  return *LbntMuon_;
+}
+
 const int &WWWTree::nLooseElec() {
   if (not nLooseElec_isLoaded) {
     if (nLooseElec_branch != 0) {
@@ -8843,6 +9047,18 @@ const double &weight_pdf_up() { return wwwbaby.weight_pdf_up(); }
 const double &weight_pdf_down() { return wwwbaby.weight_pdf_down(); }
 const double &weight_alphas_down() { return wwwbaby.weight_alphas_down(); }
 const double &weight_alphas_up() { return wwwbaby.weight_alphas_up(); }
+const int &nLbnt3lElec() { return wwwbaby.nLbnt3lElec(); }
+const vector<int> &Lbnt3lElec() { return wwwbaby.Lbnt3lElec(); }
+const int &nLbnt3lLepton() { return wwwbaby.nLbnt3lLepton(); }
+const vector<int> &Lbnt3lLepton() { return wwwbaby.Lbnt3lLepton(); }
+const int &nLbnt3lMuon() { return wwwbaby.nLbnt3lMuon(); }
+const vector<int> &Lbnt3lMuon() { return wwwbaby.Lbnt3lMuon(); }
+const int &nLbntElec() { return wwwbaby.nLbntElec(); }
+const vector<int> &LbntElec() { return wwwbaby.LbntElec(); }
+const int &nLbntLepton() { return wwwbaby.nLbntLepton(); }
+const vector<int> &LbntLepton() { return wwwbaby.LbntLepton(); }
+const int &nLbntMuon() { return wwwbaby.nLbntMuon(); }
+const vector<int> &LbntMuon() { return wwwbaby.LbntMuon(); }
 const int &nLooseElec() { return wwwbaby.nLooseElec(); }
 const vector<int> &LooseElec() { return wwwbaby.LooseElec(); }
 const int &nLooseLepton() { return wwwbaby.nLooseLepton(); }
