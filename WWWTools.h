@@ -140,6 +140,26 @@ bool passTrigMM();
 bool passTrigEM();
 bool passTrigEE();
 
+// SS Signal region definitions
+bool passPRVRSSMM();
+bool passPRVRSSEM();
+bool passPRVRSSEE();
+
+// SS Signal region definitions
+bool passPRVRSSMMPred();
+bool passPRVRSSEMPred();
+bool passPRVRSSEEPred();
+
+// Application region definitions
+bool passPRARSSMM();
+bool passPRARSSEM();
+bool passPRARSSEE();
+
+// Application region definitions
+bool passPRARSSMMPred();
+bool passPRARSSEMPred();
+bool passPRARSSEEPred();
+
 // Event weights
 float weight( bool=false, int=0 );
 

@@ -73,9 +73,11 @@ bool passSSMM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
 {
     setObjectIndices();
     if (!( passTrigMM()                                                             )) return false;
+    if (!( lepidx[lepid].size()                              ==   2                 )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 169                 )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                                            )) return false;
     if (!( wwwbaby.firstgoodvertex()                         ==   0                 )) return false;
-    if (!( lepidx[lepid].size()                              ==   2                 )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                )) return false;
     if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
@@ -88,8 +90,6 @@ bool passSSMM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
              MjjW()                                          <  100. )  || dropmjj  )) return false;
     if (!( MjjLead()                                         <  400.    || dropjet  )) return false;
     if (!( DEtajjLead()                                      <    1.5   || dropjet  )) return false;
-    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
-           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 169                 )) return false;
     if (!( ( wwwbaby.lep_p4()[lepidx[lepid][0]]
              + wwwbaby.lep_p4()[lepidx[lepid][1]] ).mass()   >   40.                )) return false;
     return true;
@@ -100,9 +100,11 @@ bool passSSEM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
 {
     setObjectIndices();
     if (!( passTrigEM()                                                             )) return false;
+    if (!( lepidx[lepid].size()                              ==   2                 )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 143                 )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                                            )) return false;
     if (!( wwwbaby.firstgoodvertex()                         ==   0                 )) return false;
-    if (!( lepidx[lepid].size()                              ==   2                 )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                )) return false;
     if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
@@ -115,8 +117,6 @@ bool passSSEM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
              MjjW()                                          <  100. )  || dropmjj  )) return false;
     if (!( MjjLead()                                         <  400.    || dropjet  )) return false;
     if (!( DEtajjLead()                                      <    1.5   || dropjet  )) return false;
-    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
-           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 143                 )) return false;
     if (!( ( wwwbaby.lep_p4()[lepidx[lepid][0]]
              + wwwbaby.lep_p4()[lepidx[lepid][1]] ).mass()   >   30.                )) return false;
     if (!( wwwbaby.met_pt()                                  >   40.                )) return false;
@@ -129,9 +129,11 @@ bool passSSEE( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
 {
     setObjectIndices();
     if (!( passTrigEE()                                                              )) return false;
+    if (!( lepidx[lepid].size()                              ==   2                  )) return false;
+    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
+           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 121                  )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                                             )) return false;
     if (!( wwwbaby.firstgoodvertex()                         ==   0                 )) return false;
-    if (!( lepidx[lepid].size()                              ==   2                  )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                 )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                 )) return false;
     if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
@@ -144,8 +146,6 @@ bool passSSEE( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
              MjjW()                                          <  100. )   || dropmjj  )) return false;
     if (!( MjjLead()                                         <  400.     || dropjet  )) return false;
     if (!( DEtajjLead()                                      <    1.5    || dropjet  )) return false;
-    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
-           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 121                  )) return false;
     if (!( ( wwwbaby.lep_p4()[lepidx[lepid][0]]
              + wwwbaby.lep_p4()[lepidx[lepid][1]] ).mass()   >   40.                 )) return false;
     if (!( wwwbaby.met_pt()                                  >   40.                 )) return false;
@@ -764,6 +764,159 @@ bool passMjjSBPRARSSEEPred()
         return false;
 }
 
+//______________________________________________________________________________________
+bool passPRVRSSMM()
+{
+    setObjectIndices();
+    if (!( passSSMM( "TightLepton", false, true, true ) )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passPRVRSSEM()
+{
+    setObjectIndices();
+    if (!( passSSEM( "TightLepton", false, true, true ) )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passPRVRSSEE()
+{
+    setObjectIndices();
+    if (!( passSSEE( "TightLepton", false, true, true ) )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passPRARSSMM()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSMM( "LooseLepton", false, true, true ) )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passPRARSSEM()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSEM( "LooseLepton", false, true, true ) )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passPRARSSEE()
+{
+    setObjectIndices();
+    if (!( lepidx["TightLepton"].size() == 1      )) return false;
+    if (!( passSSEE( "LooseLepton", false, true, true ) )) return false;
+    return true;
+}
+
+//______________________________________________________________________________________
+bool passPRVRSSMMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passPRVRSSMM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passPRVRSSMM();
+        else
+            return false;
+    }
+    else
+    {
+        return passPRVRSSMM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passPRVRSSEMPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passPRVRSSEM();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passPRVRSSEM();
+        else
+            return false;
+    }
+    else
+    {
+        return passPRVRSSEM();
+    }
+}
+
+//______________________________________________________________________________________
+bool passPRVRSSEEPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return passPRVRSSEE();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return passPRVRSSEE();
+        else
+            return false;
+    }
+    else
+    {
+        return passPRVRSSEE();
+    }
+}
+
+//______________________________________________________________________________________
+bool passPRARSSMMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passPRARSSMM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passPRARSSEMPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passPRARSSEM();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passPRARSSEEPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return passPRARSSEE();
+    else
+        return false;
+}
+
 //======================================================================================
 //
 //
@@ -1175,11 +1328,11 @@ bool isTightLepton( int ilep )
 //______________________________________________________________________________________
 bool isTightMuon( int ilep )
 {
-    if (!(       wwwbaby.lep_pass_VVV_cutbased_tight()[ilep] )) return false;
-    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 13     )) return false;
-    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.4   )) return false;
-    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.06  )) return false;
-    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_tight()[ilep]       )) return false;
+    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )        == 13     )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )        <   2.4   )) return false;
+    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]        <   0.06  )) return false;
+    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )        <   0.015 )) return false;
     return true;
 }
 
@@ -1231,6 +1384,7 @@ bool isTight3lElec( int ilep )
     }
     if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
     if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0     )) return false;
+    if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]        )) return false;
     return true;
 }
 
@@ -1273,7 +1427,7 @@ bool isLooseLepton( int ilep )
 //______________________________________________________________________________________
 bool isLooseMuon( int ilep )
 {
-    if (!(       wwwbaby.lep_pass_VVV_cutbased_veto()[ilep]  )) return false;
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_fo_noiso()[ilep]  )) return false;
     if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 13     )) return false;
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.4   )) return false;
     if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
@@ -2264,6 +2418,7 @@ double fakerate( int idx, int syst )
         float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
         float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
 
+        // Data with fabs(eta) not applied by accident
         // fSumw[4][3]=0.0229585 , x=85 , y=2.25 , error=0.0417386
         // fSumw[4][2]=0.0229585 , x=85 , y=1.65 , error=0.0417386
         // fSumw[4][1]=0.0760604 , x=85 , y=0.6  , error=0.0334087
@@ -2276,26 +2431,87 @@ double fakerate( int idx, int syst )
         // fSumw[2][2]=0.0866916 , x=25 , y=1.65 , error=0.0093254
         // fSumw[2][1]=0.054216  , x=25 , y=0.6  , error=0.00640781
 
+        // QCD MC with correct abseta
+        // fSumw[4][3]=0.0583592, x=85, y=2.25, error=0.0227116
+        // fSumw[4][2]=0.0554221, x=85, y=1.65, error=0.0171941
+        // fSumw[4][1]=0.0317323, x=85, y=0.6, error=0.00831419
+
+        // fSumw[3][3]=0.0674571, x=40, y=2.25, error=0.0151419
+        // fSumw[3][2]=0.0673591, x=40, y=1.65, error=0.00792283
+        // fSumw[3][1]=0.045541, x=40, y=0.6, error=0.00546544
+
+        // fSumw[2][3]=0.124618, x=25, y=2.25, error=0.0126553
+        // fSumw[2][2]=0.109371, x=25, y=1.65, error=0.00733365
+        // fSumw[2][1]=0.0592033, x=25, y=0.6, error=0.00397246
+
+//        if ( corrpt >= 50. )
+//        {
+//            if      ( abseta >= 2.1 ) return 0.0229585 + syst * 0.0417386;
+//            else if ( abseta >= 1.2 ) return 0.0229585 + syst * 0.0417386;
+//            else                      return 0.0760604 + syst * 0.0334087;
+//        }
+//        else if ( corrpt >= 30. )
+//        {
+//            if      ( abseta >= 2.1 ) return 0.105424  + syst * 0.0156435 ;
+//            else if ( abseta >= 1.2 ) return 0.0727306 + syst * 0.00683751;
+//            else                      return 0.0459721 + syst * 0.00482489;
+//        }
+//        else if ( corrpt >= 20. )
+//        {
+//            if      ( abseta >= 2.1 ) return 0.12044   + syst * 0.0282658 ;
+//            else if ( abseta >= 1.2 ) return 0.0866916 + syst * 0.0093254 ;
+//            else                      return 0.054216  + syst * 0.00640781;
+//        }
+//        else
+//            return 0;
+
+
         if ( corrpt >= 50. )
         {
-            if      ( abseta >= 2.1 ) return 0.0229585 + syst * 0.0417386;
-            else if ( abseta >= 1.2 ) return 0.0229585 + syst * 0.0417386;
-            else                      return 0.0760604 + syst * 0.0334087;
+            if      ( abseta >= 2.1 ) return 0.0583592 + syst * 0.0227116 ;
+            else if ( abseta >= 1.2 ) return 0.0554221 + syst * 0.0171941 ;
+            else                      return 0.0317323 + syst * 0.00831419;
         }
         else if ( corrpt >= 30. )
         {
-            if      ( abseta >= 2.1 ) return 0.105424  + syst * 0.0156435 ;
-            else if ( abseta >= 1.2 ) return 0.0727306 + syst * 0.00683751;
-            else                      return 0.0459721 + syst * 0.00482489;
+            if      ( abseta >= 2.1 ) return 0.0674571 + syst * 0.0151419 ;
+            else if ( abseta >= 1.2 ) return 0.0673591 + syst * 0.00792283;
+            else                      return 0.045541  + syst * 0.00546544;
         }
         else if ( corrpt >= 20. )
         {
-            if      ( abseta >= 2.1 ) return 0.12044   + syst * 0.0282658 ;
-            else if ( abseta >= 1.2 ) return 0.0866916 + syst * 0.0093254 ;
-            else                      return 0.054216  + syst * 0.00640781;
+            if      ( abseta >= 2.1 ) return 0.124618  + syst * 0.0126553 ;
+            else if ( abseta >= 1.2 ) return 0.109371  + syst * 0.00733365;
+            else                      return 0.0592033 + syst * 0.00397246;
         }
         else
             return 0;
+
+        // QCD
+        // fSumw[4][3]=0.0583592, x=85, y=2.25, error=0.0227116
+        // fSumw[4][2]=0.0554221, x=85, y=1.65, error=0.0171941
+        // fSumw[4][1]=0.0317323, x=85, y=0.6 , error=0.00831419
+
+        // fSumw[3][3]=0.0674571, x=40, y=2.25, error=0.0151419
+        // fSumw[3][2]=0.0673591, x=40, y=1.65, error=0.00792283
+        // fSumw[3][1]=0.045541 , x=40, y=0.6 , error=0.00546544
+
+        // fSumw[2][3]=0.124618 , x=25, y=2.25, error=0.0126553
+        // fSumw[2][2]=0.109371 , x=25, y=1.65, error=0.00733365
+        // fSumw[2][1]=0.0592033, x=25, y=0.6 , error=0.00397246
+
+// fSumw[4][3]=0.0583592, x=85, y=2.25, error=0.0227116
+// fSumw[4][2]=0.0554221, x=85, y=1.65, error=0.0171941
+// fSumw[4][1]=0.0317323, x=85, y=0.6, error=0.00831419
+
+// fSumw[3][3]=0.0674571, x=40, y=2.25, error=0.0151419
+// fSumw[3][2]=0.0673591, x=40, y=1.65, error=0.00792283
+// fSumw[3][1]=0.045541, x=40, y=0.6, error=0.00546544
+
+// fSumw[2][3]=0.124618, x=25, y=2.25, error=0.0126553
+// fSumw[2][2]=0.109371, x=25, y=1.65, error=0.00733365
+// fSumw[2][1]=0.0592033, x=25, y=0.6, error=0.00397246
+
     }
     else
         return 0;
