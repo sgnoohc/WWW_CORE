@@ -1328,11 +1328,12 @@ bool isTightLepton( int ilep )
 //______________________________________________________________________________________
 bool isTightMuon( int ilep )
 {
-    if (!(       wwwbaby.lep_pass_VVV_cutbased_tight()[ilep]       )) return false;
-    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )        == 13     )) return false;
-    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )        <   2.4   )) return false;
-    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]        <   0.06  )) return false;
-    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )        <   0.015 )) return false;
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_tight()[ilep] )) return false;
+    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 13     )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].pt()    )  >  20.0   )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.4   )) return false;
+//    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]        <   0.06  )) return false;
+//    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )        <   0.015 )) return false;
     return true;
 }
 
@@ -1341,22 +1342,23 @@ bool isTightElec( int ilep )
 {
     if (!(       wwwbaby.lep_pass_VVV_cutbased_tight()[ilep] )) return false;
     if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 11     )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].pt()    )  >  20.0   )) return false;
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.5   )) return false;
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   1.4 ||
            fabs( wwwbaby.lep_p4()[ilep].eta()   )  >   1.6   )) return false;
-    if ( fabs( wwwbaby.lep_etaSC()[ilep] ) <= 1.479 )
-    {
-        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0588  )) return false;
-    }
-    else
-    {
-        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0571  )) return false;
-    }
-    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.06  )) return false;
-    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
     if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0     )) return false;
-    if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0     )) return false;
     if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]        )) return false;
+//    if ( fabs( wwwbaby.lep_etaSC()[ilep] ) <= 1.479 )
+//    {
+//        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0588  )) return false;
+//    }
+//    else
+//    {
+//        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0571  )) return false;
+//    }
+//    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.06  )) return false;
+//    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
+//    if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0     )) return false;
     return true;
 }
 
@@ -1371,20 +1373,21 @@ bool isTight3lElec( int ilep )
 {
     if (!(       wwwbaby.lep_pass_VVV_cutbased_tight()[ilep] )) return false;
     if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 11     )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].pt()    )  >  20.0   )) return false;
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.5   )) return false;
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   1.4 ||
            fabs( wwwbaby.lep_p4()[ilep].eta()   )  >   1.6   )) return false;
-    if ( fabs( wwwbaby.lep_etaSC()[ilep] ) <= 1.479 )
-    {
-        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0588  )) return false;
-    }
-    else
-    {
-        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0571  )) return false;
-    }
-    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
-    if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0     )) return false;
     if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]        )) return false;
+//    if ( fabs( wwwbaby.lep_etaSC()[ilep] ) <= 1.479 )
+//    {
+//        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0588  )) return false;
+//    }
+//    else
+//    {
+//        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0571  )) return false;
+//    }
+//    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
+//    if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0     )) return false;
     return true;
 }
 
@@ -1400,6 +1403,8 @@ bool isVetoMuon( int ilep )
     // https://github.com/cmstas/CORE/blob/1a7909bdb178a1bea19ed812e695d17154e231b9/MuonSelections.cc#L846
     if (!(       wwwbaby.lep_pass_VVV_cutbased_veto()[ilep]  )) return false;
     if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 13     )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].pt()    )  >  10.0   )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.4   )) return false;
     return true;
 }
 
@@ -1407,14 +1412,15 @@ bool isVetoMuon( int ilep )
 bool isVetoElec( int ilep )
 {
     // https://github.com/cmstas/CORE/blob/1a7909bdb178a1bea19ed812e695d17154e231b9/ElectronSelections.cc#L1527
-    if (!(       wwwbaby.lep_pass_VVV_cutbased_veto_noiso()[ilep] )) return false;
-    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )    == 11        )) return false;
-    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )    <   2.5      )) return false;
-    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )    <   1.4 ||
-           fabs( wwwbaby.lep_p4()[ilep].eta()   )    >   1.6      )) return false;
-    if (!(       wwwbaby.lep_3ch_agree()[ilep]       !=  0        )) return false;
-    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]    <   0.4      )) return false;
-    if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]             )) return false;
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_veto()[ilep]  )) return false;
+    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 11     )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].pt()    )  >  10.0   )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.5   )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   1.4 ||
+           fabs( wwwbaby.lep_p4()[ilep].eta()   )  >   1.6   )) return false;
+//    if (!(       wwwbaby.lep_3ch_agree()[ilep]       !=  0        )) return false;
+//    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]    <   0.4      )) return false;
+//    if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]             )) return false;
     return true;
 }
 
@@ -1427,27 +1433,29 @@ bool isLooseLepton( int ilep )
 //______________________________________________________________________________________
 bool isLooseMuon( int ilep )
 {
-    if (!(       wwwbaby.lep_pass_VVV_cutbased_fo_noiso()[ilep]  )) return false;
-    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 13     )) return false;
-    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.4   )) return false;
-    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015 )) return false;
-    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.4   )) return false;
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_fo()[ilep]        )) return false;
+    if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 13         )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].pt()    )  >  20.0       )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.4       )) return false;
+    if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015     )) return false;
+//    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.4   )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
 bool isLooseElec( int ilep )
 {
-    if (!(       wwwbaby.lep_pass_VVV_cutbased_fo_noiso()[ilep] )) return false;
+    if (!(       wwwbaby.lep_pass_VVV_cutbased_fo()[ilep]       )) return false;
     if (!(  abs( wwwbaby.lep_pdgId()[ilep]      )  == 11        )) return false;
+    if (!( fabs( wwwbaby.lep_p4()[ilep].pt()    )  >  20.0      )) return false;
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.5      )) return false;
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   1.4 ||
            fabs( wwwbaby.lep_p4()[ilep].eta()   )  >   1.6      )) return false;
     if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0        )) return false;
     if (!(       wwwbaby.lep_lostHits()[ilep]      ==  0        )) return false;
-    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.2      )) return false;
     if (!( fabs( wwwbaby.lep_ip3d()[ilep]       )  <   0.015    )) return false;
     if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]           )) return false;
+//    if (!(       wwwbaby.lep_relIso03EAv2()[ilep]  <   0.2      )) return false;
     return true;
 }
 
