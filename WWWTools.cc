@@ -1721,42 +1721,42 @@ float MTidx( int idx, TString leptype )
 //______________________________________________________________________________________
 int LepFlavProduct()
 {
-    if ( lepidx["SignalLepton"].size() < 2 )
+    if ( lepidx["VetoLepton"].size() < 2 )
         return false;
-    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]]
-           * wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]];
+    return wwwbaby.lep_pdgId()[lepidx["VetoLepton"][0]]
+           * wwwbaby.lep_pdgId()[lepidx["VetoLepton"][1]];
 }
 
 //______________________________________________________________________________________
 bool isLeadPlus()
 {
-    if ( lepidx["SignalLepton"].size() < 1 )
+    if ( lepidx["VetoLepton"].size() < 1 )
         return false;
-    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]] < 0;
+    return wwwbaby.lep_pdgId()[lepidx["VetoLepton"][0]] < 0;
 }
 
 //______________________________________________________________________________________
 bool isSubleadPlus()
 {
-    if ( lepidx["SignalLepton"].size() < 2 )
+    if ( lepidx["VetoLepton"].size() < 2 )
         return false;
-    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]] < 0;
+    return wwwbaby.lep_pdgId()[lepidx["VetoLepton"][1]] < 0;
 }
 
 //______________________________________________________________________________________
 bool isLeadMinus()
 {
-    if ( lepidx["SignalLepton"].size() < 1 )
+    if ( lepidx["VetoLepton"].size() < 1 )
         return false;
-    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][0]] > 0;
+    return wwwbaby.lep_pdgId()[lepidx["VetoLepton"][0]] > 0;
 }
 
 //______________________________________________________________________________________
 bool isSubleadMinus()
 {
-    if ( lepidx["SignalLepton"].size() < 2 )
+    if ( lepidx["VetoLepton"].size() < 2 )
         return false;
-    return wwwbaby.lep_pdgId()[lepidx["SignalLepton"][1]] > 0;
+    return wwwbaby.lep_pdgId()[lepidx["VetoLepton"][1]] > 0;
 }
 
 //______________________________________________________________________________________
