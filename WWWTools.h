@@ -127,8 +127,8 @@ bool passMjjSBPRARSSEEPred();
 
 // 3L Signal region definitions
 bool pass3L0SFOS( TString="Tight3lLepton" );
-bool pass3L1SFOS( TString="Tight3lLepton" );
-bool pass3L2SFOS( TString="Tight3lLepton" );
+bool pass3L1SFOS( TString="Tight3lLepton", bool=false, bool=false );
+bool pass3L2SFOS( TString="Tight3lLepton", bool=false, bool=false );
 
 // Application region definitions
 bool pass3LAR0SFOS();
@@ -159,6 +159,9 @@ bool passPRARSSEE();
 bool passPRARSSMMPred();
 bool passPRARSSEMPred();
 bool passPRARSSEEPred();
+
+// WZ 3 lepton CR
+bool passWZCR();
 
 // Event weights
 float weight( bool=false, int=0 );
@@ -265,6 +268,9 @@ float DEtall();
 
 // Ptlll (Pt3l)
 float Pt3l();
+
+// Mlll
+float M3l();
 
 // DPhilll,MET
 float DPhi3lMET();

@@ -917,6 +917,28 @@ bool passPRARSSEEPred()
         return false;
 }
 
+//______________________________________________________________________________________
+bool passWZCR()
+{
+    int numsfos = getNumSFOS();
+
+    if (numsfos == 1)
+    {
+        if (!( pass3L1SFOS( "Tight3lLepton", true, true )  )) return false;
+        if (!( get1SFOSMll() > 55. && get1SFOSMll() < 110. )) return false;
+        return true;
+    }
+    else if (numsfos == 2)
+    {
+        if (!( pass3L1SFOS( "Tight3lLepton", true, true )           )) return false;
+        if (!( ( get2SFOSMll0() > 55. && get2SFOSMll0() < 110. ) ||
+               ( get2SFOSMll1() > 55. && get2SFOSMll1() < 110. )    )) return false;
+        return true;
+    }
+    else
+        return false;
+}
+
 //======================================================================================
 //
 //
@@ -952,49 +974,49 @@ bool pass3L0SFOS( TString lepid )
 
 //______________________________________________________________________________________
 // The 3L1SFOS signal region definition
-bool pass3L1SFOS( TString lepid )
+bool pass3L1SFOS( TString lepid, bool dropZ, bool dropV )
 {
     setObjectIndices();
-    if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
-    if (!( wwwbaby.firstgoodvertex()               ==   0   )) return false;
-    if (!( lepidx[lepid].size()                    ==   3   )) return false;
-    if (!( lepidx["VetoLepton"].size()             ==   3   )) return false;
-    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.  )) return false;
-    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt() >   20.  )) return false;
-    if (!( wwwbaby.lep_p4()[lepidx[lepid][2]].pt() >   20.  )) return false;
-    if (!( abs( totalCharge() )                    ==   1   )) return false;
-    if (!( jetidx["Good3LJet"].size()              <=   1   )) return false;
-    if (!( Pt3l()                                  >   60.  )) return false;
-    if (!( jetidx["LooseBJet"].size()              ==   0   )) return false;
-    if (!( getNumSFOS()                            ==   1   )) return false;
-    if (!( wwwbaby.met_pt()                        >   45.  )) return false;
+    if (!( wwwbaby.evt_passgoodrunlist()                            )) return false;
+    if (!( wwwbaby.firstgoodvertex()               ==   0           )) return false;
+    if (!( lepidx[lepid].size()                    ==   3           )) return false;
+    if (!( lepidx["VetoLepton"].size()             ==   3  || dropV )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.          )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt() >   20.          )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][2]].pt() >   20.          )) return false;
+    if (!( abs( totalCharge() )                    ==   1           )) return false;
+    if (!( jetidx["Good3LJet"].size()              <=   1           )) return false;
+    if (!( Pt3l()                                  >   60.          )) return false;
+    if (!( jetidx["LooseBJet"].size()              ==   0           )) return false;
+    if (!( getNumSFOS()                            ==   1           )) return false;
+    if (!( wwwbaby.met_pt()                        >   45.          )) return false;
     if (!( get1SFOSMll()                           <   55. ||
-           get1SFOSMll()                           >  100.  )) return false;
-    if (!( DPhi3lMET()                             >    2.5 )) return false;
+           get1SFOSMll()                           >  100. || dropZ )) return false;
+    if (!( DPhi3lMET()                             >    2.5         )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
 // The 3L2SFOS signal region definition
-bool pass3L2SFOS( TString lepid )
+bool pass3L2SFOS( TString lepid, bool dropZ, bool dropV )
 {
     setObjectIndices();
-    if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
-    if (!( wwwbaby.firstgoodvertex()               ==   0   )) return false;
-    if (!( lepidx[lepid].size()                    ==   3   )) return false;
-    if (!( lepidx["VetoLepton"].size()             ==   3   )) return false;
-    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.  )) return false;
-    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt() >   20.  )) return false;
-    if (!( wwwbaby.lep_p4()[lepidx[lepid][2]].pt() >   20.  )) return false;
-    if (!( abs( totalCharge() )                    ==   1   )) return false;
-    if (!( jetidx["Good3LJet"].size()              <=   1   )) return false;
-    if (!( Pt3l()                                  >   60.  )) return false;
-    if (!( jetidx["LooseBJet"].size()              ==   0   )) return false;
-    if (!( getNumSFOS()                            ==   2   )) return false;
-    if (!( wwwbaby.met_pt()                        >   55.  )) return false;
-    if (!( fabs( get2SFOSMll0() - MZ )             >   20.  )) return false;
-    if (!( fabs( get2SFOSMll1() - MZ )             >   20.  )) return false;
-    if (!( DPhi3lMET()                             >    2.5 )) return false;
+    if (!( wwwbaby.evt_passgoodrunlist()                            )) return false;
+    if (!( wwwbaby.firstgoodvertex()               ==   0           )) return false;
+    if (!( lepidx[lepid].size()                    ==   3           )) return false;
+    if (!( lepidx["VetoLepton"].size()             ==   3 || dropV  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt() >   25.          )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt() >   20.          )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][2]].pt() >   20.          )) return false;
+    if (!( abs( totalCharge() )                    ==   1           )) return false;
+    if (!( jetidx["Good3LJet"].size()              <=   1           )) return false;
+    if (!( Pt3l()                                  >   60.          )) return false;
+    if (!( jetidx["LooseBJet"].size()              ==   0           )) return false;
+    if (!( getNumSFOS()                            ==   2           )) return false;
+    if (!( wwwbaby.met_pt()                        >   55.          )) return false;
+    if (!( fabs( get2SFOSMll0() - MZ )             >   20. || dropZ )) return false;
+    if (!( fabs( get2SFOSMll1() - MZ )             >   20. || dropZ )) return false;
+    if (!( DPhi3lMET()                             >    2.5         )) return false;
     return true;
 }
 
@@ -1656,6 +1678,16 @@ float Pt3l()
     return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
              + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
              + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).pt();
+}
+
+//______________________________________________________________________________________
+float M3l()
+{
+    if ( lepidx["Tight3lLepton"].size() != 3 )
+        return -999;
+    return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+             + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+             + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).M();
 }
 
 //______________________________________________________________________________________
