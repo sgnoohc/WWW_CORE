@@ -257,6 +257,9 @@ float MjjLead();
 // DEtajj for the leading two jets
 float DEtajjLead();
 
+// MET
+float MET();
+
 // Mll for the leading two leptons in SS channel (return -999 if not two leptons)
 float Mll( TString="SignalLepton" );
 

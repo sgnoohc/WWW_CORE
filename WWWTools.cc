@@ -133,7 +133,7 @@ bool passSSEE( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
     if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
            * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 121                  )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                                             )) return false;
-    if (!( wwwbaby.firstgoodvertex()                         ==   0                 )) return false;
+    if (!( wwwbaby.firstgoodvertex()                         ==   0                  )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30.                 )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   30.                 )) return false;
     if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
@@ -1048,9 +1048,9 @@ bool pass3LAR2SFOS()
 //bool passTrigMM() { return wwwbaby.HLT_DoubleMu() || wwwbaby.HLT_DoubleMu_noiso(); }
 //bool passTrigEM() { return wwwbaby.HLT_MuEG() || wwwbaby.HLT_MuEG_noiso(); }
 //bool passTrigEE() { return wwwbaby.HLT_DoubleEl() || wwwbaby.HLT_DoubleEl_DZ() || wwwbaby.HLT_DoubleEl_DZ_2() || wwwbaby.HLT_DoubleEl_noiso(); }
-bool passTrigMM() { return wwwbaby.HLT_DoubleMu(); }
-bool passTrigEM() { return wwwbaby.HLT_MuEG(); }
-bool passTrigEE() { return wwwbaby.HLT_DoubleEl() || wwwbaby.HLT_DoubleEl_DZ() || wwwbaby.HLT_DoubleEl_DZ_2(); }
+bool passTrigMM() { if (wwwbaby.isData()) return wwwbaby.HLT_DoubleMu(); else return true; }
+bool passTrigEM() { if (wwwbaby.isData()) return wwwbaby.HLT_MuEG(); else return true; }
+bool passTrigEE() { if (wwwbaby.isData()) return wwwbaby.HLT_DoubleEl() || wwwbaby.HLT_DoubleEl_DZ() || wwwbaby.HLT_DoubleEl_DZ_2(); else return true; }
 
 //______________________________________________________________________________________
 float weight( bool applyfakefactor, int isyst )
@@ -1157,6 +1157,13 @@ void printEvent()
     std::cout  << "get1SFOSMll   " << " : " << get1SFOSMll    () << std::endl;
     std::cout  << "get2SFOSMll0  " << " : " << get2SFOSMll0   () << std::endl;
     std::cout  << "get2SFOSMll1  " << " : " << get2SFOSMll1   () << std::endl;
+    std::cout  << "met           " << " : " << wwwbaby.met_pt () << std::endl;
+    std::cout  << "ntrkiso       " << " : " << wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() << std::endl;
+    std::cout  << "grl           " << " : " << wwwbaby.evt_passgoodrunlist() << std::endl;
+    std::cout  << "firstvertex   " << " : " << wwwbaby.firstgoodvertex() << std::endl;
+    std::cout  << "passTrigEE    " << " : " << passTrigEE() << std::endl;
+    std::cout  << "passTrigEM    " << " : " << passTrigEM() << std::endl;
+    std::cout  << "passTrigMM    " << " : " << passTrigMM() << std::endl;
     std::cout << "=======================================================" << std::endl;
 }
 
@@ -1640,6 +1647,12 @@ float DEtajjLead()
     return fabs(
             wwwbaby.jets_p4()[jetidx["GoodSSJet"][0]].eta()
             - wwwbaby.jets_p4()[jetidx["GoodSSJet"][1]].eta() );
+}
+
+//______________________________________________________________________________________
+float MET()
+{
+    return wwwbaby.met_pt();
 }
 
 //______________________________________________________________________________________
