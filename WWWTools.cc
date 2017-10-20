@@ -939,13 +939,29 @@ bool passWZCR2SFOS()
 
     if (numsfos == 2)
     {
-        if (!( pass3L2SFOS( "Tight3lLepton", true, true )           )) return false;
-        if (!( ( get2SFOSMll0() > 70. && get2SFOSMll0() < 110. ) ||
-               ( get2SFOSMll1() > 70. && get2SFOSMll1() < 110. )    )) return false;
+        if (!( pass3L2SFOS( "Tight3lLepton", true, true ) )) return false;
+        if (!( ( fabs( get2SFOSMll0() - MZ ) < 20. ) ||
+               ( fabs( get2SFOSMll1() - MZ ) < 20. )      )) return false;
         return true;
     }
     else
         return false;
+}
+
+//______________________________________________________________________________________
+bool passFilters()
+{
+    if (!( wwwbaby.isData()                                   )) return true;//don't apply filters on simulation
+    if (!( wwwbaby.Flag_EcalDeadCellTriggerPrimitiveFilter()  )) return false;
+    if (!( wwwbaby.Flag_badChargedCandidateFilter         ()  )) return false;
+    if (!( wwwbaby.Flag_HBHENoiseFilter                   ()  )) return false;
+    if (!( wwwbaby.Flag_HBHEIsoNoiseFilter                ()  )) return false;
+    if (!( wwwbaby.Flag_goodVertices                      ()  )) return false;
+    if (!( wwwbaby.Flag_eeBadScFilter                     ()  )) return false;
+    if (!( wwwbaby.Flag_globalTightHalo2016               ()  )) return false;
+    if (!( wwwbaby.Flag_badMuonFilter                     ()  )) return false;
+    return true;
+
 }
 
 //======================================================================================

@@ -164,6 +164,9 @@ bool passPRARSSEEPred();
 bool passWZCR1SFOS();
 bool passWZCR2SFOS();
 
+// pass Event filters
+bool passFilters();
+
 // Event weights
 float weight( bool=false, int=0 );
 
