@@ -940,8 +940,8 @@ bool passWZCR2SFOS()
     if (numsfos == 2)
     {
         if (!( pass3L2SFOS( "Tight3lLepton", true, true )           )) return false;
-        if (!( ( get2SFOSMll0() > 55. && get2SFOSMll0() < 110. ) ||
-               ( get2SFOSMll1() > 55. && get2SFOSMll1() < 110. )    )) return false;
+        if (!( ( get2SFOSMll0() > 70. && get2SFOSMll0() < 110. ) ||
+               ( get2SFOSMll1() > 70. && get2SFOSMll1() < 110. )    )) return false;
         return true;
     }
     else
@@ -978,6 +978,7 @@ bool pass3L0SFOS( TString lepid )
     if (!( get0SFOSMll()                           >   20.  )) return false;
     if (!( fabs( get0SFOSMee() - MZ )              >   15.  )) return false;
     if (!( DPhi3lMET()                             >    2.7 )) return false;
+    if (!( fabs( M3l() - MZ )                      >   10.  )) return false;
     return true;
 }
 
@@ -999,9 +1000,11 @@ bool pass3L1SFOS( TString lepid, bool dropZ, bool dropV )
     if (!( jetidx["LooseBJet"].size()              ==   0           )) return false;
     if (!( getNumSFOS()                            ==   1           )) return false;
     if (!( wwwbaby.met_pt()                        >   45.          )) return false;
+    if (!( get1SFOSMll()                           >   20.          )) return false;
     if (!( get1SFOSMll()                           <   55. ||
            get1SFOSMll()                           >  100. || dropZ )) return false;
     if (!( DPhi3lMET()                             >    2.5         )) return false;
+    if (!( fabs( M3l() - MZ )                      >   10.          )) return false;
     return true;
 }
 
@@ -1023,9 +1026,12 @@ bool pass3L2SFOS( TString lepid, bool dropZ, bool dropV )
     if (!( jetidx["LooseBJet"].size()              ==   0           )) return false;
     if (!( getNumSFOS()                            ==   2           )) return false;
     if (!( wwwbaby.met_pt()                        >   55.          )) return false;
+    if (!(       get2SFOSMll0()                    >   20.          )) return false;
+    if (!(       get2SFOSMll1()                    >   20.          )) return false;
     if (!( fabs( get2SFOSMll0() - MZ )             >   20. || dropZ )) return false;
     if (!( fabs( get2SFOSMll1() - MZ )             >   20. || dropZ )) return false;
     if (!( DPhi3lMET()                             >    2.5         )) return false;
+    if (!( fabs( M3l() - MZ )                      >   10.          )) return false;
     return true;
 }
 
@@ -1161,11 +1167,21 @@ void printEvent()
     std::cout  << "isSSMM        " << " : " << isSSMM         () << std::endl;
     std::cout  << "totalCharge   " << " : " << totalCharge    () << std::endl;
     std::cout  << "getNumSFOS    " << " : " << getNumSFOS     () << std::endl;
-    std::cout  << "get0SFOSMll   " << " : " << get0SFOSMll    () << std::endl;
-    std::cout  << "get0SFOSMee   " << " : " << get0SFOSMee    () << std::endl;
-    std::cout  << "get1SFOSMll   " << " : " << get1SFOSMll    () << std::endl;
-    std::cout  << "get2SFOSMll0  " << " : " << get2SFOSMll0   () << std::endl;
-    std::cout  << "get2SFOSMll1  " << " : " << get2SFOSMll1   () << std::endl;
+    std::cout  << "M3l           " << " : " << M3l            () << std::endl;
+    if (getNumSFOS() == 0)
+    {
+        std::cout  << "get0SFOSMll   " << " : " << get0SFOSMll    () << std::endl;
+        std::cout  << "get0SFOSMee   " << " : " << get0SFOSMee    () << std::endl;
+    }
+    else if (getNumSFOS() == 1)
+    {
+        std::cout  << "get1SFOSMll   " << " : " << get1SFOSMll    () << std::endl;
+    }
+    else if (getNumSFOS() == 2)
+    {
+        std::cout  << "get2SFOSMll0  " << " : " << get2SFOSMll0   () << std::endl;
+        std::cout  << "get2SFOSMll1  " << " : " << get2SFOSMll1   () << std::endl;
+    }
     std::cout  << "met           " << " : " << wwwbaby.met_pt () << std::endl;
     std::cout  << "ntrkiso       " << " : " << wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() << std::endl;
     std::cout  << "grl           " << " : " << wwwbaby.evt_passgoodrunlist() << std::endl;
@@ -1384,8 +1400,8 @@ bool isTightElec( int ilep )
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   2.5   )) return false;
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   1.4 ||
            fabs( wwwbaby.lep_p4()[ilep].eta()   )  >   1.6   )) return false;
-    if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0     )) return false;
     if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]        )) return false;
+    if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0     )) return false;
 //    if ( fabs( wwwbaby.lep_etaSC()[ilep] ) <= 1.479 )
 //    {
 //        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0588  )) return false;
@@ -1416,6 +1432,7 @@ bool isTight3lElec( int ilep )
     if (!( fabs( wwwbaby.lep_p4()[ilep].eta()   )  <   1.4 ||
            fabs( wwwbaby.lep_p4()[ilep].eta()   )  >   1.6   )) return false;
     if (!(       wwwbaby.lep_isTriggerSafe_v1()[ilep]        )) return false;
+    if (!(       wwwbaby.lep_3ch_agree()[ilep]     !=  0     )) return false;
 //    if ( fabs( wwwbaby.lep_etaSC()[ilep] ) <= 1.479 )
 //    {
 //        if (!(   wwwbaby.lep_relIso03EAv2()[ilep]  <   0.0588  )) return false;
@@ -1971,14 +1988,14 @@ float get2SFOSMll1()
     int pdgid1 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][1]];
     int pdgid2 = wwwbaby.lep_pdgId()[lepidx["Tight3lLepton"][2]];
     if ( pdgid2 == -pdgid1 )
-        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
-                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     else if ( pdgid0 == -pdgid2 )
         return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
                  + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
     else if ( pdgid1 == -pdgid0 )
-        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]]
-                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][2]] ).mass();
+        return ( wwwbaby.lep_p4()[lepidx["Tight3lLepton"][0]]
+                 + wwwbaby.lep_p4()[lepidx["Tight3lLepton"][1]] ).mass();
     std::cout <<
         "Warning: Shouldn't be here if function call are at the right places."
         << std::endl;
