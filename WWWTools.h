@@ -161,7 +161,8 @@ bool passPRARSSEMPred();
 bool passPRARSSEEPred();
 
 // WZ 3 lepton CR
-bool passWZCR();
+bool passWZCR1SFOS();
+bool passWZCR2SFOS();
 
 // Event weights
 float weight( bool=false, int=0 );

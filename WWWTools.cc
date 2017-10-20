@@ -918,7 +918,7 @@ bool passPRARSSEEPred()
 }
 
 //______________________________________________________________________________________
-bool passWZCR()
+bool passWZCR1SFOS()
 {
     int numsfos = getNumSFOS();
 
@@ -928,7 +928,16 @@ bool passWZCR()
         if (!( get1SFOSMll() > 55. && get1SFOSMll() < 110. )) return false;
         return true;
     }
-    else if (numsfos == 2)
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool passWZCR2SFOS()
+{
+    int numsfos = getNumSFOS();
+
+    if (numsfos == 2)
     {
         if (!( pass3L1SFOS( "Tight3lLepton", true, true )           )) return false;
         if (!( ( get2SFOSMll0() > 55. && get2SFOSMll0() < 110. ) ||
