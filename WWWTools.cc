@@ -939,7 +939,7 @@ bool passWZCR2SFOS()
 
     if (numsfos == 2)
     {
-        if (!( pass3L1SFOS( "Tight3lLepton", true, true )           )) return false;
+        if (!( pass3L2SFOS( "Tight3lLepton", true, true )           )) return false;
         if (!( ( get2SFOSMll0() > 55. && get2SFOSMll0() < 110. ) ||
                ( get2SFOSMll1() > 55. && get2SFOSMll1() < 110. )    )) return false;
         return true;
