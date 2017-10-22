@@ -46,6 +46,7 @@ static int DEBUG;
 bool passPresel();
 
 // SS Signal region definitions
+bool passSSPresel( TString="TightLepton" );
 bool passSSMM( TString="TightLepton", bool=false, bool=false, bool=false );
 bool passSSEM( TString="TightLepton", bool=false, bool=false, bool=false );
 bool passSSEE( TString="TightLepton", bool=false, bool=false, bool=false );
@@ -124,6 +125,10 @@ bool passMjjSBPRARSSEE();
 bool passMjjSBPRARSSMMPred();
 bool passMjjSBPRARSSEMPred();
 bool passMjjSBPRARSSEEPred();
+
+// 3L Signal region definitions
+bool pass3Lpresel( TString="Tight3lLepton" );
+bool pass3LARpresel();
 
 // 3L Signal region definitions
 bool pass3L0SFOS( TString="Tight3lLepton" );
@@ -358,6 +363,12 @@ bool isBkgCategorySet();
 // Current events background categorization (based on what kind of bkg, e.g. trueSS, lost-lepton (LL), or fakes etc.)
 TString bkgCategory();
 
+// Current events background categorization (based on what kind of bkg, e.g. trueSS, lost-lepton (LL), or fakes etc.)
+TString bkgCategory_v1();
+
+// Current events background categorization (based on what kind of bkg, e.g. trueSS, lost-lepton (LL), or fakes etc.)
+TString bkgCategory_v2();
+
 // Get the category of sample based on input filename
 TString categ( TString );
 
@@ -381,6 +392,8 @@ void printEventID();
 // Fake "Factor"
 double fakerate( int, int=0 );
 double fakefactor( int, int=0 );
+
+int gentype_v2(unsigned, unsigned, int);
 
 
 #endif
