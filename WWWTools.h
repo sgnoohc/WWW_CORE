@@ -127,13 +127,13 @@ bool passMjjSBPRARSSEMPred();
 bool passMjjSBPRARSSEEPred();
 
 // 3L Signal region definitions
-bool pass3Lpresel( TString="Tight3lLepton" );
+bool pass3Lpresel( TString="TightLepton" );
 bool pass3LARpresel();
 
 // 3L Signal region definitions
-bool pass3L0SFOS( TString="Tight3lLepton" );
-bool pass3L1SFOS( TString="Tight3lLepton", bool=false, bool=false );
-bool pass3L2SFOS( TString="Tight3lLepton", bool=false, bool=false );
+bool pass3L0SFOS( TString="TightLepton" );
+bool pass3L1SFOS( TString="TightLepton", bool=false, bool=false );
+bool pass3L2SFOS( TString="TightLepton", bool=false, bool=false );
 
 // Application region definitions
 bool pass3LAR0SFOS();
@@ -168,6 +168,11 @@ bool passPRARSSEEPred();
 // WZ 3 lepton CR
 bool passWZCR1SFOS();
 bool passWZCR2SFOS();
+
+// WZCR for SS channel (it adds a third lepton to create WZCR. i.e. 3l + 2jet>=)
+bool passSSWZCRMM( TString="TightLepton", bool=false, bool=false, bool=false );
+bool passSSWZCREM( TString="TightLepton", bool=false, bool=false, bool=false );
+bool passSSWZCREE( TString="TightLepton", bool=false, bool=false, bool=false );
 
 // pass Event filters
 bool passFilters();
@@ -231,13 +236,13 @@ bool isLbnt3lMuon( int );
 bool isLbnt3lElec( int );
 
 // Good SS category jet
-bool isGoodSSJet( int );
+bool isGoodSSJet( unsigned int& );
 
 // Good 3L category jet
-bool isGood3LJet( int );
+bool isGood3LJet( unsigned int& );
 
 // B-tagging
-bool isLooseBJet( int );
+bool isLooseBJet( unsigned int& );
 
 // Check whether this event's object selections have been performed
 bool isGenObjectSelected();
@@ -270,7 +275,10 @@ float DEtajjLead();
 float MET();
 
 // Mll for the leading two leptons in SS channel (return -999 if not two leptons)
-float Mll( TString="SignalLepton" );
+float MllSS();
+
+// Mll for the leading two leptons in SS channel (return -999 if not two leptons)
+float Mll( TString="VetoLepton" );
 
 // Delta Phi for the leading two leptons in SS channel (return -999 if not two leptons)
 float DPhill();
@@ -287,20 +295,29 @@ float M3l();
 // DPhilll,MET
 float DPhi3lMET();
 
+// MT max of three leptons
+float MTmaxSS();
+
 // MT max of the two SS leptons
-float MTmax( TString="SignalLepton" );
+float MTmax( TString="VetoLepton" );
 
 // MT with the leading lepton
-float MT0( TString="SignalLepton" );
+float MT0( TString="VetoLepton" );
 
 // MT with the sub-leading lepton
-float MT1( TString="SignalLepton" );
+float MT1( TString="VetoLepton" );
 
 // MT with the sub-sub-leading lepton
-float MT2( TString="SignalLepton" );
+float MT2( TString="VetoLepton" );
 
 // MT with the lepton in given index
-float MTidx( int, TString="SignalLepton" );
+float MTidx( int, TString="VetoLepton" );
+
+// Get SS pair from 3 leptons
+std::pair<int, int> getSSPair();
+
+// Get SS pair lep pdgid product from 3 leptons
+int LepFlavProductOfSSfor3L();
 
 // Get Lep Flavor
 int LepFlavProduct();
