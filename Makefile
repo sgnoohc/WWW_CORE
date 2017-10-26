@@ -22,6 +22,9 @@ $(LIB): $(OBJECTS)
 # likelihood id library
 #
 
+rename:
+	$(CXX) $(CXXFLAGS) RenameMapping.C -o $@
+
 all: $(LIB) 
 clean:
 	rm -f *.o \
