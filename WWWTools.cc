@@ -2944,6 +2944,107 @@ int gentype_v2(unsigned lep1_index, unsigned lep2_index, int lep3_index)
 }
 
 //______________________________________________________________________________________
+float lepsf_EGammaReco(float pt, float eta)
+{
+    if (pt < 500.0 && fabs(eta) < -2.45) return 1.31760430336;
+    if (pt < 500.0 && fabs(eta) < -2.4) return 1.11378002167;
+    if (pt < 500.0 && fabs(eta) < -2.3) return 1.02462530136;
+    if (pt < 500.0 && fabs(eta) < -2.2) return 1.013641119;
+    if (pt < 500.0 && fabs(eta) < -2.0) return 1.00727653503;
+    if (pt < 500.0 && fabs(eta) < -1.8) return 0.994818627834;
+    if (pt < 500.0 && fabs(eta) < -1.63) return 0.994786262512;
+    if (pt < 500.0 && fabs(eta) < -1.566) return 0.991631805897;
+    if (pt < 500.0 && fabs(eta) < -1.444) return 0.963128507137;
+    if (pt < 500.0 && fabs(eta) < -1.2) return 0.989701330662;
+    if (pt < 500.0 && fabs(eta) < -1.0) return 0.985655725002;
+    if (pt < 500.0 && fabs(eta) < -0.6) return 0.981595098972;
+    if (pt < 500.0 && fabs(eta) < -0.4) return 0.984678268433;
+    if (pt < 500.0 && fabs(eta) < -0.2) return 0.981613874435;
+    if (pt < 500.0 && fabs(eta) < 0.0) return 0.980432569981;
+    if (pt < 500.0 && fabs(eta) < 0.2) return 0.984552025795;
+    if (pt < 500.0 && fabs(eta) < 0.4) return 0.988764047623;
+    if (pt < 500.0 && fabs(eta) < 0.6) return 0.987742602825;
+    if (pt < 500.0 && fabs(eta) < 1.0) return 0.987742602825;
+    if (pt < 500.0 && fabs(eta) < 1.2) return 0.987742602825;
+    if (pt < 500.0 && fabs(eta) < 1.444) return 0.98767966032;
+    if (pt < 500.0 && fabs(eta) < 1.566) return 0.967597782612;
+    if (pt < 500.0 && fabs(eta) < 1.63) return 0.989626526833;
+    if (pt < 500.0 && fabs(eta) < 1.8) return 0.992761135101;
+    if (pt < 500.0 && fabs(eta) < 2.0) return 0.991761088371;
+    if (pt < 500.0 && fabs(eta) < 2.2) return 0.99794024229;
+    if (pt < 500.0 && fabs(eta) < 2.3) return 1.00103735924;
+    if (pt < 500.0 && fabs(eta) < 2.4) return 0.989506840706;
+    if (pt < 500.0 && fabs(eta) < 2.45) return 0.970518887043;
+    if (pt < 500.0 && fabs(eta) < 2.5) return 0.906666696072;
+    return 1;
+}
+
+//______________________________________________________________________________________
+float lepsf_EGammaTightID(float pt, float eta)
+{
+    if (pt < 20.0 && fabs(eta) < -2.0) return 0.806557357311;
+    if (pt < 35.0 && fabs(eta) < -2.0) return 0.88245934248;
+    if (pt < 50.0 && fabs(eta) < -2.0) return 0.918840587139;
+    if (pt < 90.0 && fabs(eta) < -2.0) return 0.940397322178;
+    if (pt < 150.0 && fabs(eta) < -2.0) return 1.05108559132;
+    if (pt < 500.0 && fabs(eta) < -2.0) return 1.05108559132;
+    if (pt < 20.0 && fabs(eta) < -1.566) return 0.828571438789;
+    if (pt < 35.0 && fabs(eta) < -1.566) return 0.927487373352;
+    if (pt < 50.0 && fabs(eta) < -1.566) return 0.966987609863;
+    if (pt < 90.0 && fabs(eta) < -1.566) return 0.980964481831;
+    if (pt < 150.0 && fabs(eta) < -1.566) return 1.00592422485;
+    if (pt < 500.0 && fabs(eta) < -1.566) return 1.00592422485;
+    if (pt < 20.0 && fabs(eta) < -1.444) return 1.03286385536;
+    if (pt < 35.0 && fabs(eta) < -1.444) return 1.00759494305;
+    if (pt < 50.0 && fabs(eta) < -1.444) return 0.988195598125;
+    if (pt < 90.0 && fabs(eta) < -1.444) return 0.995391726494;
+    if (pt < 150.0 && fabs(eta) < -1.444) return 1.10410559177;
+    if (pt < 500.0 && fabs(eta) < -1.444) return 1.10410559177;
+    if (pt < 20.0 && fabs(eta) < -0.8) return 1.00775194168;
+    if (pt < 35.0 && fabs(eta) < -0.8) return 0.972039461136;
+    if (pt < 50.0 && fabs(eta) < -0.8) return 0.974666655064;
+    if (pt < 90.0 && fabs(eta) < -0.8) return 0.971674859524;
+    if (pt < 150.0 && fabs(eta) < -0.8) return 0.98948597908;
+    if (pt < 500.0 && fabs(eta) < -0.8) return 0.98948597908;
+    if (pt < 20.0 && fabs(eta) < 0.0) return 0.94072163105;
+    if (pt < 35.0 && fabs(eta) < 0.0) return 0.952998399734;
+    if (pt < 50.0 && fabs(eta) < 0.0) return 0.953457474709;
+    if (pt < 90.0 && fabs(eta) < 0.0) return 0.953086435795;
+    if (pt < 150.0 && fabs(eta) < 0.0) return 0.975495934486;
+    if (pt < 500.0 && fabs(eta) < 0.0) return 0.975495934486;
+    if (pt < 20.0 && fabs(eta) < 0.8) return 0.945876300335;
+    if (pt < 35.0 && fabs(eta) < 0.8) return 0.981996715069;
+    if (pt < 50.0 && fabs(eta) < 0.8) return 0.979811549187;
+    if (pt < 90.0 && fabs(eta) < 0.8) return 0.977528095245;
+    if (pt < 150.0 && fabs(eta) < 0.8) return 1.0118906498;
+    if (pt < 500.0 && fabs(eta) < 0.8) return 1.0118906498;
+    if (pt < 20.0 && fabs(eta) < 1.444) return 0.989769816399;
+    if (pt < 35.0 && fabs(eta) < 1.444) return 0.975206613541;
+    if (pt < 50.0 && fabs(eta) < 1.444) return 0.97463285923;
+    if (pt < 90.0 && fabs(eta) < 1.444) return 0.97893434763;
+    if (pt < 150.0 && fabs(eta) < 1.444) return 1.01072704792;
+    if (pt < 500.0 && fabs(eta) < 1.444) return 1.01072704792;
+    if (pt < 20.0 && fabs(eta) < 1.566) return 1.03398060799;
+    if (pt < 35.0 && fabs(eta) < 1.566) return 0.974874377251;
+    if (pt < 50.0 && fabs(eta) < 1.566) return 0.966386556625;
+    if (pt < 90.0 && fabs(eta) < 1.566) return 0.979907274246;
+    if (pt < 150.0 && fabs(eta) < 1.566) return 1.00716328621;
+    if (pt < 500.0 && fabs(eta) < 1.566) return 1.00716328621;
+    if (pt < 20.0 && fabs(eta) < 2.0) return 0.827485382557;
+    if (pt < 35.0 && fabs(eta) < 2.0) return 0.908937633038;
+    if (pt < 50.0 && fabs(eta) < 2.0) return 0.95782315731;
+    if (pt < 90.0 && fabs(eta) < 2.0) return 0.968553483486;
+    if (pt < 150.0 && fabs(eta) < 2.0) return 0.988262891769;
+    if (pt < 500.0 && fabs(eta) < 2.0) return 0.988262891769;
+    if (pt < 20.0 && fabs(eta) < 2.5) return 0.797014951706;
+    if (pt < 35.0 && fabs(eta) < 2.5) return 0.863321781158;
+    if (pt < 50.0 && fabs(eta) < 2.5) return 0.907801389694;
+    if (pt < 90.0 && fabs(eta) < 2.5) return 0.937662363052;
+    if (pt < 150.0 && fabs(eta) < 2.5) return 1.02135682106;
+    if (pt < 500.0 && fabs(eta) < 2.5) return 1.02135682106;
+    return 1;
+}
+//______________________________________________________________________________________
 float lepsf_EGammaTightPOG_EGammaVVV(float pt, float eta)
 {
     if (pt < 30.0 && fabs(eta) < 1.0) return 0.980376899242;
@@ -3134,3 +3235,4 @@ float lepsf_MuTightVVV_MuTightVVVMu8(float pt, float eta)
     if (pt < 1200.0 && fabs(eta) < 2.4) return 0.922808051109;
     return 1;
 }
+

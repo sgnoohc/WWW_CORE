@@ -412,12 +412,13 @@ double fakefactor( int, int=0 );
 
 int gentype_v2(unsigned, unsigned, int);
 
+float lepsf_EGammaReco(float pt, float eta)
+float lepsf_EGammaTightID(float pt, float eta)
 float lepsf_EGammaTightPOG_EGammaVVV(float pt, float eta);
 float lepsf_EGammaVVV_EGammaVVVEle12(float pt, float eta);
 float lepsf_EGammaVVV_EGammaVVVEleLead(float pt, float eta);
 float lepsf_MuMediumPOG_MuTightVVV(float pt, float eta);
 float lepsf_MuTightVVV_MuTightVVVMu17(float pt, float eta);
 float lepsf_MuTightVVV_MuTightVVVMu8(float pt, float eta);
-
 
 #endif
