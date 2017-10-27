@@ -408,7 +408,9 @@ void printEventID();
 
 // Fake "Factor"
 double fakerate( int, int=0 );
+double fakerate_qcd( int, int=0 );
 double fakefactor( int, int=0 );
+double fakefactor_qcd( int, int=0 );
 
 int gentype_v2(unsigned, unsigned, int);
 

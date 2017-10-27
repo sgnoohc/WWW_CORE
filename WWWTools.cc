@@ -2724,41 +2724,7 @@ double fakerate( int idx, int syst )
             coneptcorr = std::max( 0., relIso - 0.0571 );
         float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
         float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
-
         return fakerate_el_data(abseta, corrpt, syst);
-
-        // fSumw[4][3]=0.170493 , x=85 , y=1.9895 , error=0.0370097
-        // fSumw[4][2]=0.101855 , x=85 , y=1.1395 , error=0.0601733
-        // fSumw[4][1]=0.199399 , x=85 , y=0.4    , error=0.0770095
-
-        // fSumw[3][3]=0.1736   , x=40 , y=1.9895 , error=0.014733
-        // fSumw[3][2]=0.164039 , x=40 , y=1.1395 , error=0.0213855
-        // fSumw[3][1]=0.169051 , x=40 , y=0.4    , error=0.0207381
-
-        // fSumw[2][3]=0.217486 , x=25 , y=1.9895 , error=0.0248149
-        // fSumw[2][2]=0.191887 , x=25 , y=1.1395 , error=0.0232803
-        // fSumw[2][1]=0.195776 , x=25 , y=0.4    , error=0.0282233
-
-//        if ( corrpt >= 50. )
-//        {
-//            if      ( abseta >= 1.479 ) return 0.170493 + syst * 0.0370097;
-//            else if ( abseta >= 0.8 )   return 0.101855 + syst * 0.0601733;
-//            else                        return 0.199399 + syst * 0.0770095;
-//        }
-//        else if ( corrpt >= 30. )
-//        {
-//            if      ( abseta >= 1.479 ) return 0.1736   + syst * 0.014733 ;
-//            else if ( abseta >= 0.8 )   return 0.164039 + syst * 0.0213855;
-//            else                        return 0.169051 + syst * 0.0207381;
-//        }
-//        else if ( corrpt >= 20. )
-//        {
-//            if      ( abseta >= 1.479 ) return 0.217486 + syst * 0.0248149;
-//            else if ( abseta >= 0.8 )   return 0.191887 + syst * 0.0232803;
-//            else                        return 0.195776 + syst * 0.0282233;
-//        }
-//        else
-//            return 0;
     }
     else if ( abs( wwwbaby.lep_pdgId()[idx] ) == 13 )
     {
@@ -2766,102 +2732,34 @@ double fakerate( int idx, int syst )
         float coneptcorr = std::max( 0., relIso - 0.06 );
         float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
         float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
-
         return fakerate_mu_data(abseta, corrpt, syst);
-        // Data with fabs(eta) not applied by accident
-        // fSumw[4][3]=0.0229585 , x=85 , y=2.25 , error=0.0417386
-        // fSumw[4][2]=0.0229585 , x=85 , y=1.65 , error=0.0417386
-        // fSumw[4][1]=0.0760604 , x=85 , y=0.6  , error=0.0334087
+    }
+    else
+        return 0;
+}
 
-        // fSumw[3][3]=0.105424  , x=40 , y=2.25 , error=0.0156435
-        // fSumw[3][2]=0.0727306 , x=40 , y=1.65 , error=0.00683751
-        // fSumw[3][1]=0.0459721 , x=40 , y=0.6  , error=0.00482489
-
-        // fSumw[2][3]=0.12044   , x=25 , y=2.25 , error=0.0282658
-        // fSumw[2][2]=0.0866916 , x=25 , y=1.65 , error=0.0093254
-        // fSumw[2][1]=0.054216  , x=25 , y=0.6  , error=0.00640781
-
-        // QCD MC with correct abseta
-        // fSumw[4][3]=0.0583592, x=85, y=2.25, error=0.0227116
-        // fSumw[4][2]=0.0554221, x=85, y=1.65, error=0.0171941
-        // fSumw[4][1]=0.0317323, x=85, y=0.6, error=0.00831419
-
-        // fSumw[3][3]=0.0674571, x=40, y=2.25, error=0.0151419
-        // fSumw[3][2]=0.0673591, x=40, y=1.65, error=0.00792283
-        // fSumw[3][1]=0.045541, x=40, y=0.6, error=0.00546544
-
-        // fSumw[2][3]=0.124618, x=25, y=2.25, error=0.0126553
-        // fSumw[2][2]=0.109371, x=25, y=1.65, error=0.00733365
-        // fSumw[2][1]=0.0592033, x=25, y=0.6, error=0.00397246
-
-//        if ( corrpt >= 50. )
-//        {
-//            if      ( abseta >= 2.1 ) return 0.0229585 + syst * 0.0417386;
-//            else if ( abseta >= 1.2 ) return 0.0229585 + syst * 0.0417386;
-//            else                      return 0.0760604 + syst * 0.0334087;
-//        }
-//        else if ( corrpt >= 30. )
-//        {
-//            if      ( abseta >= 2.1 ) return 0.105424  + syst * 0.0156435 ;
-//            else if ( abseta >= 1.2 ) return 0.0727306 + syst * 0.00683751;
-//            else                      return 0.0459721 + syst * 0.00482489;
-//        }
-//        else if ( corrpt >= 20. )
-//        {
-//            if      ( abseta >= 2.1 ) return 0.12044   + syst * 0.0282658 ;
-//            else if ( abseta >= 1.2 ) return 0.0866916 + syst * 0.0093254 ;
-//            else                      return 0.054216  + syst * 0.00640781;
-//        }
-//        else
-//            return 0;
-
-
-//        if ( corrpt >= 50. )
-//        {
-//            if      ( abseta >= 2.1 ) return 0.0583592 + syst * 0.0227116 ;
-//            else if ( abseta >= 1.2 ) return 0.0554221 + syst * 0.0171941 ;
-//            else                      return 0.0317323 + syst * 0.00831419;
-//        }
-//        else if ( corrpt >= 30. )
-//        {
-//            if      ( abseta >= 2.1 ) return 0.0674571 + syst * 0.0151419 ;
-//            else if ( abseta >= 1.2 ) return 0.0673591 + syst * 0.00792283;
-//            else                      return 0.045541  + syst * 0.00546544;
-//        }
-//        else if ( corrpt >= 20. )
-//        {
-//            if      ( abseta >= 2.1 ) return 0.124618  + syst * 0.0126553 ;
-//            else if ( abseta >= 1.2 ) return 0.109371  + syst * 0.00733365;
-//            else                      return 0.0592033 + syst * 0.00397246;
-//        }
-//        else
-//            return 0;
-
-        // QCD
-        // fSumw[4][3]=0.0583592, x=85, y=2.25, error=0.0227116
-        // fSumw[4][2]=0.0554221, x=85, y=1.65, error=0.0171941
-        // fSumw[4][1]=0.0317323, x=85, y=0.6 , error=0.00831419
-
-        // fSumw[3][3]=0.0674571, x=40, y=2.25, error=0.0151419
-        // fSumw[3][2]=0.0673591, x=40, y=1.65, error=0.00792283
-        // fSumw[3][1]=0.045541 , x=40, y=0.6 , error=0.00546544
-
-        // fSumw[2][3]=0.124618 , x=25, y=2.25, error=0.0126553
-        // fSumw[2][2]=0.109371 , x=25, y=1.65, error=0.00733365
-        // fSumw[2][1]=0.0592033, x=25, y=0.6 , error=0.00397246
-
-// fSumw[4][3]=0.0583592, x=85, y=2.25, error=0.0227116
-// fSumw[4][2]=0.0554221, x=85, y=1.65, error=0.0171941
-// fSumw[4][1]=0.0317323, x=85, y=0.6, error=0.00831419
-
-// fSumw[3][3]=0.0674571, x=40, y=2.25, error=0.0151419
-// fSumw[3][2]=0.0673591, x=40, y=1.65, error=0.00792283
-// fSumw[3][1]=0.045541, x=40, y=0.6, error=0.00546544
-
-// fSumw[2][3]=0.124618, x=25, y=2.25, error=0.0126553
-// fSumw[2][2]=0.109371, x=25, y=1.65, error=0.00733365
-// fSumw[2][1]=0.0592033, x=25, y=0.6, error=0.00397246
-
+//______________________________________________________________________________________
+double fakerate_qcd( int idx, int syst )
+{
+    if ( abs( wwwbaby.lep_pdgId()[idx] ) == 11 )
+    {
+        float relIso = wwwbaby.lep_relIso03EAv2()[idx];
+        float coneptcorr = 0;
+        if ( abs( wwwbaby.lep_etaSC()[idx] ) <= 1.479 )
+            coneptcorr = std::max( 0., relIso - 0.0588 );
+        else
+            coneptcorr = std::max( 0., relIso - 0.0571 );
+        float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
+        float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
+        return fakerate_el_qcd(abseta, corrpt, syst);
+    }
+    else if ( abs( wwwbaby.lep_pdgId()[idx] ) == 13 )
+    {
+        float relIso = wwwbaby.lep_relIso03EAv2()[idx];
+        float coneptcorr = std::max( 0., relIso - 0.06 );
+        float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
+        float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
+        return fakerate_mu_qcd(abseta, corrpt, syst);
     }
     else
         return 0;
@@ -2871,6 +2769,12 @@ double fakerate( int idx, int syst )
 double fakefactor( int idx, int syst )
 {
     return fakerate( idx, syst ) / ( 1. - fakerate( idx, syst ) );
+}
+
+//______________________________________________________________________________________
+double fakefactor_qcd( int idx, int syst )
+{
+    return fakerate_qcd( idx, syst ) / ( 1. - fakerate_qcd( idx, syst ) );
 }
 
 //______________________________________________________________________________________
@@ -2946,6 +2850,7 @@ int gentype_v2(unsigned lep1_index, unsigned lep2_index, int lep3_index)
     }
 }
 
+//______________________________________________________________________________________
 float lepsf_EGammaTightID(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3013,6 +2918,7 @@ float lepsf_EGammaTightID(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_EGammaReco(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3050,6 +2956,7 @@ float lepsf_EGammaReco(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_MuonMediumID_PeriodBCDEF(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3081,6 +2988,7 @@ float lepsf_MuonMediumID_PeriodBCDEF(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_MuonMediumID_PeriodGH(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3112,6 +3020,7 @@ float lepsf_MuonMediumID_PeriodGH(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_MuonReco(float eta, float nothing, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3131,6 +3040,7 @@ float lepsf_MuonReco(float eta, float nothing, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_EGammaTightPOG_EGammaVVV(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3158,6 +3068,7 @@ float lepsf_EGammaTightPOG_EGammaVVV(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_EGammaVVV_EGammaVVVEle12(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3185,6 +3096,7 @@ float lepsf_EGammaVVV_EGammaVVVEle12(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_EGammaVVV_EGammaVVVEleLead(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3212,6 +3124,7 @@ float lepsf_EGammaVVV_EGammaVVVEleLead(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_MuMediumPOG_MuTightVVV(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3251,6 +3164,7 @@ float lepsf_MuMediumPOG_MuTightVVV(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_MuTightVVV_MuTightVVVMu8(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3290,6 +3204,7 @@ float lepsf_MuTightVVV_MuTightVVVMu8(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float lepsf_MuTightVVV_MuTightVVVMu17(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3329,6 +3244,7 @@ float lepsf_MuTightVVV_MuTightVVVMu17(float pt, float eta, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float fakerate_mu_data(float eta, float conecorrpt, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3348,6 +3264,7 @@ float fakerate_mu_data(float eta, float conecorrpt, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float fakerate_el_data(float eta, float conecorrpt, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3367,6 +3284,7 @@ float fakerate_el_data(float eta, float conecorrpt, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float fakerate_mu_qcd(float eta, float conecorrpt, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3386,6 +3304,7 @@ float fakerate_mu_qcd(float eta, float conecorrpt, int isyst)
     return 1;
 }
 
+//______________________________________________________________________________________
 float fakerate_el_qcd(float eta, float conecorrpt, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
