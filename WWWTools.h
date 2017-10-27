@@ -424,4 +424,9 @@ float lepsf_MuMediumPOG_MuTightVVV(float pt, float eta, int isyst=0);
 float lepsf_MuTightVVV_MuTightVVVMu8(float pt, float eta, int isyst=0);
 float lepsf_MuTightVVV_MuTightVVVMu17(float pt, float eta, int isyst=0);
 
+float fakerate_mu_data(float eta, float conecorrpt, int isyst=0);
+float fakerate_el_data(float eta, float conecorrpt, int isyst=0);
+float fakerate_mu_qcd(float eta, float conecorrpt, int isyst=0);
+float fakerate_el_qcd(float eta, float conecorrpt, int isyst=0);
+
 #endif

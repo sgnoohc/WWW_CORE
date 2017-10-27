@@ -2725,6 +2725,8 @@ double fakerate( int idx, int syst )
         float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
         float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
 
+        return fakerate_el_data(abseta, corrpt, syst);
+
         // fSumw[4][3]=0.170493 , x=85 , y=1.9895 , error=0.0370097
         // fSumw[4][2]=0.101855 , x=85 , y=1.1395 , error=0.0601733
         // fSumw[4][1]=0.199399 , x=85 , y=0.4    , error=0.0770095
@@ -2737,26 +2739,26 @@ double fakerate( int idx, int syst )
         // fSumw[2][2]=0.191887 , x=25 , y=1.1395 , error=0.0232803
         // fSumw[2][1]=0.195776 , x=25 , y=0.4    , error=0.0282233
 
-        if ( corrpt >= 50. )
-        {
-            if      ( abseta >= 1.479 ) return 0.170493 + syst * 0.0370097;
-            else if ( abseta >= 0.8 )   return 0.101855 + syst * 0.0601733;
-            else                        return 0.199399 + syst * 0.0770095;
-        }
-        else if ( corrpt >= 30. )
-        {
-            if      ( abseta >= 1.479 ) return 0.1736   + syst * 0.014733 ;
-            else if ( abseta >= 0.8 )   return 0.164039 + syst * 0.0213855;
-            else                        return 0.169051 + syst * 0.0207381;
-        }
-        else if ( corrpt >= 20. )
-        {
-            if      ( abseta >= 1.479 ) return 0.217486 + syst * 0.0248149;
-            else if ( abseta >= 0.8 )   return 0.191887 + syst * 0.0232803;
-            else                        return 0.195776 + syst * 0.0282233;
-        }
-        else
-            return 0;
+//        if ( corrpt >= 50. )
+//        {
+//            if      ( abseta >= 1.479 ) return 0.170493 + syst * 0.0370097;
+//            else if ( abseta >= 0.8 )   return 0.101855 + syst * 0.0601733;
+//            else                        return 0.199399 + syst * 0.0770095;
+//        }
+//        else if ( corrpt >= 30. )
+//        {
+//            if      ( abseta >= 1.479 ) return 0.1736   + syst * 0.014733 ;
+//            else if ( abseta >= 0.8 )   return 0.164039 + syst * 0.0213855;
+//            else                        return 0.169051 + syst * 0.0207381;
+//        }
+//        else if ( corrpt >= 20. )
+//        {
+//            if      ( abseta >= 1.479 ) return 0.217486 + syst * 0.0248149;
+//            else if ( abseta >= 0.8 )   return 0.191887 + syst * 0.0232803;
+//            else                        return 0.195776 + syst * 0.0282233;
+//        }
+//        else
+//            return 0;
     }
     else if ( abs( wwwbaby.lep_pdgId()[idx] ) == 13 )
     {
@@ -2765,6 +2767,7 @@ double fakerate( int idx, int syst )
         float corrpt = wwwbaby.lep_p4()[idx].pt() * ( 1 + coneptcorr );
         float abseta = fabs( wwwbaby.lep_p4()[idx].eta() );
 
+        return fakerate_mu_data(abseta, corrpt, syst);
         // Data with fabs(eta) not applied by accident
         // fSumw[4][3]=0.0229585 , x=85 , y=2.25 , error=0.0417386
         // fSumw[4][2]=0.0229585 , x=85 , y=1.65 , error=0.0417386
@@ -2813,26 +2816,26 @@ double fakerate( int idx, int syst )
 //            return 0;
 
 
-        if ( corrpt >= 50. )
-        {
-            if      ( abseta >= 2.1 ) return 0.0583592 + syst * 0.0227116 ;
-            else if ( abseta >= 1.2 ) return 0.0554221 + syst * 0.0171941 ;
-            else                      return 0.0317323 + syst * 0.00831419;
-        }
-        else if ( corrpt >= 30. )
-        {
-            if      ( abseta >= 2.1 ) return 0.0674571 + syst * 0.0151419 ;
-            else if ( abseta >= 1.2 ) return 0.0673591 + syst * 0.00792283;
-            else                      return 0.045541  + syst * 0.00546544;
-        }
-        else if ( corrpt >= 20. )
-        {
-            if      ( abseta >= 2.1 ) return 0.124618  + syst * 0.0126553 ;
-            else if ( abseta >= 1.2 ) return 0.109371  + syst * 0.00733365;
-            else                      return 0.0592033 + syst * 0.00397246;
-        }
-        else
-            return 0;
+//        if ( corrpt >= 50. )
+//        {
+//            if      ( abseta >= 2.1 ) return 0.0583592 + syst * 0.0227116 ;
+//            else if ( abseta >= 1.2 ) return 0.0554221 + syst * 0.0171941 ;
+//            else                      return 0.0317323 + syst * 0.00831419;
+//        }
+//        else if ( corrpt >= 30. )
+//        {
+//            if      ( abseta >= 2.1 ) return 0.0674571 + syst * 0.0151419 ;
+//            else if ( abseta >= 1.2 ) return 0.0673591 + syst * 0.00792283;
+//            else                      return 0.045541  + syst * 0.00546544;
+//        }
+//        else if ( corrpt >= 20. )
+//        {
+//            if      ( abseta >= 2.1 ) return 0.124618  + syst * 0.0126553 ;
+//            else if ( abseta >= 1.2 ) return 0.109371  + syst * 0.00733365;
+//            else                      return 0.0592033 + syst * 0.00397246;
+//        }
+//        else
+//            return 0;
 
         // QCD
         // fSumw[4][3]=0.0583592, x=85, y=2.25, error=0.0227116
@@ -3325,4 +3328,81 @@ float lepsf_MuTightVVV_MuTightVVVMu17(float pt, float eta, int isyst)
     if ((pt) < 1200.0 && fabs(eta) < 2.4) return 0.80960047245 + isyst * 0.0950186278378;
     return 1;
 }
+
+float fakerate_mu_data(float eta, float conecorrpt, int isyst)
+{
+    if (isyst != 1 && isyst != -1 && isyst != 0)
+        printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
+    if (fabs(eta) < 1.2 && (conecorrpt) < 20.0) return 0.18162853637 + isyst * 0.00419139178595;
+    if (fabs(eta) < 2.1 && (conecorrpt) < 20.0) return 0.228556342818 + isyst * 0.00643408235926;
+    if (fabs(eta) < 2.4 && (conecorrpt) < 20.0) return 0.284501936043 + isyst * 0.0138531422818;
+    if (fabs(eta) < 1.2 && (conecorrpt) < 30.0) return 0.0593080016201 + isyst * 0.00429931883058;
+    if (fabs(eta) < 2.1 && (conecorrpt) < 30.0) return 0.0812573899031 + isyst * 0.00690133585711;
+    if (fabs(eta) < 2.4 && (conecorrpt) < 30.0) return 0.120471940997 + isyst * 0.0154600921933;
+    if (fabs(eta) < 1.2 && (conecorrpt) < 50.0) return 0.0502796544514 + isyst * 0.00337692471616;
+    if (fabs(eta) < 2.1 && (conecorrpt) < 50.0) return 0.0755524005305 + isyst * 0.00454099610916;
+    if (fabs(eta) < 2.4 && (conecorrpt) < 50.0) return 0.102110577821 + isyst * 0.0116371933399;
+    if (fabs(eta) < 1.2 && (conecorrpt) < 10000) return 0.0504603068665 + isyst * 0.0223031276198;
+    if (fabs(eta) < 2.1 && (conecorrpt) < 10000) return 0.0699800116561 + isyst * 0.0249675245212;
+    if (fabs(eta) < 2.4 && (conecorrpt) < 10000) return 0.0699800116561 + isyst * 0.0249675245212;
+    return 1;
+}
+
+float fakerate_el_data(float eta, float conecorrpt, int isyst)
+{
+    if (isyst != 1 && isyst != -1 && isyst != 0)
+        printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
+    if (fabs(eta) < 0.8 && (conecorrpt) < 20.0) return 0.180862610834 + isyst * 0.011780565611;
+    if (fabs(eta) < 1.479 && (conecorrpt) < 20.0) return 0.151654211681 + isyst * 0.00866843935974;
+    if (fabs(eta) < 2.5 && (conecorrpt) < 20.0) return 0.166856924948 + isyst * 0.0086750832925;
+    if (fabs(eta) < 0.8 && (conecorrpt) < 30.0) return 0.133459584075 + isyst * 0.0146960861119;
+    if (fabs(eta) < 1.479 && (conecorrpt) < 30.0) return 0.108987284034 + isyst * 0.0112594175795;
+    if (fabs(eta) < 2.5 && (conecorrpt) < 30.0) return 0.127048887898 + isyst * 0.0116391553635;
+    if (fabs(eta) < 0.8 && (conecorrpt) < 50.0) return 0.115077619378 + isyst * 0.0116121608794;
+    if (fabs(eta) < 1.479 && (conecorrpt) < 50.0) return 0.0997162232625 + isyst * 0.0099509146269;
+    if (fabs(eta) < 2.5 && (conecorrpt) < 50.0) return 0.106395503788 + isyst * 0.00678263788235;
+    if (fabs(eta) < 0.8 && (conecorrpt) < 10000) return 0.0793935587448 + isyst * 0.0340196244843;
+    if (fabs(eta) < 1.479 && (conecorrpt) < 10000) return 0.0794240499611 + isyst * 0.0289512048486;
+    if (fabs(eta) < 2.5 && (conecorrpt) < 10000) return 0.0995944944707 + isyst * 0.0122391050471;
+    return 1;
+}
+
+float fakerate_mu_qcd(float eta, float conecorrpt, int isyst)
+{
+    if (isyst != 1 && isyst != -1 && isyst != 0)
+        printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
+    if (fabs(eta) < 1.2 && (conecorrpt) < 20.0) return 0.192454320571 + isyst * 0.00435651562103;
+    if (fabs(eta) < 2.1 && (conecorrpt) < 20.0) return 0.25212783352 + isyst * 0.00673523309854;
+    if (fabs(eta) < 2.4 && (conecorrpt) < 20.0) return 0.299959325364 + isyst * 0.0139496576752;
+    if (fabs(eta) < 1.2 && (conecorrpt) < 30.0) return 0.0592032661673 + isyst * 0.00397245526891;
+    if (fabs(eta) < 2.1 && (conecorrpt) < 30.0) return 0.109370893274 + isyst * 0.00733365179432;
+    if (fabs(eta) < 2.4 && (conecorrpt) < 30.0) return 0.124618041094 + isyst * 0.0126552722177;
+    if (fabs(eta) < 1.2 && (conecorrpt) < 50.0) return 0.0455410037998 + isyst * 0.00546544224618;
+    if (fabs(eta) < 2.1 && (conecorrpt) < 50.0) return 0.0673590936047 + isyst * 0.00792283130924;
+    if (fabs(eta) < 2.4 && (conecorrpt) < 50.0) return 0.067457120855 + isyst * 0.0151418937682;
+    if (fabs(eta) < 1.2 && (conecorrpt) < 10000) return 0.0317322626443 + isyst * 0.00831418957152;
+    if (fabs(eta) < 2.1 && (conecorrpt) < 10000) return 0.0554220997027 + isyst * 0.0171941451909;
+    if (fabs(eta) < 2.4 && (conecorrpt) < 10000) return 0.0583591616584 + isyst * 0.0227115872818;
+    return 1;
+}
+
+float fakerate_el_qcd(float eta, float conecorrpt, int isyst)
+{
+    if (isyst != 1 && isyst != -1 && isyst != 0)
+        printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
+    if (fabs(eta) < 0.8 && (conecorrpt) < 20.0) return 0.230089425906 + isyst * 0.013635548062;
+    if (fabs(eta) < 1.479 && (conecorrpt) < 20.0) return 0.187918774855 + isyst * 0.0301966750315;
+    if (fabs(eta) < 2.5 && (conecorrpt) < 20.0) return 0.181326427551 + isyst * 0.0229038017929;
+    if (fabs(eta) < 0.8 && (conecorrpt) < 30.0) return 0.173060172437 + isyst * 0.0540543730729;
+    if (fabs(eta) < 1.479 && (conecorrpt) < 30.0) return 0.127839209154 + isyst * 0.0578526851684;
+    if (fabs(eta) < 2.5 && (conecorrpt) < 30.0) return 0.106022264846 + isyst * 0.0311610831766;
+    if (fabs(eta) < 0.8 && (conecorrpt) < 50.0) return 0.0515026065715 + isyst * 0.0163129257811;
+    if (fabs(eta) < 1.479 && (conecorrpt) < 50.0) return 0.141963824743 + isyst * 0.0705629823265;
+    if (fabs(eta) < 2.5 && (conecorrpt) < 50.0) return 0.0987933061792 + isyst * 0.022152759532;
+    if (fabs(eta) < 0.8 && (conecorrpt) < 10000) return 0.0854687145457 + isyst * 0.0367682367283;
+    if (fabs(eta) < 1.479 && (conecorrpt) < 10000) return 0.101560108062 + isyst * 0.0386388851491;
+    if (fabs(eta) < 2.5 && (conecorrpt) < 10000) return 0.0892398734513 + isyst * 0.0199718234062;
+    return 1;
+}
+
 
