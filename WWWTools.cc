@@ -2943,7 +2943,7 @@ int gentype_v2(unsigned lep1_index, unsigned lep2_index, int lep3_index)
     }
 }
 
-float lepsf_EGammaTightID(float pt, float eta, int isyst=0)
+float lepsf_EGammaTightID(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
@@ -3010,7 +3010,7 @@ float lepsf_EGammaTightID(float pt, float eta, int isyst=0)
     return 1;
 }
 
-float lepsf_EGammaReco(float pt, float eta, int isyst=0)
+float lepsf_EGammaReco(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
@@ -3047,7 +3047,7 @@ float lepsf_EGammaReco(float pt, float eta, int isyst=0)
     return 1;
 }
 
-float lepsf_MuonMediumID_PeriodBCDEF(float pt, float eta, int isyst=0)
+float lepsf_MuonMediumID_PeriodBCDEF(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
@@ -3078,7 +3078,7 @@ float lepsf_MuonMediumID_PeriodBCDEF(float pt, float eta, int isyst=0)
     return 1;
 }
 
-float lepsf_MuonMediumID_PeriodGH(float pt, float eta, int isyst=0)
+float lepsf_MuonMediumID_PeriodGH(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
@@ -3109,7 +3109,7 @@ float lepsf_MuonMediumID_PeriodGH(float pt, float eta, int isyst=0)
     return 1;
 }
 
-float lepsf_MuonReco(float eta, float nothing, int isyst=0)
+float lepsf_MuonReco(float eta, float nothing, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
@@ -3128,7 +3128,7 @@ float lepsf_MuonReco(float eta, float nothing, int isyst=0)
     return 1;
 }
 
-float lepsf_EGammaTightPOG_EGammaVVV(float pt, float eta, int isyst=0)
+float lepsf_EGammaTightPOG_EGammaVVV(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
@@ -3155,61 +3155,61 @@ float lepsf_EGammaTightPOG_EGammaVVV(float pt, float eta, int isyst=0)
     return 1;
 }
 
-float lepsf_EGammaVVV_EGammaVVVEle12(float pt, float eta, int isyst=0)
+float lepsf_EGammaVVV_EGammaVVVEle12(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
-    if ((pt) < 30.0 && fabs(eta) < 1.0) return 1.01243853569 + isyst * 0.00415810225751;
-    if ((pt) < 40.0 && fabs(eta) < 1.0) return 1.01314127445 + isyst * 0.00220955795264;
-    if ((pt) < 50.0 && fabs(eta) < 1.0) return 1.01340222359 + isyst * 0.00153488639642;
-    if ((pt) < 2000.0 && fabs(eta) < 1.0) return 1.01799964905 + isyst * 0.0030709442108;
-    if ((pt) < 30.0 && fabs(eta) < 1.4442) return 1.01877808571 + isyst * 0.00703133730813;
-    if ((pt) < 40.0 && fabs(eta) < 1.4442) return 1.01980721951 + isyst * 0.0037519042278;
-    if ((pt) < 50.0 && fabs(eta) < 1.4442) return 1.01803350449 + isyst * 0.00256296687759;
-    if ((pt) < 2000.0 && fabs(eta) < 1.4442) return 1.01880669594 + isyst * 0.00514886459673;
-    if ((pt) < 30.0 && fabs(eta) < 1.56) return 1.01981687546 + isyst * 0.0211114197957;
-    if ((pt) < 40.0 && fabs(eta) < 1.56) return 1.01999163628 + isyst * 0.011510622811;
-    if ((pt) < 50.0 && fabs(eta) < 1.56) return 1.01699542999 + isyst * 0.0101067497456;
-    if ((pt) < 2000.0 && fabs(eta) < 1.56) return 1.01749408245 + isyst * 0.0163650603465;
-    if ((pt) < 30.0 && fabs(eta) < 2.0) return 1.02057921886 + isyst * 0.00800799186292;
-    if ((pt) < 40.0 && fabs(eta) < 2.0) return 1.02028226852 + isyst * 0.00417999303835;
-    if ((pt) < 50.0 && fabs(eta) < 2.0) return 1.01790201664 + isyst * 0.00399646248143;
-    if ((pt) < 2000.0 && fabs(eta) < 2.0) return 1.02002465725 + isyst * 0.00574978642275;
-    if ((pt) < 30.0 && fabs(eta) < 2.5) return 0.978350162506 + isyst * 0.00889438557043;
-    if ((pt) < 40.0 && fabs(eta) < 2.5) return 1.00657308102 + isyst * 0.00531540398448;
-    if ((pt) < 50.0 && fabs(eta) < 2.5) return 1.00991177559 + isyst * 0.00538696732705;
-    if ((pt) < 2000.0 && fabs(eta) < 2.5) return 1.01343548298 + isyst * 0.00990127934385;
+    if ((pt) < 30.0 && fabs(eta) < 1.0) return 0.938784837723 + isyst * 0.00219590521361;
+    if ((pt) < 40.0 && fabs(eta) < 1.0) return 0.956399559975 + isyst * 0.00127861103515;
+    if ((pt) < 50.0 && fabs(eta) < 1.0) return 0.962966561317 + isyst * 0.000316125299188;
+    if ((pt) < 2000.0 && fabs(eta) < 1.0) return 0.967466413975 + isyst * 0.00155382971572;
+    if ((pt) < 30.0 && fabs(eta) < 1.4442) return 0.94966250658 + isyst * 0.00368355725231;
+    if ((pt) < 40.0 && fabs(eta) < 1.4442) return 0.96033769846 + isyst * 0.00197332068038;
+    if ((pt) < 50.0 && fabs(eta) < 1.4442) return 0.965217530727 + isyst * 0.000220183866521;
+    if ((pt) < 2000.0 && fabs(eta) < 1.4442) return 0.969266951084 + isyst * 0.00265256114334;
+    if ((pt) < 30.0 && fabs(eta) < 1.56) return 0.957857549191 + isyst * 0.0115744391104;
+    if ((pt) < 40.0 && fabs(eta) < 1.56) return 0.962614357471 + isyst * 0.0059518655469;
+    if ((pt) < 50.0 && fabs(eta) < 1.56) return 0.964548945427 + isyst * 0.0055577892749;
+    if ((pt) < 2000.0 && fabs(eta) < 1.56) return 0.962951600552 + isyst * 0.00883849432663;
+    if ((pt) < 30.0 && fabs(eta) < 2.0) return 0.958219587803 + isyst * 0.00428889366748;
+    if ((pt) < 40.0 && fabs(eta) < 2.0) return 0.96611481905 + isyst * 0.00169359181774;
+    if ((pt) < 50.0 && fabs(eta) < 2.0) return 0.971387922764 + isyst * 0.00208029227053;
+    if ((pt) < 2000.0 && fabs(eta) < 2.0) return 0.974559724331 + isyst * 1.84578668625e-05;
+    if ((pt) < 30.0 && fabs(eta) < 2.5) return 0.910284698009 + isyst * 0.00477846357209;
+    if ((pt) < 40.0 && fabs(eta) < 2.5) return 0.947666943073 + isyst * 0.00277335535449;
+    if ((pt) < 50.0 && fabs(eta) < 2.5) return 0.955771327019 + isyst * 0.00289434846743;
+    if ((pt) < 2000.0 && fabs(eta) < 2.5) return 0.962957322598 + isyst * 0.00532928187002;
     return 1;
 }
 
-float lepsf_EGammaVVV_EGammaVVVEleLead(float pt, float eta, int isyst=0)
+float lepsf_EGammaVVV_EGammaVVVEleLead(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
-    if ((pt) < 30.0 && fabs(eta) < 1.0) return 0.973178207874 + isyst * 0.0040103121406;
-    if ((pt) < 40.0 && fabs(eta) < 1.0) return 1.01313531399 + isyst * 0.00222550242336;
-    if ((pt) < 50.0 && fabs(eta) < 1.0) return 1.01339864731 + isyst * 0.00175534598448;
-    if ((pt) < 2000.0 && fabs(eta) < 1.0) return 1.01799964905 + isyst * 0.0030709442108;
-    if ((pt) < 30.0 && fabs(eta) < 1.4442) return 0.969570457935 + isyst * 0.00671661037656;
-    if ((pt) < 40.0 && fabs(eta) < 1.4442) return 1.01976215839 + isyst * 0.00374993719158;
-    if ((pt) < 50.0 && fabs(eta) < 1.4442) return 1.01803350449 + isyst * 0.00256296687759;
-    if ((pt) < 2000.0 && fabs(eta) < 1.4442) return 1.01880669594 + isyst * 0.00514886459673;
-    if ((pt) < 30.0 && fabs(eta) < 1.56) return 0.974450111389 + isyst * 0.0203688830732;
-    if ((pt) < 40.0 && fabs(eta) < 1.56) return 1.01983559132 + isyst * 0.0115502494729;
-    if ((pt) < 50.0 && fabs(eta) < 1.56) return 1.01696801186 + isyst * 0.0101253321368;
-    if ((pt) < 2000.0 && fabs(eta) < 1.56) return 1.01749408245 + isyst * 0.0163650603465;
-    if ((pt) < 30.0 && fabs(eta) < 2.0) return 0.980933725834 + isyst * 0.00771928797329;
-    if ((pt) < 40.0 && fabs(eta) < 2.0) return 1.02049899101 + isyst * 0.00450020303167;
-    if ((pt) < 50.0 && fabs(eta) < 2.0) return 1.01789569855 + isyst * 0.00400843010965;
-    if ((pt) < 2000.0 && fabs(eta) < 2.0) return 1.01624071598 + isyst * 0.00572845563252;
-    if ((pt) < 30.0 && fabs(eta) < 2.5) return 0.932764172554 + isyst * 0.00851596308569;
-    if ((pt) < 40.0 && fabs(eta) < 2.5) return 1.00653338432 + isyst * 0.00532100465026;
-    if ((pt) < 50.0 && fabs(eta) < 2.5) return 1.00987935066 + isyst * 0.0049538140478;
-    if ((pt) < 2000.0 && fabs(eta) < 2.5) return 1.01343548298 + isyst * 0.00990127934385;
+    if ((pt) < 30.0 && fabs(eta) < 1.0) return 0.902300655842 + isyst * 0.00213228896962;
+    if ((pt) < 40.0 && fabs(eta) < 1.0) return 0.956393837929 + isyst * 0.00130303273575;
+    if ((pt) < 50.0 && fabs(eta) < 1.0) return 0.962963223457 + isyst * 0.000868854723185;
+    if ((pt) < 2000.0 && fabs(eta) < 1.0) return 0.967466413975 + isyst * 0.00155382971572;
+    if ((pt) < 30.0 && fabs(eta) < 1.4442) return 0.903473079205 + isyst * 0.0035448160487;
+    if ((pt) < 40.0 && fabs(eta) < 1.4442) return 0.960295259953 + isyst * 0.00197019492648;
+    if ((pt) < 50.0 && fabs(eta) < 1.4442) return 0.965217530727 + isyst * 0.000220183866521;
+    if ((pt) < 2000.0 && fabs(eta) < 1.4442) return 0.969266951084 + isyst * 0.00265256114334;
+    if ((pt) < 30.0 && fabs(eta) < 1.56) return 0.914313673973 + isyst * 0.0113559311569;
+    if ((pt) < 40.0 && fabs(eta) < 1.56) return 0.962467074394 + isyst * 0.00602194977727;
+    if ((pt) < 50.0 && fabs(eta) < 1.56) return 0.964522898197 + isyst * 0.00558842549423;
+    if ((pt) < 2000.0 && fabs(eta) < 1.56) return 0.962951600552 + isyst * 0.00883849432663;
+    if ((pt) < 30.0 && fabs(eta) < 2.0) return 0.920680880547 + isyst * 0.00415683064104;
+    if ((pt) < 40.0 && fabs(eta) < 2.0) return 0.966320037842 + isyst * 0.00231408855426;
+    if ((pt) < 50.0 && fabs(eta) < 2.0) return 0.971381902695 + isyst * 0.00210118701395;
+    if ((pt) < 2000.0 && fabs(eta) < 2.0) return 0.970944464207 + isyst * 1.80491030395e-05;
+    if ((pt) < 30.0 && fabs(eta) < 2.5) return 0.867845416069 + isyst * 0.00461339431639;
+    if ((pt) < 40.0 && fabs(eta) < 2.5) return 0.947629570961 + isyst * 0.00278310457802;
+    if ((pt) < 50.0 && fabs(eta) < 2.5) return 0.955740690231 + isyst * 0.00208964389036;
+    if ((pt) < 2000.0 && fabs(eta) < 2.5) return 0.962957322598 + isyst * 0.00532928187002;
     return 1;
 }
 
-float lepsf_MuMediumPOG_MuTightVVV(float pt, float eta, int isyst=0)
+float lepsf_MuMediumPOG_MuTightVVV(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
@@ -3248,81 +3248,81 @@ float lepsf_MuMediumPOG_MuTightVVV(float pt, float eta, int isyst=0)
     return 1;
 }
 
-float lepsf_MuTightVVV_MuTightVVVMu8(float pt, float eta, int isyst=0)
+float lepsf_MuTightVVV_MuTightVVVMu8(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
-    if ((pt) < 25.0 && fabs(eta) < 0.9) return 0.999541461468 + isyst * 0.00431553026237;
-    if ((pt) < 30.0 && fabs(eta) < 0.9) return 0.997860491276 + isyst * 0.0028927840418;
-    if ((pt) < 40.0 && fabs(eta) < 0.9) return 0.997504532337 + isyst * 0.00120918728177;
-    if ((pt) < 50.0 && fabs(eta) < 0.9) return 0.996784865856 + isyst * 0.00126254361911;
-    if ((pt) < 60.0 && fabs(eta) < 0.9) return 0.996682703495 + isyst * 0.00265837582487;
-    if ((pt) < 120.0 && fabs(eta) < 0.9) return 0.994662582874 + isyst * 0.00344272367229;
-    if ((pt) < 200.0 && fabs(eta) < 0.9) return 0.995876908302 + isyst * 0.0152094641941;
-    if ((pt) < 1200.0 && fabs(eta) < 0.9) return 1.00186300278 + isyst * 0.034564004248;
-    if ((pt) < 25.0 && fabs(eta) < 1.2) return 1.00136160851 + isyst * 0.00764691674305;
-    if ((pt) < 30.0 && fabs(eta) < 1.2) return 1.00054740906 + isyst * 0.00462958245752;
-    if ((pt) < 40.0 && fabs(eta) < 1.2) return 1.00397896767 + isyst * 0.00277219834328;
-    if ((pt) < 50.0 && fabs(eta) < 1.2) return 1.00303781033 + isyst * 0.00237030069092;
-    if ((pt) < 60.0 && fabs(eta) < 1.2) return 1.00098395348 + isyst * 0.00474342472387;
-    if ((pt) < 120.0 && fabs(eta) < 1.2) return 1.00059711933 + isyst * 0.0061635578464;
-    if ((pt) < 200.0 && fabs(eta) < 1.2) return 0.994088232517 + isyst * 0.027560198074;
-    if ((pt) < 1200.0 && fabs(eta) < 1.2) return 0.998805344105 + isyst * 0.0573733280054;
-    if ((pt) < 25.0 && fabs(eta) < 2.1) return 1.01416134834 + isyst * 0.00357451807376;
-    if ((pt) < 30.0 && fabs(eta) < 2.1) return 1.01810801029 + isyst * 0.00342957072222;
-    if ((pt) < 40.0 && fabs(eta) < 2.1) return 1.01771843433 + isyst * 0.00153400246277;
-    if ((pt) < 50.0 && fabs(eta) < 2.1) return 1.01809024811 + isyst * 0.00156235027236;
-    if ((pt) < 60.0 && fabs(eta) < 2.1) return 1.01902592182 + isyst * 0.00309096972942;
-    if ((pt) < 120.0 && fabs(eta) < 2.1) return 1.01623928547 + isyst * 0.00346157064905;
-    if ((pt) < 200.0 && fabs(eta) < 2.1) return 0.983312547207 + isyst * 0.0176575075046;
-    if ((pt) < 1200.0 && fabs(eta) < 2.1) return 0.948991417885 + isyst * 0.0444214225361;
-    if ((pt) < 25.0 && fabs(eta) < 2.4) return 1.00432026386 + isyst * 0.00878741411123;
-    if ((pt) < 30.0 && fabs(eta) < 2.4) return 1.00704360008 + isyst * 0.0165327153848;
-    if ((pt) < 40.0 && fabs(eta) < 2.4) return 1.00508832932 + isyst * 0.00364856554481;
-    if ((pt) < 50.0 && fabs(eta) < 2.4) return 1.00839221478 + isyst * 0.00345417641563;
-    if ((pt) < 60.0 && fabs(eta) < 2.4) return 1.00767874718 + isyst * 0.00678964294352;
-    if ((pt) < 120.0 && fabs(eta) < 2.4) return 1.00606381893 + isyst * 0.0093887399362;
-    if ((pt) < 200.0 && fabs(eta) < 2.4) return 0.988984107971 + isyst * 0.0433369591145;
-    if ((pt) < 1200.0 && fabs(eta) < 2.4) return 0.922808051109 + isyst * 0.578778636643;
+    if ((pt) < 25.0 && fabs(eta) < 0.9) return 0.933527767658 + isyst * 0.00252632647732;
+    if ((pt) < 30.0 && fabs(eta) < 0.9) return 0.933456897736 + isyst * 0.00152941158904;
+    if ((pt) < 40.0 && fabs(eta) < 0.9) return 0.934123814106 + isyst * 5.7151570156e-05;
+    if ((pt) < 50.0 && fabs(eta) < 0.9) return 0.933176159859 + isyst * 0.000533302705251;
+    if ((pt) < 60.0 && fabs(eta) < 0.9) return 0.931691288948 + isyst * 0.00134394291184;
+    if ((pt) < 120.0 && fabs(eta) < 0.9) return 0.929507613182 + isyst * 0.00175162047452;
+    if ((pt) < 200.0 && fabs(eta) < 0.9) return 0.924368977547 + isyst * 0.00746803644143;
+    if ((pt) < 1200.0 && fabs(eta) < 0.9) return 0.910157442093 + isyst * 0.0167671085273;
+    if ((pt) < 25.0 && fabs(eta) < 1.2) return 0.96690428257 + isyst * 0.00463995182995;
+    if ((pt) < 30.0 && fabs(eta) < 1.2) return 0.968839883804 + isyst * 0.000296189435009;
+    if ((pt) < 40.0 && fabs(eta) < 1.2) return 0.968176484108 + isyst * 0.00147301227187;
+    if ((pt) < 50.0 && fabs(eta) < 1.2) return 0.967356085777 + isyst * 0.0012252910266;
+    if ((pt) < 60.0 && fabs(eta) < 1.2) return 0.966672122478 + isyst * 0.00253712385559;
+    if ((pt) < 120.0 && fabs(eta) < 1.2) return 0.965913832188 + isyst * 0.00324173670128;
+    if ((pt) < 200.0 && fabs(eta) < 1.2) return 0.962421000004 + isyst * 0.0145629366561;
+    if ((pt) < 1200.0 && fabs(eta) < 1.2) return 0.961861371994 + isyst * 0.0236944487724;
+    if ((pt) < 25.0 && fabs(eta) < 2.1) return 0.961845993996 + isyst * 0.00034315722064;
+    if ((pt) < 30.0 && fabs(eta) < 2.1) return 0.962982833385 + isyst * 0.00180503994187;
+    if ((pt) < 40.0 && fabs(eta) < 2.1) return 0.962533831596 + isyst * 0.000139178337978;
+    if ((pt) < 50.0 && fabs(eta) < 2.1) return 0.963077664375 + isyst * 0.0008053328847;
+    if ((pt) < 60.0 && fabs(eta) < 2.1) return 0.963417887688 + isyst * 0.00160263939342;
+    if ((pt) < 120.0 && fabs(eta) < 2.1) return 0.962129116058 + isyst * 0.000363735247895;
+    if ((pt) < 200.0 && fabs(eta) < 2.1) return 0.935746133327 + isyst * 0.0082700842047;
+    if ((pt) < 1200.0 && fabs(eta) < 2.1) return 0.89957177639 + isyst * 0.0245530433342;
+    if ((pt) < 25.0 && fabs(eta) < 2.4) return 0.944805383682 + isyst * 0.00573946175886;
+    if ((pt) < 30.0 && fabs(eta) < 2.4) return 0.948861658573 + isyst * 0.0148002473209;
+    if ((pt) < 40.0 && fabs(eta) < 2.4) return 0.949180960655 + isyst * 0.00205940031199;
+    if ((pt) < 50.0 && fabs(eta) < 2.4) return 0.949977576733 + isyst * 0.00186501847954;
+    if ((pt) < 60.0 && fabs(eta) < 2.4) return 0.947516798973 + isyst * 0.00371860765466;
+    if ((pt) < 120.0 && fabs(eta) < 2.4) return 0.948109149933 + isyst * 0.00521480251546;
+    if ((pt) < 200.0 && fabs(eta) < 2.4) return 0.926202654839 + isyst * 0.0195444637705;
+    if ((pt) < 1200.0 && fabs(eta) < 2.4) return 0.865132570267 + isyst * 0.532614728793;
     return 1;
 }
 
-float lepsf_MuTightVVV_MuTightVVVMu17(float pt, float eta, int isyst=0)
+float lepsf_MuTightVVV_MuTightVVVMu17(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
         printf(Form("WARNING - in function=%s, isyst=%d is not recommended!\n", __FUNCTION__, isyst));
-    if ((pt) < 25.0 && fabs(eta) < 0.9) return 0.990568935871 + isyst * 0.00428578853702;
-    if ((pt) < 30.0 && fabs(eta) < 0.9) return 0.989429354668 + isyst * 0.00240011944288;
-    if ((pt) < 40.0 && fabs(eta) < 0.9) return 0.989176571369 + isyst * 0.00143115699909;
-    if ((pt) < 50.0 && fabs(eta) < 0.9) return 0.988689124584 + isyst * 0.00138855122597;
-    if ((pt) < 60.0 && fabs(eta) < 0.9) return 0.988338470459 + isyst * 0.00237986913776;
-    if ((pt) < 120.0 && fabs(eta) < 0.9) return 0.986210823059 + isyst * 0.00349298818646;
-    if ((pt) < 200.0 && fabs(eta) < 0.9) return 0.986462116241 + isyst * 0.0151003314152;
-    if ((pt) < 1200.0 && fabs(eta) < 0.9) return 0.992106556892 + isyst * 0.0343044397198;
-    if ((pt) < 25.0 && fabs(eta) < 1.2) return 0.979321241379 + isyst * 0.00752118826671;
-    if ((pt) < 30.0 && fabs(eta) < 1.2) return 0.979366958141 + isyst * 0.00577754804023;
-    if ((pt) < 40.0 && fabs(eta) < 1.2) return 0.984407544136 + isyst * 0.00270720685526;
-    if ((pt) < 50.0 && fabs(eta) < 1.2) return 0.98391777277 + isyst * 0.00208542109032;
-    if ((pt) < 60.0 && fabs(eta) < 1.2) return 0.982034981251 + isyst * 0.00461454880707;
-    if ((pt) < 120.0 && fabs(eta) < 1.2) return 0.981674432755 + isyst * 0.00605804465441;
-    if ((pt) < 200.0 && fabs(eta) < 1.2) return 0.967723488808 + isyst * 0.0268672399087;
-    if ((pt) < 1200.0 && fabs(eta) < 1.2) return 0.97421169281 + isyst * 0.0566903375968;
-    if ((pt) < 25.0 && fabs(eta) < 2.1) return 0.988342583179 + isyst * 0.00426988556524;
-    if ((pt) < 30.0 && fabs(eta) < 2.1) return 0.997145831585 + isyst * 0.0033662174878;
-    if ((pt) < 40.0 && fabs(eta) < 2.1) return 0.997771382332 + isyst * 0.00150532405478;
-    if ((pt) < 50.0 && fabs(eta) < 2.1) return 0.999460279942 + isyst * 0.00131179158031;
-    if ((pt) < 60.0 && fabs(eta) < 2.1) return 0.996708571911 + isyst * 0.00308752379284;
-    if ((pt) < 120.0 && fabs(eta) < 2.1) return 0.980419993401 + isyst * 0.00400979371536;
-    if ((pt) < 200.0 && fabs(eta) < 2.1) return 0.921213328838 + isyst * 0.0174511326533;
-    if ((pt) < 1200.0 && fabs(eta) < 2.1) return 0.875039458275 + isyst * 0.0413410183062;
-    if ((pt) < 25.0 && fabs(eta) < 2.4) return 0.902593195438 + isyst * 0.0077581711431;
-    if ((pt) < 30.0 && fabs(eta) < 2.4) return 0.927266776562 + isyst * 0.00586203706794;
-    if ((pt) < 40.0 && fabs(eta) < 2.4) return 0.943869292736 + isyst * 0.00344757297066;
-    if ((pt) < 50.0 && fabs(eta) < 2.4) return 0.958442807198 + isyst * 0.00330206264661;
-    if ((pt) < 60.0 && fabs(eta) < 2.4) return 0.96275305748 + isyst * 0.00650398673032;
-    if ((pt) < 120.0 && fabs(eta) < 2.4) return 0.966543674469 + isyst * 0.00906450612074;
-    if ((pt) < 200.0 && fabs(eta) < 2.4) return 0.951920926571 + isyst * 0.0415598878787;
-    if ((pt) < 1200.0 && fabs(eta) < 2.4) return 0.870018422604 + isyst * 0.146053352153;
+    if ((pt) < 25.0 && fabs(eta) < 0.9) return 0.922722399235 + isyst * 0.00250782468408;
+    if ((pt) < 30.0 && fabs(eta) < 0.9) return 0.923307836056 + isyst * 0.000366351007182;
+    if ((pt) < 40.0 && fabs(eta) < 0.9) return 0.924030900002 + isyst * 0.000730909831923;
+    if ((pt) < 50.0 && fabs(eta) < 0.9) return 0.923241138458 + isyst * 0.000768592171557;
+    if ((pt) < 60.0 && fabs(eta) < 0.9) return 0.921180009842 + isyst * 0.00080159636303;
+    if ((pt) < 120.0 && fabs(eta) < 0.9) return 0.918352901936 + isyst * 0.00185961188485;
+    if ((pt) < 200.0 && fabs(eta) < 0.9) return 0.910844266415 + isyst * 0.00739344058835;
+    if ((pt) < 1200.0 && fabs(eta) < 0.9) return 0.894463002682 + isyst * 0.016525458852;
+    if ((pt) < 25.0 && fabs(eta) < 1.2) return 0.942260980606 + isyst * 0.00458041035964;
+    if ((pt) < 30.0 && fabs(eta) < 1.2) return 0.945485949516 + isyst * 0.00346783935787;
+    if ((pt) < 40.0 && fabs(eta) < 1.2) return 0.946832001209 + isyst * 0.00141910674422;
+    if ((pt) < 50.0 && fabs(eta) < 1.2) return 0.946245908737 + isyst * 0.000673513472744;
+    if ((pt) < 60.0 && fabs(eta) < 1.2) return 0.945586264133 + isyst * 0.00240884834276;
+    if ((pt) < 120.0 && fabs(eta) < 1.2) return 0.945138394833 + isyst * 0.00318644606928;
+    if ((pt) < 200.0 && fabs(eta) < 1.2) return 0.933813333511 + isyst * 0.014169270918;
+    if ((pt) < 1200.0 && fabs(eta) < 1.2) return 0.931742787361 + isyst * 0.0243677246898;
+    if ((pt) < 25.0 && fabs(eta) < 2.1) return 0.934685409069 + isyst * 0.00235550744943;
+    if ((pt) < 30.0 && fabs(eta) < 2.1) return 0.940949559212 + isyst * 0.0017736671693;
+    if ((pt) < 40.0 && fabs(eta) < 2.1) return 0.941943407059 + isyst * 0.000142803887399;
+    if ((pt) < 50.0 && fabs(eta) < 2.1) return 0.943855106831 + isyst * 0.000241549432239;
+    if ((pt) < 60.0 && fabs(eta) < 2.1) return 0.94069480896 + isyst * 0.00167134522243;
+    if ((pt) < 120.0 && fabs(eta) < 2.1) return 0.926266431808 + isyst * 0.00212335629489;
+    if ((pt) < 200.0 && fabs(eta) < 2.1) return 0.873467862606 + isyst * 0.00932832611851;
+    if ((pt) < 1200.0 && fabs(eta) < 2.1) return 0.823928773403 + isyst * 0.0230251207295;
+    if ((pt) < 25.0 && fabs(eta) < 2.4) return 0.837569534779 + isyst * 0.00488000441924;
+    if ((pt) < 30.0 && fabs(eta) < 2.4) return 0.866438448429 + isyst * 0.00319838676876;
+    if ((pt) < 40.0 && fabs(eta) < 2.4) return 0.885224223137 + isyst * 0.00194770815806;
+    if ((pt) < 50.0 && fabs(eta) < 2.4) return 0.898686885834 + isyst * 0.00179089574024;
+    if ((pt) < 60.0 && fabs(eta) < 2.4) return 0.901396632195 + isyst * 0.00355735499739;
+    if ((pt) < 120.0 && fabs(eta) < 2.4) return 0.906494557858 + isyst * 0.00504503993108;
+    if ((pt) < 200.0 && fabs(eta) < 2.4) return 0.884702563286 + isyst * 0.0182467487213;
+    if ((pt) < 1200.0 && fabs(eta) < 2.4) return 0.80960047245 + isyst * 0.0950186278378;
     return 1;
 }
 
