@@ -22,6 +22,24 @@ int bkg_category_set_to_run = 0;
 int bkg_category_set_to_lumi = 0;
 TString bkg_category;
 
+int jet_container_mode = 0;
+
+const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >& _jets_p4()
+{
+    if (jet_container_mode == 0) return wwwbaby.jets_p4();
+    if (jet_container_mode == 1) return wwwbaby.jets_up_p4();
+    if (jet_container_mode == 2) return wwwbaby.jets_dn_p4();
+    return wwwbaby.jets_p4();
+}
+
+const vector<float>& _jets_csv()
+{
+    if (jet_container_mode == 0) return wwwbaby.jets_csv();
+    if (jet_container_mode == 1) return wwwbaby.jets_up_csv();
+    if (jet_container_mode == 2) return wwwbaby.jets_dn_csv();
+    return wwwbaby.jets_csv();
+}
+
 #define MZ 91.1876
 #define LUMI 35.87
 
@@ -1248,7 +1266,7 @@ bool passTrigEE() { if (wwwbaby.isData()) return wwwbaby.HLT_DoubleEl() || wwwba
 //______________________________________________________________________________________
 float weight( bool applyfakefactor, int isyst )
 {
-    float wgt = wwwbaby.isData() ? 1 : wwwbaby.evt_scale1fb() * LUMI;
+    float wgt = wwwbaby.isData() ? 1 : wwwbaby.evt_scale1fb() * LUMI * wwwbaby.weight_btagsf() * lepsf() * puWeight(wwwbaby.nTrueInt());
 
     if ( wwwbaby.evt_dataset()[0].Contains( "/TEST-www/wwwext-Private80X-v1/USER" ) )
         wgt *= 0.066805*164800./(91900.+164800.);
@@ -1260,6 +1278,16 @@ float weight( bool applyfakefactor, int isyst )
     if      ( isyst == 0 ) ffsyst =  0;
     else if ( isyst == 1 ) ffsyst = -1;
     else if ( isyst == 2 ) ffsyst =  1;
+    else if ( isyst == 3 ) wgt *= wwwbaby.weight_btagsf_heavy_UP() / wwwbaby.weight_btagsf();
+    else if ( isyst == 4 ) wgt *= wwwbaby.weight_btagsf_heavy_DN() / wwwbaby.weight_btagsf();
+    else if ( isyst == 5 ) wgt *= wwwbaby.weight_btagsf_light_UP() / wwwbaby.weight_btagsf();
+    else if ( isyst == 6 ) wgt *= wwwbaby.weight_btagsf_light_DN() / wwwbaby.weight_btagsf();
+    else if ( isyst == 7 ) wgt *= 1;
+    else if ( isyst == 8 ) wgt *= 1;
+    else if ( isyst == 9 ) wgt *= lepsf(1) / lepsf();
+    else if ( isyst ==10 ) wgt *= lepsf(-1) / lepsf();
+    else if ( isyst ==11 ) wgt *= puWeight(wwwbaby.nTrueInt(), 1) / puWeight(wwwbaby.nTrueInt());
+    else if ( isyst ==12 ) wgt *= puWeight(wwwbaby.nTrueInt(),-1) / puWeight(wwwbaby.nTrueInt());
     else
         std::cerr << "Error: Unrecognized systematics: " << isyst << std::endl;
 
@@ -1307,12 +1335,12 @@ void printEvent()
         std::cout << "Printing ... " << jidx.first << std::endl;
         for ( auto& ijet : jidx.second )
         {
-            std::cout << wwwbaby.jets_p4()[ijet].pt()     << " ";
-            std::cout << wwwbaby.jets_p4()[ijet].eta()    << " ";
-            std::cout << wwwbaby.jets_p4()[ijet].phi()    << " ";
-            std::cout << wwwbaby.jets_p4()[ijet].energy() << " ";
-            std::cout << wwwbaby.jets_p4()[ijet].mass()   << " ";
-            std::cout << wwwbaby.jets_csv()[ijet]         << " ";
+            std::cout << _jets_p4()[ijet].pt()     << " ";
+            std::cout << _jets_p4()[ijet].eta()    << " ";
+            std::cout << _jets_p4()[ijet].phi()    << " ";
+            std::cout << _jets_p4()[ijet].energy() << " ";
+            std::cout << _jets_p4()[ijet].mass()   << " ";
+            std::cout << _jets_csv()[ijet]         << " ";
             std::cout << std::endl;
         }
     }
@@ -1386,6 +1414,7 @@ void setObjectIndices( bool preload )
         //otherwise perform object selections
         lepidx = getLeptonsIndices();
         jetidx = getJetsIndices();
+        setJESSystJetsIndices();
     }
     // Now set the event id of the event the objects are selected from
     objidx_set_to_eventid = wwwbaby.evt();
@@ -1469,7 +1498,7 @@ void loadLeptonIndices()
 ObjIdx getJetsIndices()
 {
     ObjIdx idx = makeEmptyJetidx();
-    for ( unsigned int ijet = 0; ijet < wwwbaby.jets_csv().size(); ++ijet )
+    for ( unsigned int ijet = 0; ijet < _jets_csv().size(); ++ijet )
     {
         if ( isGoodSSJet( ijet ) )
         {
@@ -1497,8 +1526,8 @@ ObjIdx getJetsIndices()
         {
             if ( ijet == jjet )
                 continue;
-            LorentzVector ijet_p4 = wwwbaby.jets_p4()[idx["GoodSSJet"][ijet]];
-            LorentzVector jjet_p4 = wwwbaby.jets_p4()[idx["GoodSSJet"][jjet]];
+            LorentzVector ijet_p4 = _jets_p4()[idx["GoodSSJet"][ijet]];
+            LorentzVector jjet_p4 = _jets_p4()[idx["GoodSSJet"][jjet]];
             float dr = ROOT::Math::VectorUtil::DeltaR( ijet_p4, jjet_p4 );
             if ( dr < mindr )
             {
@@ -1516,6 +1545,58 @@ ObjIdx getJetsIndices()
     }
 
     return idx;
+}
+
+//______________________________________________________________________________________
+void setJESSystJetsIndices()
+{
+    jetidx["GoodSSJetNom"] = jetidx["GoodSSJet"];
+    jetidx["Good3LJetNom"] = jetidx["Good3LJet"];
+    jetidx["LooseBJetNom"] = jetidx["LooseBJet"];
+    jetidx["GoodSSWJetNom"] = jetidx["GoodSSWJet"];
+    jet_container_mode = 1;
+    ObjIdx idx = getJetsIndices();
+    jetidx["GoodSSJetUp"] = idx["GoodSSJet"];
+    jetidx["Good3LJetUp"] = idx["Good3LJet"];
+    jetidx["LooseBJetUp"] = idx["LooseBJet"];
+    jetidx["GoodSSWJetUp"] = idx["GoodSSWJet"];
+    jet_container_mode = 2;
+    idx = getJetsIndices();
+    jetidx["GoodSSJetDn"] = idx["GoodSSJet"];
+    jetidx["Good3LJetDn"] = idx["Good3LJet"];
+    jetidx["LooseBJetDn"] = idx["LooseBJet"];
+    jetidx["GoodSSWJetDn"] = idx["GoodSSWJet"];
+    jet_container_mode = 0;
+}
+
+//______________________________________________________________________________________
+void setJetIndicesToJESUp()
+{
+    jet_container_mode = 1;
+    jetidx["GoodSSJet"] = jetidx["GoodSSJetUp"];
+    jetidx["Good3LJet"] = jetidx["Good3LJetUp"];
+    jetidx["LooseBJet"] = jetidx["LooseBJetUp"];
+    jetidx["GoodSSWJet"] = jetidx["GoodSSWJetUp"];
+}
+
+//______________________________________________________________________________________
+void setJetIndicesToJESDn()
+{
+    jet_container_mode = 2;
+    jetidx["GoodSSJet"] = jetidx["GoodSSJetDn"];
+    jetidx["Good3LJet"] = jetidx["Good3LJetDn"];
+    jetidx["LooseBJet"] = jetidx["LooseBJetDn"];
+    jetidx["GoodSSWJet"] = jetidx["GoodSSWJetDn"];
+}
+
+//______________________________________________________________________________________
+void setJetIndicesToNominal()
+{
+    jet_container_mode = 0;
+    jetidx["GoodSSJet"] = jetidx["GoodSSJetNom"];
+    jetidx["Good3LJet"] = jetidx["Good3LJetNom"];
+    jetidx["LooseBJet"] = jetidx["LooseBJetNom"];
+    jetidx["GoodSSWJet"] = jetidx["GoodSSWJetNom"];
 }
 
 //______________________________________________________________________________________
@@ -1707,25 +1788,25 @@ bool isLbnt3lElec( int ilep )
 //______________________________________________________________________________________
 bool isGoodSSJet( unsigned int& ijet )
 {
-    if (!(       wwwbaby.jets_p4()[ijet].Pt()      > 30.  )) return false;
-    if (!( fabs( wwwbaby.jets_p4()[ijet].Eta() )   <  2.5 )) return false;
+    if (!(       _jets_p4()[ijet].Pt()      > 30.  )) return false;
+    if (!( fabs( _jets_p4()[ijet].Eta() )   <  2.5 )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
 bool isGood3LJet( unsigned int& ijet )
 {
-    if (!(       wwwbaby.jets_p4()[ijet].Pt()      > 30.  )) return false;
-    if (!( fabs( wwwbaby.jets_p4()[ijet].Eta() )   <  5.0 )) return false;
+    if (!(       _jets_p4()[ijet].Pt()      > 30.  )) return false;
+    if (!( fabs( _jets_p4()[ijet].Eta() )   <  5.0 )) return false;
     return true;
 }
 
 //______________________________________________________________________________________
 bool isLooseBJet( unsigned int& ijet )
 {
-    if (!(       wwwbaby.jets_p4()[ijet].Pt()      > 20.     )) return false;
-    if (!( fabs( wwwbaby.jets_p4()[ijet].Eta() )   <  2.4    )) return false;
-    if (!(       wwwbaby.jets_csv()[ijet]          >  0.5426 )) return false;
+    if (!(       _jets_p4()[ijet].Pt()      > 20.     )) return false;
+    if (!( fabs( _jets_p4()[ijet].Eta() )   <  2.4    )) return false;
+    if (!(       _jets_csv()[ijet]          >  0.5426 )) return false;
     return true;
 }
 
@@ -1800,7 +1881,7 @@ bool isData( TString path )
 //______________________________________________________________________________________
 float Mjj( int ijet, int jjet )
 {
-    return ( wwwbaby.jets_p4()[ijet] + wwwbaby.jets_p4()[jjet] ).mass();
+    return ( _jets_p4()[ijet] + _jets_p4()[jjet] ).mass();
 }
 
 //______________________________________________________________________________________
@@ -1825,8 +1906,8 @@ float DEtajjLead()
     if ( jetidx["GoodSSJet"].size() < 2 )
         return -999;
     return fabs(
-            wwwbaby.jets_p4()[jetidx["GoodSSJet"][0]].eta()
-            - wwwbaby.jets_p4()[jetidx["GoodSSJet"][1]].eta() );
+            _jets_p4()[jetidx["GoodSSJet"][0]].eta()
+            - _jets_p4()[jetidx["GoodSSJet"][1]].eta() );
 }
 
 //______________________________________________________________________________________
@@ -2216,8 +2297,8 @@ float M4()
         return -999;
     return ( wwwbaby.lep_p4()[lepidx["VetoLepton"][0]]
              + wwwbaby.lep_p4()[lepidx["VetoLepton"][1]]
-             + wwwbaby.jets_p4()[jetidx["GoodSSWJet"][0]]
-             + wwwbaby.jets_p4()[jetidx["GoodSSWJet"][1]]
+             + _jets_p4()[jetidx["GoodSSWJet"][0]]
+             + _jets_p4()[jetidx["GoodSSWJet"][1]]
              ).mass();
 }
 
@@ -2337,7 +2418,7 @@ TString sampleCategory( int& priority )
     else if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "madgraphMLM" ) )      { priority = 1; sample_category =  "wg"; }
     else if ( dsname.Contains( "/WGJets_"  ) )                                          { priority = 2; sample_category =  "wgpt40"; }
     else if ( dsname.Contains( "/WGToLNuG" ) && dsname.Contains( "amcatnloFXFX" ) )     { priority = 2; sample_category =  "wgnlo"; }
-    else if ( dsname.Contains( "/WGstarTo" ) )                                          { priority = 2; sample_category =  "wgstar"; }
+    else if ( dsname.Contains( "/WGstarTo" ) )                                          { priority = 1; sample_category =  "wgstar"; }
     else if ( dsname.Contains( "/ZGTo2LG"  ) )                                          { priority = 1; sample_category =  "zg"; }
     else if ( dsname.Contains( "/WminusH_HToBB" ) )                                     { priority = 2; sample_category =  "whbb"; }
     else if ( dsname.Contains( "/WplusH_HToBB" ) )                                      { priority = 2; sample_category =  "whbb"; }
@@ -2851,6 +2932,62 @@ int gentype_v2(unsigned lep1_index, unsigned lep2_index, int lep3_index)
 }
 
 //______________________________________________________________________________________
+float lepsf(int isyst)
+{
+    // Only apply to MC
+    if (wwwbaby.isData()) return 1;
+    // Only apply to all tight leptons region. (we only use the loose + tight region with data)
+    if (lepidx["TightLepton"].size() == 2 || lepidx["TightLepton"].size() == 3)
+    {
+        float sf = 1.;
+        float pt0 = wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt();
+        float eta0 = wwwbaby.lep_p4()[lepidx["TightLepton"][0]].eta();
+        int pdgid0 = wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]];
+        float pt1 = wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt();
+        float eta1 = wwwbaby.lep_p4()[lepidx["TightLepton"][1]].eta();
+        if (abs(LepFlavProduct()) == 121)
+        {
+            sf *= lepsf_EGammaReco(pt0, eta0, isyst);
+            sf *= lepsf_EGammaTightID(pt0, eta0, isyst);
+            sf *= lepsf_EGammaTightPOG_EGammaVVV(pt0, eta0, isyst);
+            sf *= lepsf_EGammaVVV_EGammaVVVEleLead(pt0, eta0, isyst);
+            sf *= lepsf_EGammaReco(pt1, eta1, isyst);
+            sf *= lepsf_EGammaTightID(pt1, eta1, isyst);
+            sf *= lepsf_EGammaTightPOG_EGammaVVV(pt1, eta1, isyst);
+            sf *= lepsf_EGammaVVV_EGammaVVVEle12(pt1, eta1, isyst);
+        }
+        else if (abs(LepFlavProduct()) == 143)
+        {
+            float ptEl = abs(pdgid0) == 11 ? pt0 : pt1;
+            float etaEl = abs(pdgid0) == 11 ? eta0 : eta1;
+            float ptMu = abs(pdgid0) == 13 ? pt0 : pt1;
+            float etaMu = abs(pdgid0) == 13 ? eta0 : eta1;
+            sf *= lepsf_EGammaReco(ptEl, etaEl, isyst);
+            sf *= lepsf_EGammaTightID(ptEl, etaEl, isyst);
+            sf *= lepsf_EGammaTightPOG_EGammaVVV(ptEl, etaEl, isyst);
+            sf *= lepsf_EGammaVVV_EGammaVVVEle12(ptEl, etaEl, isyst);
+            sf *= lepsf_MuonReco(etaMu, 0, isyst);
+            sf *= lepsf_MuonMediumID_PeriodGH(ptMu, etaMu, isyst);
+            sf *= lepsf_MuMediumPOG_MuTightVVV(ptMu, etaMu, isyst);
+            sf *= lepsf_MuTightVVV_MuTightVVVMu8(ptMu, etaMu, isyst);
+        }
+        else if (abs(LepFlavProduct()) == 169)
+        {
+            sf *= lepsf_MuonReco(eta0, 0, isyst);
+            sf *= lepsf_MuonMediumID_PeriodGH(pt0, eta0, isyst);
+            sf *= lepsf_MuMediumPOG_MuTightVVV(pt0, eta0, isyst);
+            sf *= lepsf_MuTightVVV_MuTightVVVMu17(pt0, eta0, isyst);
+            sf *= lepsf_MuonReco(eta1, 0, isyst);
+            sf *= lepsf_MuonMediumID_PeriodGH(pt1, eta1, isyst);
+            sf *= lepsf_MuMediumPOG_MuTightVVV(pt1, eta1, isyst);
+            sf *= lepsf_MuTightVVV_MuTightVVVMu8(pt1, eta1, isyst);
+        }
+        return sf;
+    }
+    return 1;
+}
+
+//______________________________________________________________________________________
 float lepsf_EGammaTightID(float pt, float eta, int isyst)
 {
     if (isyst != 1 && isyst != -1 && isyst != 0)
@@ -3322,6 +3459,247 @@ float fakerate_el_qcd(float eta, float conecorrpt, int isyst)
     if (fabs(eta) < 1.479 && (conecorrpt) < 10000) return 0.101560108062 + isyst * 0.0386388851491;
     if (fabs(eta) < 2.5 && (conecorrpt) < 10000) return 0.0892398734513 + isyst * 0.0199718234062;
     return 1;
+}
+
+//______________________________________________________________________________________
+float puWeight(int nPUVtx, int variation)
+{
+    if (nPUVtx < 0) { return 0; }
+    if (variation == 0)
+    {
+        if (nPUVtx == 0) { return 0.366077; }
+        if (nPUVtx == 1) { return 0.893925; }
+        if (nPUVtx == 2) { return 1.19772; }
+        if (nPUVtx == 3) { return 0.9627; }
+        if (nPUVtx == 4) { return 1.12098; }
+        if (nPUVtx == 5) { return 1.16486; }
+        if (nPUVtx == 6) { return 0.795599; }
+        if (nPUVtx == 7) { return 0.495824; }
+        if (nPUVtx == 8) { return 0.742182; }
+        if (nPUVtx == 9) { return 0.878856; }
+        if (nPUVtx == 10) { return 0.964232; }
+        if (nPUVtx == 11) { return 1.0725; }
+        if (nPUVtx == 12) { return 1.12534; }
+        if (nPUVtx == 13) { return 1.17603; }
+        if (nPUVtx == 14) { return 1.20208; }
+        if (nPUVtx == 15) { return 1.20764; }
+        if (nPUVtx == 16) { return 1.20018; }
+        if (nPUVtx == 17) { return 1.18268; }
+        if (nPUVtx == 18) { return 1.144; }
+        if (nPUVtx == 19) { return 1.09663; }
+        if (nPUVtx == 20) { return 1.0656; }
+        if (nPUVtx == 21) { return 1.05117; }
+        if (nPUVtx == 22) { return 1.0516; }
+        if (nPUVtx == 23) { return 1.05063; }
+        if (nPUVtx == 24) { return 1.04986; }
+        if (nPUVtx == 25) { return 1.05817; }
+        if (nPUVtx == 26) { return 1.07216; }
+        if (nPUVtx == 27) { return 1.08303; }
+        if (nPUVtx == 28) { return 1.09569; }
+        if (nPUVtx == 29) { return 1.10787; }
+        if (nPUVtx == 30) { return 1.09462; }
+        if (nPUVtx == 31) { return 1.08262; }
+        if (nPUVtx == 32) { return 1.04125; }
+        if (nPUVtx == 33) { return 0.985752; }
+        if (nPUVtx == 34) { return 0.910807; }
+        if (nPUVtx == 35) { return 0.820923; }
+        if (nPUVtx == 36) { return 0.716787; }
+        if (nPUVtx == 37) { return 0.610013; }
+        if (nPUVtx == 38) { return 0.503118; }
+        if (nPUVtx == 39) { return 0.404841; }
+        if (nPUVtx == 40) { return 0.309195; }
+        if (nPUVtx == 41) { return 0.22792; }
+        if (nPUVtx == 42) { return 0.16369; }
+        if (nPUVtx == 43) { return 0.11318; }
+        if (nPUVtx == 44) { return 0.0773005; }
+        if (nPUVtx == 45) { return 0.0509221; }
+        if (nPUVtx == 46) { return 0.0318936; }
+        if (nPUVtx == 47) { return 0.0200936; }
+        if (nPUVtx == 48) { return 0.0122631; }
+        if (nPUVtx == 49) { return 0.00742646; }
+        if (nPUVtx == 50) { return 0.00438028; }
+        if (nPUVtx == 51) { return 0.00260777; }
+        if (nPUVtx == 52) { return 0.00156599; }
+        if (nPUVtx == 53) { return 0.000971358; }
+        if (nPUVtx == 54) { return 0.000729206; }
+        if (nPUVtx == 55) { return 0.000672709; }
+        if (nPUVtx == 56) { return 0.000730459; }
+        if (nPUVtx == 57) { return 0.000948791; }
+        if (nPUVtx == 58) { return 0.00135533; }
+        if (nPUVtx == 59) { return 0.00189419; }
+        if (nPUVtx == 60) { return 0.00308244; }
+        if (nPUVtx == 61) { return 0.00409665; }
+        if (nPUVtx == 62) { return 0.00487449; }
+        if (nPUVtx == 63) { return 0.00525606; }
+        if (nPUVtx == 64) { return 0.00578498; }
+        if (nPUVtx == 65) { return 0.00551468; }
+        if (nPUVtx == 66) { return 0.00500046; }
+        if (nPUVtx == 67) { return 0.00440983; }
+        if (nPUVtx == 68) { return 0.00401224; }
+        if (nPUVtx == 69) { return 0.00354754; }
+        if (nPUVtx == 70) { return 0.00310751; }
+        if (nPUVtx == 71) { return 0.00270211; }
+        if (nPUVtx == 72) { return 0.00233691; }
+        if (nPUVtx == 73) { return 0.00202529; }
+        if (nPUVtx >= 74) { return 0.00172328; }
+    }
+    if (variation < 0) //down
+    {
+        if (nPUVtx == 0) { return 0.379278; }
+        if (nPUVtx == 1) { return 1.14117; }
+        if (nPUVtx == 2) { return 1.25988; }
+        if (nPUVtx == 3) { return 1.0989; }
+        if (nPUVtx == 4) { return 1.25006; }
+        if (nPUVtx == 5) { return 1.28085; }
+        if (nPUVtx == 6) { return 0.920142; }
+        if (nPUVtx == 7) { return 0.767693; }
+        if (nPUVtx == 8) { return 1.09257; }
+        if (nPUVtx == 9) { return 1.3374; }
+        if (nPUVtx == 10) { return 1.48624; }
+        if (nPUVtx == 11) { return 1.52827; }
+        if (nPUVtx == 12) { return 1.49779; }
+        if (nPUVtx == 13) { return 1.50093; }
+        if (nPUVtx == 14) { return 1.49728; }
+        if (nPUVtx == 15) { return 1.4437; }
+        if (nPUVtx == 16) { return 1.36783; }
+        if (nPUVtx == 17) { return 1.29894; }
+        if (nPUVtx == 18) { return 1.22733; }
+        if (nPUVtx == 19) { return 1.16569; }
+        if (nPUVtx == 20) { return 1.12543; }
+        if (nPUVtx == 21) { return 1.09059; }
+        if (nPUVtx == 22) { return 1.06406; }
+        if (nPUVtx == 23) { return 1.03996; }
+        if (nPUVtx == 24) { return 1.01924; }
+        if (nPUVtx == 25) { return 1.00604; }
+        if (nPUVtx == 26) { return 0.996975; }
+        if (nPUVtx == 27) { return 0.984886; }
+        if (nPUVtx == 28) { return 0.972847; }
+        if (nPUVtx == 29) { return 0.95656; }
+        if (nPUVtx == 30) { return 0.914677; }
+        if (nPUVtx == 31) { return 0.872239; }
+        if (nPUVtx == 32) { return 0.807112; }
+        if (nPUVtx == 33) { return 0.734267; }
+        if (nPUVtx == 34) { return 0.65103; }
+        if (nPUVtx == 35) { return 0.561399; }
+        if (nPUVtx == 36) { return 0.466396; }
+        if (nPUVtx == 37) { return 0.374559; }
+        if (nPUVtx == 38) { return 0.288558; }
+        if (nPUVtx == 39) { return 0.214518; }
+        if (nPUVtx == 40) { return 0.149749; }
+        if (nPUVtx == 41) { return 0.0998954; }
+        if (nPUVtx == 42) { return 0.0643477; }
+        if (nPUVtx == 43) { return 0.0395894; }
+        if (nPUVtx == 44) { return 0.0238912; }
+        if (nPUVtx == 45) { return 0.0138223; }
+        if (nPUVtx == 46) { return 0.00756684; }
+        if (nPUVtx == 47) { return 0.004156; }
+        if (nPUVtx == 48) { return 0.00221556; }
+        if (nPUVtx == 49) { return 0.00118683; }
+        if (nPUVtx == 50) { return 0.000642772; }
+        if (nPUVtx == 51) { return 0.000384094; }
+        if (nPUVtx == 52) { return 0.000272857; }
+        if (nPUVtx == 53) { return 0.000243368; }
+        if (nPUVtx == 54) { return 0.000289656; }
+        if (nPUVtx == 55) { return 0.000395793; }
+        if (nPUVtx == 56) { return 0.000543963; }
+        if (nPUVtx == 57) { return 0.00078281; }
+        if (nPUVtx == 58) { return 0.00115137; }
+        if (nPUVtx == 59) { return 0.00160404; }
+        if (nPUVtx == 60) { return 0.00256812; }
+        if (nPUVtx == 61) { return 0.0033401; }
+        if (nPUVtx == 62) { return 0.00387997; }
+        if (nPUVtx == 63) { return 0.00407904; }
+        if (nPUVtx == 64) { return 0.00437327; }
+        if (nPUVtx == 65) { return 0.00405792; }
+        if (nPUVtx == 66) { return 0.00357906; }
+        if (nPUVtx == 67) { return 0.00306806; }
+        if (nPUVtx == 68) { return 0.00271159; }
+        if (nPUVtx == 69) { return 0.0023274; }
+        if (nPUVtx == 70) { return 0.00197776; }
+        if (nPUVtx == 71) { return 0.00166723; }
+        if (nPUVtx == 72) { return 0.00139694; }
+        if (nPUVtx == 73) { return 0.00117213; }
+        if (nPUVtx >= 74) { return 0.000964963; }
+    }
+    if (variation > 0)
+    {
+        if (nPUVtx == 0) { return 0.356705; }
+        if (nPUVtx == 1) { return 0.703874; }
+        if (nPUVtx == 2) { return 1.1331; }
+        if (nPUVtx == 3) { return 0.84596; }
+        if (nPUVtx == 4) { return 1.01965; }
+        if (nPUVtx == 5) { return 1.04908; }
+        if (nPUVtx == 6) { return 0.72572; }
+        if (nPUVtx == 7) { return 0.347758; }
+        if (nPUVtx == 8) { return 0.500583; }
+        if (nPUVtx == 9) { return 0.603052; }
+        if (nPUVtx == 10) { return 0.632203; }
+        if (nPUVtx == 11) { return 0.732849; }
+        if (nPUVtx == 12) { return 0.827779; }
+        if (nPUVtx == 13) { return 0.912507; }
+        if (nPUVtx == 14) { return 0.959919; }
+        if (nPUVtx == 15) { return 0.988481; }
+        if (nPUVtx == 16) { return 1.02442; }
+        if (nPUVtx == 17) { return 1.05282; }
+        if (nPUVtx == 18) { return 1.05104; }
+        if (nPUVtx == 19) { return 1.02729; }
+        if (nPUVtx == 20) { return 1.00559; }
+        if (nPUVtx == 21) { return 0.99799; }
+        if (nPUVtx == 22) { return 1.01493; }
+        if (nPUVtx == 23) { return 1.03752; }
+        if (nPUVtx == 24) { return 1.05812; }
+        if (nPUVtx == 25) { return 1.0855; }
+        if (nPUVtx == 26) { return 1.12067; }
+        if (nPUVtx == 27) { return 1.15508; }
+        if (nPUVtx == 28) { return 1.1925; }
+        if (nPUVtx == 29) { return 1.23145; }
+        if (nPUVtx == 30) { return 1.24627; }
+        if (nPUVtx == 31) { return 1.26784; }
+        if (nPUVtx == 32) { return 1.25902; }
+        if (nPUVtx == 33) { return 1.23373; }
+        if (nPUVtx == 34) { return 1.18149; }
+        if (nPUVtx == 35) { return 1.10478; }
+        if (nPUVtx == 36) { return 1.00239; }
+        if (nPUVtx == 37) { return 0.889404; }
+        if (nPUVtx == 38) { return 0.769071; }
+        if (nPUVtx == 39) { return 0.653862; }
+        if (nPUVtx == 40) { return 0.532499; }
+        if (nPUVtx == 41) { return 0.422593; }
+        if (nPUVtx == 42) { return 0.329801; }
+        if (nPUVtx == 43) { return 0.249936; }
+        if (nPUVtx == 44) { return 0.188554; }
+        if (nPUVtx == 45) { return 0.138154; }
+        if (nPUVtx == 46) { return 0.096836; }
+        if (nPUVtx == 47) { return 0.0686432; }
+        if (nPUVtx == 48) { return 0.0473417; }
+        if (nPUVtx == 49) { return 0.0324882; }
+        if (nPUVtx == 50) { return 0.021705; }
+        if (nPUVtx == 51) { return 0.0145288; }
+        if (nPUVtx == 52) { return 0.00958437; }
+        if (nPUVtx == 53) { return 0.00616762; }
+        if (nPUVtx == 54) { return 0.00427747; }
+        if (nPUVtx == 55) { return 0.00307056; }
+        if (nPUVtx == 56) { return 0.00224154; }
+        if (nPUVtx == 57) { return 0.00192254; }
+        if (nPUVtx == 58) { return 0.00202293; }
+        if (nPUVtx == 59) { return 0.00239738; }
+        if (nPUVtx == 60) { return 0.00365154; }
+        if (nPUVtx == 61) { return 0.00477849; }
+        if (nPUVtx == 62) { return 0.00572481; }
+        if (nPUVtx == 63) { return 0.0062735; }
+        if (nPUVtx == 64) { return 0.00704536; }
+        if (nPUVtx == 65) { return 0.00686592; }
+        if (nPUVtx == 66) { return 0.00637147; }
+        if (nPUVtx == 67) { return 0.00575494; }
+        if (nPUVtx == 68) { return 0.00536637; }
+        if (nPUVtx == 69) { return 0.00486586; }
+        if (nPUVtx == 70) { return 0.0043736; }
+        if (nPUVtx == 71) { return 0.0039046; }
+        if (nPUVtx == 72) { return 0.00346908; }
+        if (nPUVtx == 73) { return 0.00309034; }
+        if (nPUVtx == 74) { return 0.00270442; }
+    }
+    return 1;//should not happen
 }
 
 

@@ -41,6 +41,11 @@ extern int bkg_category_set_to_run;
 extern int bkg_category_set_to_lumi;
 extern TString bkg_category;
 
+extern int jet_container_mode;
+
+const vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<float> > >& _jets_p4();
+const vector<float>& _jets_csv();
+
 static int DEBUG;
 
 bool passPresel();
@@ -189,6 +194,8 @@ bool isObjectSelected();
 // Set object indices for this event
 void setObjectIndices( bool preload=false );
 
+// set jets
+
 // Returns a collection of indices for selected leptons
 ObjIdx makeEmptyLepidx();
 ObjIdx makeEmptyJetidx();
@@ -196,6 +203,11 @@ ObjIdx makeEmptyJetidx();
 // Returns a collection of indices for selected leptons
 ObjIdx getLeptonsIndices();
 ObjIdx getJetsIndices();
+
+void setJESSystJetsIndices();
+void setJetIndicesToJESUp();
+void setJetIndicesToJESDn();
+void setJetIndicesToNominal();
 
 // Loads collection of indices for selected objects
 void loadLeptonIndices();
@@ -414,6 +426,7 @@ double fakefactor_qcd( int, int=0 );
 
 int gentype_v2(unsigned, unsigned, int);
 
+float lepsf(int isyst=0);
 float lepsf_EGammaTightID(float pt, float eta, int isyst=0);
 float lepsf_EGammaReco(float pt, float eta, int isyst=0);
 float lepsf_MuonMediumID_PeriodBCDEF(float pt, float eta, int isyst=0);
@@ -430,5 +443,7 @@ float fakerate_mu_data(float eta, float conecorrpt, int isyst=0);
 float fakerate_el_data(float eta, float conecorrpt, int isyst=0);
 float fakerate_mu_qcd(float eta, float conecorrpt, int isyst=0);
 float fakerate_el_qcd(float eta, float conecorrpt, int isyst=0);
+
+float puWeight(int nPUVtx, int variation=0);
 
 #endif
