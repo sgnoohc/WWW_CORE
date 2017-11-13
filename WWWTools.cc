@@ -47,43 +47,31 @@ const vector<float>& _jets_csv()
 bool passPresel()
 {
     if (
-        // Same sign two lepton preselection
-        (
-         ( lepidx["TightLepton"].size() == 2 ) &&
-         ( lepidx["GoodSSJet"].size() >= 2 ) &&
-         ( lepidx["VetoLepton"].size() == 2 ) &&
-         ( ( wwwbaby.lep_pdgId()[lepidx["TightLepton"][0]] * wwwbaby.lep_pdgId()[lepidx["TightLepton"][1]] ) > 0 ) &&
-         ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt() >= 30.)  &&
-         ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt() >= 30.) )
-        ||
-        // Three lepton preselection
-        (
-         ( lepidx["TightLepton"].size() == 3                      )  &&
-         ( wwwbaby.lep_p4()[lepidx["TightLepton"][0]].pt() >= 25. )  &&
-         ( wwwbaby.lep_p4()[lepidx["TightLepton"][1]].pt() >= 20. )  &&
-         ( wwwbaby.lep_p4()[lepidx["TightLepton"][2]].pt() >= 20. ) )
-        ||
-        // One loose but not tight + one tight preselection
-        (
-         ( lepidx["TightLepton"].size() == 1 ) &&
-         ( lepidx["LooseLepton"].size() == 2 ) &&
-         ( lepidx["GoodSSJet"].size() >= 2 ) &&
-         ( lepidx["VetoLepton"].size() == 2 ) &&
-         ( ( wwwbaby.lep_pdgId()[lepidx["LooseLepton"][0]] * wwwbaby.lep_pdgId()[lepidx["LooseLepton"][1]] ) > 0 ) &&
-         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt() >= 30.)  &&
-         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt() >= 30.) )
-        ||
-        // One loose but not tight + two tight preselection
-        (
-         ( lepidx["TightLepton"].size() == 2 ) &&
-         ( lepidx["LooseLepton"].size() == 3 ) &&
-         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt() >= 25.)  &&
-         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt() >= 20.)  &&
-         ( wwwbaby.lep_p4()[lepidx["LooseLepton"][2]].pt() >= 20.) )
+            (
+             lepidx["VetoLepton"].size() == 2
+             && lepidx["TightLepton"].size() >= 1
+             && jetidx["GoodSSJet"].size() >= 2
+             && (wwwbaby.lep_p4()[lepidx["VetoLepton"][0]].pt() >= 30.)
+             && (wwwbaby.lep_p4()[lepidx["VetoLepton"][1]].pt() >= 30.)
+             && (wwwbaby.lep_pdgId()[lepidx["VetoLepton"][0]]
+                 * wwwbaby.lep_pdgId()[lepidx["VetoLepton"][1]] >   0)
+            )
+            ||
+            (
+             lepidx["LooseLepton"].size() >= 3
+             && lepidx["TightLepton"].size() >= 2
+             && (wwwbaby.lep_p4()[lepidx["LooseLepton"][0]].pt() >= 25.)
+             && (wwwbaby.lep_p4()[lepidx["LooseLepton"][1]].pt() >= 20.)
+             && (wwwbaby.lep_p4()[lepidx["LooseLepton"][2]].pt() >= 20.)
+            )
        )
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 //_________________________________________________________________________________________________
@@ -92,8 +80,6 @@ bool passSSPresel(TString lepid)
     setObjectIndices();
     if (!( passTrigMM() || passTrigEM() || passTrigEE()              )) return false;
     if (!( lepidx[lepid].size()                              ==   2  )) return false;
-    if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
-           * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           == 169  )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                             )) return false;
     if (!( wwwbaby.firstgoodvertex()                         ==   0  )) return false;
     if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   30. )) return false;
@@ -102,8 +88,20 @@ bool passSSPresel(TString lepid)
            * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           >    0  )) return false;
     if (!( jetidx["GoodSSJet"].size()                        >=   2  )) return false;
     if (!( lepidx["VetoLepton"].size()                       ==   2  )) return false;
-    if (!( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0  )) return false;
-    if (!( jetidx["LooseBJet"].size()                        ==   0  )) return false;
+//    if (!( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0  )) return false;
+//    if (!( jetidx["LooseBJet"].size()                        ==   0  )) return false;
+    return true;
+}
+
+//_________________________________________________________________________________________________
+bool passPreprocessPresel(TString lepid)
+{
+    setObjectIndices();
+    if (!( lepidx[lepid].size()                              >=   2  )) return false;
+    if (!( wwwbaby.evt_passgoodrunlist()                             )) return false;
+    if (!( wwwbaby.firstgoodvertex()                         ==   0  )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][0]].pt()           >   20. )) return false;
+    if (!( wwwbaby.lep_p4()[lepidx[lepid][1]].pt()           >   20. )) return false;
     return true;
 }
 
@@ -123,8 +121,10 @@ bool passSSMM( TString lepid, bool dropbtag, bool dropmjj, bool dropjet )
     if (!( wwwbaby.lep_pdgId()[lepidx[lepid][0]]
            * wwwbaby.lep_pdgId()[lepidx[lepid][1]]           >    0                 )) return false;
     if (!( jetidx["GoodSSJet"].size()                        >=   2                 )) return false;
+//    if (!( wwwbaby.jets_p4()[jetidx["GoodSSJet"][0]].pt()    >   30.                )) return false;
+//    if (!( wwwbaby.jets_p4()[jetidx["GoodSSJet"][1]].pt()    >   20.                )) return false;
     if (!( lepidx["VetoLepton"].size()                       ==   2                 )) return false;
-    if (!( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0                 )) return false;
+//    if (!( wwwbaby.nisoTrack_mt2_cleaned_VVV_cutbased_veto() ==   0                 )) return false;
     if (!( jetidx["LooseBJet"].size()                        ==   0     || dropbtag )) return false;
     if (!( ( MjjW()                                          >   60. &&
              MjjW()                                          <  100. )  || dropmjj  )) return false;
@@ -1125,10 +1125,10 @@ bool passFilters()
 //======================================================================================
 
 //______________________________________________________________________________________
-bool pass3Lpresel( TString lepid )
+bool pass3LPresel( TString lepid )
 {
     setObjectIndices();
-    if (!( passFilters()                                                            )) return false;
+    if (!( passFilters()                                    )) return false;
     if (!( wwwbaby.evt_passgoodrunlist()                    )) return false;
     if (!( wwwbaby.firstgoodvertex()               ==   0   )) return false;
     if (!( lepidx[lepid].size()                    ==   3   )) return false;
@@ -1143,11 +1143,11 @@ bool pass3Lpresel( TString lepid )
 }
 
 //______________________________________________________________________________________
-bool pass3LARpresel()
+bool pass3LARPresel()
 {
     setObjectIndices();
     if (!( lepidx["TightLepton"].size() == 2 )) return false;
-    if (!( pass3Lpresel( "LooseLepton" )        )) return false;
+    if (!( pass3LPresel( "LooseLepton" )        )) return false;
     return true;
 }
 
@@ -1253,6 +1253,108 @@ bool pass3LAR2SFOS()
     if (!( lepidx["TightLepton"].size() == 2 )) return false;
     if (!( pass3L2SFOS( "LooseLepton" )        )) return false;
     return true;
+}
+
+//______________________________________________________________________________________
+bool pass3L0SFOSPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return pass3L0SFOS();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return pass3L0SFOS();
+        else
+            return false;
+    }
+    else
+    {
+        return pass3L0SFOS();
+    }
+}
+
+//______________________________________________________________________________________
+bool pass3L1SFOSPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return pass3L1SFOS();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return pass3L1SFOS();
+        else
+            return false;
+    }
+    else
+    {
+        return pass3L1SFOS();
+    }
+}
+
+//______________________________________________________________________________________
+bool pass3L2SFOSPred()
+{
+    setObjectIndices();
+    if ( isFakeSample() )
+    {
+        if ( isRealLeptonEvent() )
+            return pass3L2SFOS();
+        else
+            return false;
+    }
+    else if ( isPhotonConversionSample() )
+    {
+        if ( isPhotonConversionEvent() )
+            return pass3L2SFOS();
+        else
+            return false;
+    }
+    else
+    {
+        return pass3L2SFOS();
+    }
+}
+
+//______________________________________________________________________________________
+bool pass3LAR0SFOSPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return pass3LAR0SFOS();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool pass3LAR1SFOSPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return pass3LAR1SFOS();
+    else
+        return false;
+}
+
+//______________________________________________________________________________________
+bool pass3LAR2SFOSPred()
+{
+    setObjectIndices();
+    if ( sampleCategory().Contains( "data" ) )
+        return pass3LAR2SFOS();
+    else
+        return false;
 }
 
 //______________________________________________________________________________________
@@ -1488,10 +1590,10 @@ ObjIdx getLeptonsIndices()
 //______________________________________________________________________________________
 void loadLeptonIndices()
 {
-    lepidx["TightLepton"]   = wwwbaby.TightLepton();
-    lepidx["LooseLepton"]   = wwwbaby.LooseLepton();
-    lepidx["VetoLepton"]    = wwwbaby.VetoLepton();
-    lepidx["LbntLepton"]    = wwwbaby.LbntLepton();
+//    lepidx["TightLepton"]   = wwwbaby.TightLepton();
+//    lepidx["LooseLepton"]   = wwwbaby.LooseLepton();
+//    lepidx["VetoLepton"]    = wwwbaby.VetoLepton();
+//    lepidx["LbntLepton"]    = wwwbaby.LbntLepton();
 }
 
 //______________________________________________________________________________________
@@ -1500,7 +1602,7 @@ ObjIdx getJetsIndices()
     ObjIdx idx = makeEmptyJetidx();
     for ( unsigned int ijet = 0; ijet < _jets_csv().size(); ++ijet )
     {
-        if ( isGoodSSJet( ijet ) )
+        if ( isGoodSSJet( ijet, idx["GoodSSJet"].size() == 0 ? 30. : 30. ) )
         {
             idx["GoodSSJet"].push_back( ijet );
             idx["Good3LJet"].push_back( ijet );
@@ -1602,10 +1704,10 @@ void setJetIndicesToNominal()
 //______________________________________________________________________________________
 void loadJetsIndices()
 {
-    jetidx["GoodSSJet"]  = wwwbaby.GoodSSJet();
-    jetidx["Good3LJet"]  = wwwbaby.Good3LJet();
-    jetidx["LooseBJet"]  = wwwbaby.LooseBJet();
-    jetidx["GoodSSWJet"] = wwwbaby.GoodSSWJet();
+//    jetidx["GoodSSJet"]  = wwwbaby.GoodSSJet();
+//    jetidx["Good3LJet"]  = wwwbaby.Good3LJet();
+//    jetidx["LooseBJet"]  = wwwbaby.LooseBJet();
+//    jetidx["GoodSSWJet"] = wwwbaby.GoodSSWJet();
 }
 
 //______________________________________________________________________________________
@@ -1786,9 +1888,9 @@ bool isLbnt3lElec( int ilep )
 }
 
 //______________________________________________________________________________________
-bool isGoodSSJet( unsigned int& ijet )
+bool isGoodSSJet( unsigned int& ijet, float pt )
 {
-    if (!(       _jets_p4()[ijet].Pt()      > 30.  )) return false;
+    if (!(       _jets_p4()[ijet].Pt()      > pt   )) return false;
     if (!( fabs( _jets_p4()[ijet].Eta() )   <  2.5 )) return false;
     return true;
 }
@@ -1805,6 +1907,7 @@ bool isGood3LJet( unsigned int& ijet )
 bool isLooseBJet( unsigned int& ijet )
 {
     if (!(       _jets_p4()[ijet].Pt()      > 20.     )) return false;
+//    if (!(       _jets_p4()[ijet].Pt()      > 25.     )) return false;
     if (!( fabs( _jets_p4()[ijet].Eta() )   <  2.4    )) return false;
     if (!(       _jets_csv()[ijet]          >  0.5426 )) return false;
     return true;
@@ -2043,6 +2146,83 @@ float MTidx( int idx, TString leptype )
     LorentzVector p4;
     p4 = wwwbaby.lep_p4()[lepidx[leptype][idx]];
     return sqrt( 2 * p4.pt() * metlv.pt() * ( 1 - cos( ROOT::Math::VectorUtil::DeltaPhi( metlv, p4 ) ) ) );
+}
+
+//______________________________________________________________________________________
+float Mlj00() { return Mlj("VetoLepton", 0, "GoodSSJet", 0); }
+float Mlj01() { return Mlj("VetoLepton", 0, "GoodSSJet", 1); }
+float Mlj10() { return Mlj("VetoLepton", 1, "GoodSSJet", 0); }
+float Mlj11() { return Mlj("VetoLepton", 1, "GoodSSJet", 1); }
+float MljW00() { return Mlj("VetoLepton", 0, "GoodSSWJet", 0); }
+float MljW01() { return Mlj("VetoLepton", 0, "GoodSSWJet", 1); }
+float MljW10() { return Mlj("VetoLepton", 1, "GoodSSWJet", 0); }
+float MljW11() { return Mlj("VetoLepton", 1, "GoodSSWJet", 1); }
+
+//______________________________________________________________________________________
+float Mlj(TString lepid, int lidx, TString jetid, int jidx)
+{
+    if ( lepidx[lepid].size() < (unsigned int)lidx + 1) return -999;
+    if ( jetidx[jetid].size() < (unsigned int)jidx + 1) return -999;
+    return (wwwbaby.lep_p4()[lepidx[lepid][lidx]] + _jets_p4()[jetidx[jetid][jidx]]).mass();
+}
+
+//______________________________________________________________________________________
+float DPhilj00() { return DPhilj("VetoLepton", 0, "GoodSSJet", 0); }
+float DPhilj01() { return DPhilj("VetoLepton", 0, "GoodSSJet", 1); }
+float DPhilj10() { return DPhilj("VetoLepton", 1, "GoodSSJet", 0); }
+float DPhilj11() { return DPhilj("VetoLepton", 1, "GoodSSJet", 1); }
+float DPhiljW00() { return DPhilj("VetoLepton", 0, "GoodSSWJet", 0); }
+float DPhiljW01() { return DPhilj("VetoLepton", 0, "GoodSSWJet", 1); }
+float DPhiljW10() { return DPhilj("VetoLepton", 1, "GoodSSWJet", 0); }
+float DPhiljW11() { return DPhilj("VetoLepton", 1, "GoodSSWJet", 1); }
+
+//______________________________________________________________________________________
+float DPhilj(TString lepid, int lidx, TString jetid, int jidx)
+{
+    if ( lepidx[lepid].size() < (unsigned int)lidx + 1) return -999;
+    if ( jetidx[jetid].size() < (unsigned int)jidx + 1) return -999;
+    return fabs( ROOT::Math::VectorUtil::DeltaPhi(
+            wwwbaby.lep_p4()[lepidx[lepid][lidx]],
+            _jets_p4()[jetidx[jetid][jidx]] ));
+}
+
+//______________________________________________________________________________________
+float DEtalj00() { return DEtalj("VetoLepton", 0, "GoodSSJet", 0); }
+float DEtalj01() { return DEtalj("VetoLepton", 0, "GoodSSJet", 1); }
+float DEtalj10() { return DEtalj("VetoLepton", 1, "GoodSSJet", 0); }
+float DEtalj11() { return DEtalj("VetoLepton", 1, "GoodSSJet", 1); }
+float DEtaljW00() { return DEtalj("VetoLepton", 0, "GoodSSWJet", 0); }
+float DEtaljW01() { return DEtalj("VetoLepton", 0, "GoodSSWJet", 1); }
+float DEtaljW10() { return DEtalj("VetoLepton", 1, "GoodSSWJet", 0); }
+float DEtaljW11() { return DEtalj("VetoLepton", 1, "GoodSSWJet", 1); }
+
+//______________________________________________________________________________________
+float DEtalj(TString lepid, int lidx, TString jetid, int jidx)
+{
+    if ( lepidx[lepid].size() < (unsigned int)lidx + 1) return -999;
+    if ( jetidx[jetid].size() < (unsigned int)jidx + 1) return -999;
+    return fabs(wwwbaby.lep_p4()[lepidx[lepid][lidx]].eta()
+            - _jets_p4()[jetidx[jetid][jidx]].eta());
+}
+
+//______________________________________________________________________________________
+float DRlj00() { return DRlj("VetoLepton", 0, "GoodSSJet", 0); }
+float DRlj01() { return DRlj("VetoLepton", 0, "GoodSSJet", 1); }
+float DRlj10() { return DRlj("VetoLepton", 1, "GoodSSJet", 0); }
+float DRlj11() { return DRlj("VetoLepton", 1, "GoodSSJet", 1); }
+float DRljW00() { return DRlj("VetoLepton", 0, "GoodSSWJet", 0); }
+float DRljW01() { return DRlj("VetoLepton", 0, "GoodSSWJet", 1); }
+float DRljW10() { return DRlj("VetoLepton", 1, "GoodSSWJet", 0); }
+float DRljW11() { return DRlj("VetoLepton", 1, "GoodSSWJet", 1); }
+
+//______________________________________________________________________________________
+float DRlj(TString lepid, int lidx, TString jetid, int jidx)
+{
+    if ( lepidx[lepid].size() < (unsigned int)lidx + 1) return -999;
+    if ( jetidx[jetid].size() < (unsigned int)jidx + 1) return -999;
+    return ROOT::Math::VectorUtil::DeltaR(
+            wwwbaby.lep_p4()[lepidx[lepid][lidx]],
+            _jets_p4()[jetidx[jetid][jidx]] );
 }
 
 //______________________________________________________________________________________
@@ -2749,10 +2929,21 @@ TString bkgCategory_v2()
 bool isFakeSample()
 {
     TString sample = sampleCategory();
-    if ( sample.Contains( "tt1l" ) ) return true;
-    if ( sample.Contains( "singletop" ) ) return true;
-    if ( sample.Contains( "wj" ) ) return true;
-    if ( sample.Contains( "dy" ) ) return true;
+    if ( lepidx["VetoLepton"].size() == 2)
+    {
+        if ( sample.Contains( "tt1l" ) ) return true;
+        if ( sample.Contains( "singletop" ) ) return true;
+        if ( sample.Contains( "wj" ) ) return true;
+        if ( sample.Contains( "dy" ) ) return true;
+    }
+    else if ( lepidx["VetoLepton"].size() == 3)
+    {
+        if ( sample.Contains( "tt2l" ) ) return true;
+        if ( sample.Contains( "tt1l" ) ) return true;
+        if ( sample.Contains( "singletop" ) ) return true;
+        if ( sample.Contains( "wj" ) ) return true;
+        if ( sample.Contains( "dy" ) ) return true;
+    }
     return false;
 }
 
@@ -3700,6 +3891,158 @@ float puWeight(int nPUVtx, int variation)
         if (nPUVtx == 74) { return 0.00270442; }
     }
     return 1;//should not happen
+}
+
+//_________________________________________________________________________________________________
+// prints gen particle information for a given gen particle index in the WWWTree
+void printGenPart(int igen)
+{
+    int pdgid = wwwbaby.genPart_pdgId()[igen];
+    int status = wwwbaby.genPart_status()[igen] ;
+    int motherId = wwwbaby.genPart_motherId()[igen] ;
+    std::cout <<  " pdgid: " << pdgid <<  " status: " << status <<  " motherId: " << motherId <<  std::endl;
+}
+
+//_________________________________________________________________________________________________
+// prints all gen particle
+void printAllGenPart()
+{
+    for (Idx igen = 0; igen < wwwbaby.genPart_status().size(); ++igen)
+    {
+        printGenPart(igen);
+    }
+}
+
+//_________________________________________________________________________________________________
+// returns if the given igen'th gen particle is a W to be considered.
+bool isW(int igen)
+{
+    if (!(abs(wwwbaby.genPart_pdgId()[igen]) == 24)) return false;
+    if (!(abs(wwwbaby.genPart_status()[igen]) == 62)) return false;
+    return true;
+}
+
+//_________________________________________________________________________________________________
+// returns if the given igen'th gen particle is a desecendent of W. (The fermions from W boson)
+bool isParentW(int igen)
+{
+    if (!(abs(wwwbaby.genPart_motherId()[igen]) == 24)) return false;
+    if (!(abs(wwwbaby.genPart_pdgId()[igen]) != 24)) return false;
+    return true;
+}
+
+//_________________________________________________________________________________________________
+// returns if the given igen'th gen particle is a desecendent of W. (The fermions from W boson)
+bool isParentTau(int igen)
+{
+    if (!(abs(wwwbaby.genPart_motherId()[igen]) == 15)) return false;
+    if (!(abs(wwwbaby.genPart_pdgId()[igen]) != 15)) return false;
+    return true;
+}
+
+//_________________________________________________________________________________________________
+// returns if the given igen'th gen particle is a lepton.
+bool isLepton(int igen)
+{
+    if (!(abs(wwwbaby.genPart_pdgId()[igen]) == 11 ||
+          abs(wwwbaby.genPart_pdgId()[igen]) == 13 ||
+          abs(wwwbaby.genPart_pdgId()[igen]) == 15 )) return false;
+    return true;
+}
+
+//_________________________________________________________________________________________________
+// returns if the given igen'th gen particle is a lepton.
+bool isLightLepton(int igen)
+{
+    if (!(abs(wwwbaby.genPart_pdgId()[igen]) == 11 ||
+          abs(wwwbaby.genPart_pdgId()[igen]) == 13 )) return false;
+    return true;
+}
+
+//_________________________________________________________________________________________________
+// returns if the given igen'th gen particle is a lepton.
+bool isTau(int igen)
+{
+    if (!(abs(wwwbaby.genPart_pdgId()[igen]) == 15)) return false;
+    return true;
+}
+
+//_________________________________________________________________________________________________
+// Loops over gen particles and returns W and W's desecendents
+std::tuple<vIdx, vIdx, vIdx, vIdx, vIdx, vIdx, vIdx> getGenIndices()
+{
+    vIdx iws;
+    vIdx ifs;
+    vIdx ils;
+    vIdx ills;
+    vIdx ilts;
+    vIdx its;
+    vIdx ifls;
+    for (Idx igen = 0; igen < wwwbaby.genPart_pdgId().size(); ++igen)
+    {
+        if (isW(igen)) iws.push_back(igen);
+        if (isParentW(igen)) ifs.push_back(igen);
+        if (isParentW(igen) && isLepton(igen)) ils.push_back(igen);
+        if (isParentW(igen) && isLightLepton(igen)) ills.push_back(igen);
+        if (isParentW(igen) && isTau(igen)) its.push_back(igen);
+        if (isParentTau(igen) && isLepton(igen)) ilts.push_back(igen);
+        if ((isParentTau(igen) && isLepton(igen)) || (isParentW(igen) && isLightLepton(igen))) ifls.push_back(igen);
+    }
+    return std::make_tuple(iws, ifs, ils, ills, ilts, its, ifls);
+}
+
+//_________________________________________________________________________________________________
+// Return whether it is a 2 lepton SS
+bool isSSgen(vIdx ifls)
+{
+    if (ifls.size() == 2)
+    {
+        if (genFlavProduct(ifls) > 0)
+            return true;
+        else
+            return false;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+//_________________________________________________________________________________________________
+// Return flav product
+int genFlavProduct(vIdx ifls)
+{
+    return (wwwbaby.genPart_pdgId()[ifls[0]] * wwwbaby.genPart_pdgId()[ifls[1]]);
+}
+
+//_________________________________________________________________________________________________
+// Categorizaing the decay channel
+int wwwcateg(vIdx ifls)
+{
+    //if (sampleCategory().Contains("www"))
+    //else if ( dsname.Contains( "/TEST-www" ) )
+    if (ifls.size() == 0) return 0;
+    if (ifls.size() == 1) return 1;
+    if (ifls.size() == 2 && isSSgen(ifls)) return 2;
+    if (ifls.size() == 2 && !isSSgen(ifls)) return 3;
+    if (ifls.size() == 3) return 4;
+    return -1;
+}
+
+//_________________________________________________________________________________________________
+// Compute pt/eta acceptable leptons
+vIdx ptEtaAccepable(vIdx ifls)
+{
+    vIdx rtn;
+    for (auto& idx : ifls)
+    {
+        LorentzVector p4 = wwwbaby.genPart_p4()[idx];
+        float aeta = fabs(wwwbaby.genPart_p4()[idx].eta());
+        float pt = wwwbaby.genPart_p4()[idx].pt();
+        if (pt > 35. && aeta < 2.4)
+            rtn.push_back(idx);
+    }
+    return rtn;
 }
 
 

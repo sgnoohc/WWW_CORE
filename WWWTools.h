@@ -12,7 +12,10 @@
 #include <stdlib.h>
 #include <map>
 #include <vector>
+#include <tuple>
 
+typedef unsigned int Idx;
+typedef std::vector<Idx> vIdx;
 typedef std::map<TString, std::vector<Int_t>> ObjIdx;
 // comparators
 bool comparator_abspdgId( int i, int j ) { return abs( wwwbaby.lep_pdgId()[i] ) > abs( wwwbaby.lep_pdgId()[j] ); }
@@ -49,6 +52,7 @@ const vector<float>& _jets_csv();
 static int DEBUG;
 
 bool passPresel();
+bool passPreprocessPresel( TString="LooseLepton" );
 
 // SS Signal region definitions
 bool passSSPresel( TString="TightLepton" );
@@ -132,8 +136,8 @@ bool passMjjSBPRARSSEMPred();
 bool passMjjSBPRARSSEEPred();
 
 // 3L Signal region definitions
-bool pass3Lpresel( TString="TightLepton" );
-bool pass3LARpresel();
+bool pass3LPresel( TString="TightLepton" );
+bool pass3LARPresel();
 
 // 3L Signal region definitions
 bool pass3L0SFOS( TString="TightLepton" );
@@ -144,6 +148,16 @@ bool pass3L2SFOS( TString="TightLepton", bool=false, bool=false );
 bool pass3LAR0SFOS();
 bool pass3LAR1SFOS();
 bool pass3LAR2SFOS();
+
+// 3L Signal region definitions
+bool pass3L0SFOSPred();
+bool pass3L1SFOSPred();
+bool pass3L2SFOSPred();
+
+// Application region definitions
+bool pass3LAR0SFOSPred();
+bool pass3LAR1SFOSPred();
+bool pass3LAR2SFOSPred();
 
 // Trigger selections
 bool passTrigMM();
@@ -248,7 +262,7 @@ bool isLbnt3lMuon( int );
 bool isLbnt3lElec( int );
 
 // Good SS category jet
-bool isGoodSSJet( unsigned int& );
+bool isGoodSSJet( unsigned int&, float=30. );
 
 // Good 3L category jet
 bool isGood3LJet( unsigned int& );
@@ -324,6 +338,50 @@ float MT2( TString="VetoLepton" );
 
 // MT with the lepton in given index
 float MTidx( int, TString="VetoLepton" );
+
+// Mljs
+float Mlj00();
+float Mlj01();
+float Mlj10();
+float Mlj11();
+float MljW00();
+float MljW01();
+float MljW10();
+float MljW11();
+float Mlj(TString lepid, int lidx, TString jetid, int jidx);
+
+// DPhiljs
+float DPhilj00();
+float DPhilj01();
+float DPhilj10();
+float DPhilj11();
+float DPhiljW00();
+float DPhiljW01();
+float DPhiljW10();
+float DPhiljW11();
+float DPhilj(TString lepid, int lidx, TString jetid, int jidx);
+
+// DEtaljs
+float DEtalj00();
+float DEtalj01();
+float DEtalj10();
+float DEtalj11();
+float DEtaljW00();
+float DEtaljW01();
+float DEtaljW10();
+float DEtaljW11();
+float DEtalj(TString lepid, int lidx, TString jetid, int jidx);
+
+// DRljs
+float DRlj00();
+float DRlj01();
+float DRlj10();
+float DRlj11();
+float DRljW00();
+float DRljW01();
+float DRljW10();
+float DRljW11();
+float DRlj(TString lepid, int lidx, TString jetid, int jidx);
 
 // Get SS pair from 3 leptons
 std::pair<int, int> getSSPair();
@@ -445,5 +503,22 @@ float fakerate_mu_qcd(float eta, float conecorrpt, int isyst=0);
 float fakerate_el_qcd(float eta, float conecorrpt, int isyst=0);
 
 float puWeight(int nPUVtx, int variation=0);
+
+
+// Truth tools
+void printGenPart(int igen);
+void printAllGenPart();
+bool isW(int igen);
+bool isParentW(int igen);
+bool isParentTau(int igen);
+bool isLepton(int igen);
+bool isLightLepton(int igen);
+bool isTau(int igen);
+std::tuple<vIdx, vIdx, vIdx, vIdx, vIdx, vIdx, vIdx> getGenIndices();
+int genFlavProduct(vIdx);
+bool isSSgen(vIdx ifls);
+int wwwcateg(vIdx);
+vIdx ptEtaAccepable(vIdx ifls);
+
 
 #endif
